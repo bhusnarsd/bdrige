@@ -1,0 +1,845 @@
+<%- include('../partials/header') %>
+  <div class="container">
+    <%- include('../partials/left-panel') %>
+      <div class="right-panel">
+
+        <div class="banner">
+          <img src="../images/banner-img.jpg" alt="Logo">
+        </div>
+
+
+        <div class="content-area">
+
+          <% if (typeof errorMessage !=='undefined' && errorMessage) { %>
+            <div style="color: red; margin-bottom: 20px;">
+              <%= errorMessage %>
+            </div>
+            <% } %>
+              <% if (typeof successMessage !=='undefined' && successMessage) { %>
+                <div style="color: green; margin-bottom: 20px;">
+                  <%= successMessage %>
+                </div>
+                <% } %>
+
+                  <div class="breadcrumbs">
+                    <ul>
+                      <li><a href="/">Home</a></li>
+                      <li><a href="/staff">Staff</a></li>
+                      <li>Add Staff Details</li>
+                    </ul>
+                  </div>
+
+                  <div class="form-area">
+                    <h2>Add Staff Details</h2>
+                    <div class="form-box">
+                      <form id="staffForm" action="/staff/enrollment" method="POST" enctype="multipart/form-data">
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label for="staff_name">Employee Name: <i>(Example: John Doe)</i></label>
+                            <input type="text" id="staff_name" name="staff_name" placeholder="Employee Name" required>
+                            <span id="staff_name_error" style="color:red; display:none;">Please enter both first name
+                              and surname.</span>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="staff_id">Unique Id:</label>
+                            <input type="text" id="staff_id" name="staff_id" placeholder="Unique Id" readonly>
+                          </div>
+
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label for="staff_email">Personal Email</label>
+                            <input type="email" id="staff_email" name="staff_email" placeholder="Your email" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="staff_phone">Current Phone (In Dubai)</label>
+                            <input type="tel" id="staff_phone" name="staff_phone" placeholder="Your phone number"
+                              required>
+                          </div>
+                          <div class="form-group">
+                            <label for="dob">Date Of Birth:</label>
+                            <input type="date" id="dob" name="dob" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="econtact">Emergency contact details</label>
+                            <input type="text" id="econtact" name="econtact" placeholder="Enter text" required>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label for="bank_acc">Bank account details</label>
+                            <input type="text" id="bank_acc" name="bank_acc" placeholder="Enter Bank account details">
+                          </div>
+                          <div class="form-group">
+                            <label for="permanent_address">Permanent address</label>
+                            <input type="text" id="permanent_address" name="permanent_address"
+                              placeholder="Enter Permanent address" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="temporary_address">Temporary address</label>
+                            <input type="text" id="temporary_address" name="temporary_address"
+                              placeholder="Enter Temporary address" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="ccdetails">Current Contact details </label>
+                            <input type="text" id="ccdetails" name="ccdetails"
+                              placeholder="Enter Current Contact details">
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label for="references">References</label>
+                            <input type="text" id="references" name="references" placeholder="Enter references">
+                          </div>
+                        </div>
+                        <div class="tablewrapper">
+                          <div class="table-responsive">
+                            <table class="table table-condensed table-striped">
+                              <thead class="tablehead">
+                                <tr>
+                                  <th>Steps</th>
+                                  <th>Date of Completion</th>
+                                  <th>Expiry date</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                              <tbody class="tablebody">
+                                <tr>
+                                  <td>Day 1: Trainee will receive Induction program Sheet</td>
+                                  <td><input type="date" id="twrips_date" name="twrips_date"></td>
+                                  <td>--</td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="twrips" id="twrips" value="1" required>
+                                        Active</label>
+                                      <label><input type="radio" name="twrips" id="twrips" value="0" required>
+                                        Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>1.Introduction to Center Premises - direct</td>
+                                  <td>
+                                    <div class="checkbox-group">
+                                      <label><input type="checkbox" name="itcpd[]" value="director">Director</label>
+                                      <label><input type="checkbox" name="itcpd[]"
+                                          value="supervisors">Supervisors</label><br />
+                                      <label><input type="checkbox" name="itcpd[]" value="pantry area">Pantry
+                                        area</label>
+                                      <label><input type="checkbox" name="itcpd[]" value="toy room work area">Toy
+                                        Room/Work Area</label><br />
+                                      <label><input type="checkbox" name="itcpd[]" value="resource room">Resource
+                                        Room</label>
+                                      <label><input type="checkbox" name="itcpd[]" value="training area">Training
+                                        Area</label>
+                                    </div>
+                                  </td>
+                                  <td>--</td>
+                                  <td><input type="text" id="itcpd_status" name="itcpd_status"
+                                      placeholder="Enter status"></td>
+                                </tr>
+                                <tr>
+                                  <td colspan="5">2. Document Submission</td </tr>
+                                <tr>
+                                  <td>Passport</td>
+                                  <td>
+                                    <input type="file" id="passport_file" name="passport_file"
+                                      onchange="handleFileUpload(this)">
+                                    <span id="passport_file_name" style="margin-left: 10px;"></span>
+                                  </td>
+                                  <td><input type="date" id="passport_expiry" name="passport_expiry"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="passport" value="1" required> Active</label>
+                                      <label><input type="radio" name="passport" value="0" required> Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Visa</td>
+                                  <td><input type="file" id="visa_file" name="visa_file"
+                                      onchange="handleFileUpload(this)"></td>
+                                  <span id="visa_file_name" style="margin-left: 10px;"></span>
+                                  <td><input type="date" id="visa_expiry" name="visa_expiry"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="visa" value="1" required> Active</label>
+                                      <label><input type="radio" name="visa" value="0" required> Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Experience letter</td>
+                                  <td><input type="file" id="exp_letter_file" name="exp_letter_file"
+                                      onchange="handleFileUpload(this)"></td>
+                                  <span id="exp_letter_file_name" style="margin-left: 10px;"></span>
+                                  <td><input type="date" id="exp_letter_date" name="exp_letter_date"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="experience" value="1" required> Active</label>
+                                      <label><input type="radio" name="experience" value="0" required> Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>License copy</td>
+                                  <td><input type="file" id="license_file" name="license_file"
+                                      onchange="handleFileUpload(this)"></td>
+                                  <span id="license_file_name" style="margin-left: 10px;"></span>
+                                  <td><input type="date" id="license_expiry" name="license_expiry"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="license" value="1" required> Active</label>
+                                      <label><input type="radio" name="license" value="0" required> Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Emirates ID (EID)</td>
+                                  <td><input type="file" id="emirates_id_file" name="emirates_id_file"
+                                      onchange="handleFileUpload(this)"></td>
+                                  <span id="emirates_id_file_name" style="margin-left: 10px;"></span>
+                                  <td><input type="date" id="emirates_id_expiry" name="emirates_id_expiry"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="emirates_id" value="1" required> Active</label>
+                                      <label><input type="radio" name="emirates_id" value="0" required> Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Hepatitis B vaccination card</td>
+                                  <td><input type="file" id="hepatitis_b_file" name="hepatitis_b_file"
+                                      onchange="handleFileUpload(this)"></td>
+                                  <span id="hepatitis_b_file_name" style="margin-left: 10px;"></span>
+                                  <td><input type="date" id="hepatitis_b_expiry" name="hepatitis_b_expiry"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="hepatitis_b" value="1" required> Active</label>
+                                      <label><input type="radio" name="hepatitis_b" value="0" required> Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Basic Life Support (BLS) training certificate</td>
+                                  <td><input type="file" id="bls_file" name="bls_file"
+                                      onchange="handleFileUpload(this)"></td>
+                                  <span id="bls_file_name" style="margin-left: 10px;"></span>
+                                  <td><input type="date" id="bls_file_date" name="bls_file_date"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="bls" value="1" required> Active</label>
+                                      <label><input type="radio" name="bls" value="0" required> Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Attested Highest degree certificate</td>
+                                  <td><input type="file" id="hdc_file" name="hdc_file"
+                                      onchange="handleFileUpload(this)"></td>
+                                  <span id="hdc_file_name" style="margin-left: 10px;"></span>
+                                  <td><input type="date" id="hdc_file_date" name="hdc_file_date"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="hdc" value="1" required> Active</label>
+                                      <label><input type="radio" name="hdc" value="0" required> Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>DHA /CDA license</td>
+                                  <td><input type="file" id="dhacda_license_file" name="dhacda_license_file"
+                                      onchange="handleFileUpload(this)"></td>
+                                  <span id="dhacda_license_file_name" style="margin-left: 10px;"></span>
+                                  <td><input type="date" id="dhacda_license_expiry" name="dhacda_license_expiry"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="dhacda_license" value="1" required>
+                                        Active</label>
+                                      <label><input type="radio" name="dhacda_license" value="0" required>
+                                        Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td colspan="5">3. Roles and Responsibilities (To be given for signature). Provide
+                                    designation-specific roles and responsibilities</td>
+                                </tr>
+                                <tr>
+                                  <td>Employment contract</td>
+                                  <td><input type="file" id="employment_contract_file" name="employment_contract_file"
+                                      onchange="handleFileUpload(this)">
+                                    <span id="employment_contract_file_name" style="margin-left: 10px;"></span>
+                                  </td>
+                                  <td><input type="date" id="employment_contract_expiry"
+                                      name="employment_contract_expiry"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="employment_contract" value="1" required>
+                                        Active</label>
+                                      <label><input type="radio" name="employment_contract" value="0" required>
+                                        Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Confidentiality Contract</td>
+                                  <td><input type="file" id="confidentiality_contract_file"
+                                      name="confidentiality_contract_file" onchange="handleFileUpload(this)"></td>
+                                  <span id="confidentiality_contract_file_name" style="margin-left: 10px;"></span>
+                                  <td><input type="date" id="confidentiality_contract_expiry"
+                                      name="confidentiality_contract_expiry"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="confidentiality_contract" value="1" required>
+                                        Active</label>
+                                      <label><input type="radio" name="confidentiality_contract" value="0" required>
+                                        Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>Employee Handbook</td>
+                                  <td><input type="file" id="employee_handbook_file" name="employee_handbook_file"
+                                      onchange="handleFileUpload(this)"></td>
+                                  <span id="employee_handbook_file_name" style="margin-left: 10px;"></span>
+                                  <td><input type="date" id="employee_handbook_expiry" name="employee_handbook_expiry">
+                                  </td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="employee_handbook" value="1" required>
+                                        Active</label>
+                                      <label><input type="radio" name="employee_handbook" value="0" required>
+                                        Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>4. Policy Overview: Standard DHA and CDA policies</td>
+                                  <td><input type="file" id="dhacda_policies_file" name="dhacda_policies_file"
+                                      onchange="handleFileUpload(this)"></td>
+                                  <span id="dhacda_policies_file_name" style="margin-left: 10px;"></span>
+                                  <td><input type="date" id="dhacda_policies_expiry" name="dhacda_policies_expiry"></td>
+                                  <td>
+                                    <div class="radio-group">
+                                      <label><input type="radio" name="dhacda_policies" value="1" required>
+                                        Active</label>
+                                      <label><input type="radio" name="dhacda_policies" value="0" required>
+                                        Inactive</label>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <button type="submit">Submit</button>
+                          <!-- <button type="reset">Reset</button> -->
+                        </div>
+                      </form>
+                    </div>
+
+                  </div>
+        </div>
+      </div>
+  </div>
+  <script>
+    // document.addEventListener('DOMContentLoaded', () => {
+    //   const sectionConfigs = [
+    //     {
+    //       name: "passport_file",
+    //       fieldId: "passport_file_name",
+    //       dateId: "passport_expiry"
+    //     },
+    //     {
+    //       name: "visa_file",
+    //       fieldId: "visa_file_name",
+    //       dateId: "visa_expiry"
+    //     },
+    //     {
+    //       name: "exp_letter_file",
+    //       fieldId: "exp_letter_file_name",
+    //       dateId: "exp_letter_date"
+    //     },
+    //     {
+    //       name: "license_file",
+    //       fieldId: "license_file_name",
+    //       dateId: "license_expiry"
+    //     },
+    //     {
+    //       name: "emirates_id_file",
+    //       fieldId: "emirates_id_file_name",
+    //       dateId: "emirates_id_expiry"
+    //     },
+    //     {
+    //       name: "hepatitis_b_file",
+    //       fieldId: "hepatitis_b_file_name",
+    //       dateId: "hepatitis_b_expiry"
+    //     },
+    //     {
+    //       name: "bls_file",
+    //       fieldId: "bls_file_name",
+    //       dateId: "bls_file_date"
+    //     },
+    //     {
+    //       name: "hdc_file",
+    //       fileId: "hdc_file_name",
+    //       dateId: "hdc_file_date"
+    //     },
+    //     {
+    //       name: "dhacda_license",
+    //       fileId: "dhacda_license_file",
+    //       dateId: "dhacda_license_expiry"
+    //     },
+    //     {
+    //       name: "employment_contract",
+    //       fileId: "employment_contract_file",
+    //       dateId: "employment_contract_expiry"
+    //     },
+    //     {
+    //       name: "confidentiality_contract",
+    //       fileId: "confidentiality_contract_file",
+    //       dateId: "confidentiality_contract_expiry"
+    //     },
+    //     {
+    //       name: "employee_handbook",
+    //       fileId: "employee_handbook_file",
+    //       dateId: "employee_handbook_expiry"
+    //     },
+    //     {
+    //       name: "dhacda_policies",
+    //       fileId: "dhacda_policies_file",
+    //       dateId: "dhacda_policies_expiry"
+    //     }
+    //   ];
+
+    //   // Attach change event listeners to each radio group
+    //   sectionConfigs.forEach(section => {
+    //     const radios = document.querySelectorAll(`input[name="${section.name}"]`);
+    //     radios.forEach(radio => {
+    //       radio.addEventListener("change", () => {
+    //         const isActive = document.querySelector(`input[name="${section.name}"]:checked`)?.value === "1";
+    //         const fileInput = document.getElementById(section.fileId);
+    //         const dateInput = document.getElementById(section.dateId);
+
+    //         if (fileInput) fileInput.disabled = !isActive;
+    //         if (dateInput) dateInput.disabled = !isActive;
+
+    //         if (!isActive) {
+    //           // Clear values when disabled
+    //           fileInput.value = "";
+    //           dateInput.value = "";
+    //           fileInput.style.border = "";
+    //           dateInput.style.border = "";
+    //         }
+    //       });
+    //     });
+    //   });
+    // });
+
+    // document.getElementById('staff_name').addEventListener('input', function () {
+    //   const staffName = this.value.trim();
+    //   const nameParts = staffName.split(/\s+/); // split by whitespace
+    //   const staffNameInput = document.getElementById('staff_name');
+    //   const errorSpan = document.getElementById('staff_name_error');
+
+    //   if (nameParts.length >= 2) {
+    //     // Valid: First name + Last name
+    //     const firstName = nameParts[0];
+    //     const lastName = nameParts[1];
+
+    //     const randomNumber = Math.floor(Math.random() * 9000 + 1000);
+    //     const staffId = firstName.slice(0, 2).toUpperCase() + lastName.slice(0, 2).toUpperCase() + randomNumber;
+
+    //     document.getElementById('staff_id').value = staffId;
+
+    //     // Hide error and reset border
+    //     errorSpan.style.display = "none";
+    //     staffNameInput.style.border = "";
+    //   } else {
+    //     // Not valid
+    //     document.getElementById('staff_id').value = "";
+    //     errorSpan.style.display = "inline";
+    //     staffNameInput.style.border = "2px solid red";
+    //   }
+    // });
+
+    // // Optional: prevent form submission if name is not valid
+    // document.getElementById("staffForm").addEventListener("submit", function (e) {
+    //   let isValid = true;
+
+    //   const sections = [
+    //     {
+    //       name: "passport_file",
+    //       fieldId: "passport_file_name",
+    //       dateId: "passport_expiry"
+    //     },
+    //     {
+    //       name: "visa_file",
+    //       fieldId: "visa_file_name",
+    //       dateId: "visa_expiry"
+    //     },
+    //     {
+    //       name: "exp_letter_file",
+    //       fieldId: "exp_letter_file_name",
+    //       dateId: "exp_letter_date"
+    //     },
+    //     {
+    //       name: "license_file",
+    //       fieldId: "license_file_name",
+    //       dateId: "license_expiry"
+    //     },
+    //     {
+    //       name: "emirates_id_file",
+    //       fieldId: "emirates_id_file_name",
+    //       dateId: "emirates_id_expiry"
+    //     },
+    //     {
+    //       name: "hepatitis_b_file",
+    //       fieldId: "hepatitis_b_file_name",
+    //       dateId: "hepatitis_b_expiry"
+    //     },
+    //     {
+    //       name: "bls_file",
+    //       fieldId: "bls_file_name",
+    //       dateId: "bls_file_date"
+    //     },
+    //     {
+    //       name: "hdc_file",
+    //       fileId: "hdc_file_name",
+    //       dateId: "hdc_file_date"
+    //     },
+    //     {
+    //       name: "dhacda_license",
+    //       fileId: "dhacda_license_file",
+    //       dateId: "dhacda_license_expiry"
+    //     },
+    //     {
+    //       name: "employment_contract",
+    //       fileId: "employment_contract_file",
+    //       dateId: "employment_contract_expiry"
+    //     },
+    //     {
+    //       name: "confidentiality_contract",
+    //       fileId: "confidentiality_contract_file",
+    //       dateId: "confidentiality_contract_expiry"
+    //     },
+    //     {
+    //       name: "employee_handbook",
+    //       fileId: "employee_handbook_file",
+    //       dateId: "employee_handbook_expiry"
+    //     },
+    //     {
+    //       name: "dhacda_policies",
+    //       fileId: "dhacda_policies_file",
+    //       dateId: "dhacda_policies_expiry"
+    //     }
+    //   ];
+
+    //   sections.forEach(section => {
+    //     const isActive = document.querySelector(`input[name="${section.name}"]:checked`)?.value === "1";
+    //     const fileInput = document.getElementById(section.fileId);
+    //     const dateInput = document.getElementById(section.dateId);
+
+    //     fileInput.style.border = "";
+    //     dateInput.style.border = "";
+
+    //     if (isActive) {
+    //       if (!fileInput.value) {
+    //         fileInput.style.border = "2px solid red";
+    //         isValid = false;
+    //       }
+
+    //       if (!dateInput.value) {
+    //         dateInput.style.border = "2px solid red";
+    //         isValid = false;
+    //       }
+    //     }
+    //   });
+
+    //   if (!isValid) {
+    //     e.preventDefault();
+    //     alert("Please upload file and select expiry date for all active fields.");
+    //   }
+    // });
+
+    // // document.getElementById('staffForm').addEventListener('submit', function (e) {
+    // //   const staffName = document.getElementById('staff_name').value.trim();
+    // //   const nameParts = staffName.split(/\s+/);
+
+    // //   if (nameParts.length < 2) {
+    // //     e.preventDefault();
+    // //     document.getElementById('staff_name_error').style.display = "inline";
+    // //     document.getElementById('staff_name').style.border = "2px solid red";
+    // //   }
+    // // });
+    // document.addEventListener('DOMContentLoaded', () => {
+    //   const form = document.querySelector('form'); // update selector if needed
+
+    //   form.addEventListener('submit', (e) => {
+    //     const requiredFields = [
+    //       'staff_name',
+    //       'staff_email',
+    //       'staff_phone',
+    //       'dob',
+    //       'permanent_address',
+    //       'temporary_address'
+    //     ];
+
+    //     let formValid = true;
+
+    //     requiredFields.forEach(id => {
+    //       const field = document.getElementById(id);
+    //       if (!field.value.trim()) {
+    //         field.style.border = '2px solid red';
+    //         formValid = false;
+    //       } else {
+    //         field.style.border = '';
+    //       }
+    //       // Extra: for email and phone you could add further pattern checks here if desired
+    //     });
+
+    //     if (!formValid) {
+    //       e.preventDefault();
+    //       alert('Please fill all mandatory fields correctly.');
+    //     }
+    //   });
+
+    //   // Remove red border on input
+    //   ['staff_name', 'staff_email', 'staff_phone', 'dob', 'permanent_address', 'temporary_address'].forEach(id => {
+    //     const field = document.getElementById(id);
+    //     field.addEventListener('input', () => {
+    //       if (field.value.trim()) {
+    //         field.style.border = '';
+    //       }
+    //     });
+    //   });
+
+    // });
+    // // document.addEventListener('DOMContentLoaded', function () {
+    // //   // Attach the blur event to staff_name
+    // //   document.getElementById('staff_name').addEventListener('blur', function () {
+    // //     console.log('inside blur out....'); // Log to see if it's working
+
+    // //     // Get the staff_name value
+    // //     const staffName = this.value.trim();
+
+    // //     // Check if the name has at least two words (first and last name)
+    // //     const nameParts = staffName.split(' ');
+
+    // //     if (nameParts.length < 2) {
+    // //       console.log('Name is invalid, clearing staff_id'); // Debug log
+    // //       document.getElementById('staff_id').value = ''; // Clear staff_id if name is invalid
+    // //     }
+    // //   });
+    // // });
+    // function handleFileUpload(input) {
+    //   const file = input.files[0];
+    //   const fileNameSpan = document.getElementById(input.id + '_name');
+
+    //   if (file) {
+    //     // Show file name
+    //     fileNameSpan.textContent = file.name;
+
+    //     // Disable file input to prevent changing
+    //     input.disabled = true;
+
+    //     // Optional: show remove/reset button
+    //     // const resetBtn = document.createElement('button');
+    //     // resetBtn.textContent = 'Remove';
+    //     // resetBtn.type = 'button';
+    //     // resetBtn.style.marginLeft = '10px';
+    //     // resetBtn.onclick = function () {
+    //     //   input.value = '';
+    //     //   input.disabled = false;
+    //     //   fileNameSpan.textContent = '';
+    //     //   resetBtn.remove();
+    //     // };
+    //     // fileNameSpan.after(resetBtn);
+    //   }
+    // }
+
+
+    // document.getElementById("staffForm").addEventListener("submit", function (e) {
+    //   let isValid = true;
+
+    //   // Define each section to validate
+    //   const sections = [
+    //     {
+    //       name: "employee_handbook",
+    //       fileId: "employee_handbook_file",
+    //       dateId: "employee_handbook_expiry"
+    //     },
+    //     {
+    //       name: "dhacda_policies",
+    //       fileId: "dhacda_policies_file",
+    //       dateId: "dhacda_policies_expiry"
+    //     },
+    //     // Add more sections if needed
+    //   ];
+
+    //   sections.forEach(section => {
+    //     const active = document.querySelector(`input[name="${section.name}"]:checked`)?.value === "1";
+    //     const fileInput = document.getElementById(section.fileId);
+    //     const dateInput = document.getElementById(section.dateId);
+
+    //     // Reset previous borders
+    //     fileInput.style.border = "";
+    //     dateInput.style.border = "";
+
+    //     if (active) {
+    //       // Validate file and expiry
+    //       if (!fileInput.value) {
+    //         fileInput.style.border = "2px solid red";
+    //         isValid = false;
+    //       }
+
+    //       if (!dateInput.value) {
+    //         dateInput.style.border = "2px solid red";
+    //         isValid = false;
+    //       }
+    //     }
+    //   });
+
+    //   if (!isValid) {
+    //     e.preventDefault();
+    //     alert("Please fill all required fields for active sections.");
+    //   }
+    // });
+    document.addEventListener('DOMContentLoaded', () => {
+      const sectionConfigs = [
+        { name: "twrips", dateId: "twrips_date" },
+        { name: "passport", fileId: "passport_file", dateId: "passport_expiry" },
+        { name: "visa", fileId: "visa_file", dateId: "visa_expiry" },
+        { name: "experience", fileId: "exp_letter_file", dateId: "exp_letter_date" },
+        { name: "license", fileId: "license_file", dateId: "license_expiry" },
+        { name: "emirates_id", fileId: "emirates_id_file", dateId: "emirates_id_expiry" },
+        { name: "hepatitis_b", fileId: "hepatitis_b_file", dateId: "hepatitis_b_expiry" },
+        { name: "bls", fileId: "bls_file", dateId: "bls_file_date" },
+        { name: "hdc", fileId: "hdc_file", dateId: "hdc_file_date" },
+        { name: "dhacda_license", fileId: "dhacda_license_file", dateId: "dhacda_license_expiry" },
+        { name: "employment_contract", fileId: "employment_contract_file", dateId: "employment_contract_expiry" },
+        { name: "confidentiality_contract", fileId: "confidentiality_contract_file", dateId: "confidentiality_contract_expiry" },
+        { name: "employee_handbook", fileId: "employee_handbook_file", dateId: "employee_handbook_expiry" },
+        { name: "dhacda_policies", fileId: "dhacda_policies_file", dateId: "dhacda_policies_expiry" }
+      ];
+
+      // Enable/disable inputs based on radio button selection
+      sectionConfigs.forEach(section => {
+        const radios = document.querySelectorAll(`input[name="${section.name}"]`);
+        radios.forEach(radio => {
+          radio.addEventListener("change", () => {
+            const isActive = document.querySelector(`input[name="${section.name}"]:checked`)?.value === "1";
+            const fileInput = document.getElementById(section.fileId);
+            const dateInput = document.getElementById(section.dateId);
+
+            if (fileInput) {
+              fileInput.disabled = !isActive;
+              if (!isActive) {
+                fileInput.value = "";
+                fileInput.style.border = "";
+              }
+            }
+
+            if (dateInput) {
+              dateInput.disabled = !isActive;
+              if (!isActive) {
+                dateInput.value = "";
+                dateInput.style.border = "";
+              }
+            }
+          });
+        });
+      });
+
+      // Auto-generate staff ID from name
+      const staffNameInput = document.getElementById('staff_name');
+      const staffIdInput = document.getElementById('staff_id');
+      const nameErrorSpan = document.getElementById('staff_name_error');
+
+      staffNameInput.addEventListener('input', () => {
+        const nameParts = staffNameInput.value.trim().split(/\s+/);
+        if (nameParts.length >= 2) {
+          const randomNumber = Math.floor(Math.random() * 9000 + 1000);
+          const staffId = nameParts[0].slice(0, 2).toUpperCase() + nameParts[1].slice(0, 2).toUpperCase() + randomNumber;
+          staffIdInput.value = staffId;
+          nameErrorSpan.style.display = "none";
+          staffNameInput.style.border = "";
+        } else {
+          staffIdInput.value = "";
+          nameErrorSpan.style.display = "inline";
+          staffNameInput.style.border = "2px solid red";
+        }
+      });
+
+      // Form validation
+      const form = document.getElementById("staffForm");
+
+      form.addEventListener("submit", function (e) {
+        let isValid = true;
+
+        // Validate required fields
+        const requiredFields = [
+          'staff_name', 'staff_email', 'staff_phone',
+          'dob', 'permanent_address', 'temporary_address'
+        ];
+
+        requiredFields.forEach(id => {
+          const field = document.getElementById(id);
+          if (!field.value.trim()) {
+            field.style.border = '2px solid red';
+            isValid = false;
+          } else {
+            field.style.border = '';
+          }
+        });
+
+        // Validate active document sections
+        sectionConfigs.forEach(section => {
+          const isActive = document.querySelector(`input[name="${section.name}"]:checked`)?.value === "1";
+          const fileInput = document.getElementById(section.fileId);
+          const dateInput = document.getElementById(section.dateId);
+
+          if (isActive) {
+            if (fileInput && !fileInput.value) {
+              fileInput.style.border = "2px solid red";
+              isValid = false;
+            }
+            if (dateInput && !dateInput.value) {
+              dateInput.style.border = "2px solid red";
+              isValid = false;
+            }
+          }
+        });
+
+        if (!isValid) {
+          e.preventDefault();
+          alert("Please fill all mandatory fields and upload required files for active sections.");
+        }
+      });
+
+      // Clear red border on input change
+      ['staff_name', 'staff_email', 'staff_phone', 'dob', 'permanent_address', 'temporary_address'].forEach(id => {
+        const field = document.getElementById(id);
+        field.addEventListener('input', () => {
+          if (field.value.trim()) {
+            field.style.border = '';
+          }
+        });
+      });
+    });
+
+    // Handle file upload preview (optional display)
+    function handleFileUpload(input) {
+      const file = input.files[0];
+      const fileNameSpan = document.getElementById(input.id + '_name');
+      if (file && fileNameSpan) {
+        fileNameSpan.textContent = file.name;
+        input.disabled = true;
+      }
+    }
+
+  </script>
+  <%- include('../partials/footer') %>

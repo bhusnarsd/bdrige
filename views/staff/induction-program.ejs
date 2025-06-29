@@ -1,0 +1,788 @@
+<%- include('../partials/header') %>
+  <div class="container">
+    <%- include('../partials/left-panel') %>
+      <div class="right-panel">
+        <div class="content-area">
+          <% if (typeof errorMessage !=='undefined' && errorMessage) { %>
+            <div style="color: red; margin-bottom: 20px;">
+              <%= errorMessage %>
+            </div>
+            <% } %>
+              <% if (typeof successMessage !=='undefined' && successMessage) { %>
+                <div style="color: green; margin-bottom: 20px;">
+                  <%= successMessage %>
+                </div>
+                <% } %>
+
+                  <div class="breadcrumbs">
+                    <ul>
+                      <li><a href="/">Home</a></li>
+                      <li><a href="/staff">Staff</a></li>
+                      <li>Induction Program</li>
+                    </ul>
+                  </div>
+                  <div class="form-area">
+                    <h2>Staff Induction Program</h2>
+                    <div class="form-box">
+                      <form action="/submit" method="POST">
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label for="staff_id">Unique ID</label>
+                            <select id="staff_id" name="staff_id" required>
+                              <option value="">-- Select Unique ID --</option>
+                              <% if (staffList && staffList.length) { %>
+                                <% staffList.forEach(staff=> { %>
+                                  <option value="<%= staff.staff_id %>">
+                                    <%= staff.staff_id %>
+                                  </option>
+                                  <% }) %>
+                                    <% } else { %>
+                                      <option value="">No staff found</option>
+                                      <% } %>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="last-name">Employee Name:</label>
+                            <input type="text" id="last-name" name="last-name" placeholder="last name" required>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label for="email">Department</label>
+                            <input type="text" id="last-name" name="last-name" placeholder="last name" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="phone">Job Title</label>
+                            <input type="text" id="last-name" name="last-name" placeholder="last name" required>
+                          </div>
+                        </div>
+                        <p>This is a checklist of information for Induction which HR Officer/supervisors should use with
+                          new staff as part of their induction programme within the first two weeks of employment.
+                          Health and Safety measures will be identified at immediately. The new employee should be asked
+                          to tick each subject as he/she has been informed about it, and sign the end of the form. The
+                          HR /supervisor then keeps the form for inclusion in the employee’s personnel file.</p>
+                        <h2>ITEMS TO COVER WITH EACH NEW EMPLOYEE</h2>
+                        <div class="content">
+                          <div class="tablewrapper">
+                            <div class="table-responsive">
+                              <table class="table table-condensed table-striped">
+                                <thead class="tablehead">
+                                  <tr>
+                                    <th>The Department</th>
+                                    <th>Complete/ Incomplete</th>
+                                  </tr>
+                                </thead>
+                                <tbody class="tablebody">
+                                  <tr>
+                                    <td>1.Department function</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>2.Introduction to colleagues</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>3.New entrant’s own job</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>4.Supervision</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>5.General layout - entrances and exits</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>Conditions of Employment</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>1.Information on hours of work. </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>2.Time recording, finger punching, Email ID , Attendance marking </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>3.Job description </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>4.Probationary periods of employment </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>5.Breaking the contract–notice and other formalities </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>6.Reporting in when sick including when on leave</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>7.Arrangements for requesting leave:annual leave/sick leave /emergency leave
+                                    </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>8.Uniforms, and uniform policy, protective clothing, replacement dress in the
+                                      center. </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>9.DHA,CDA , guild lines of standard and policy , Child protection </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>10. Dealing with the parents/ Clients </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>11. Medical Records, Preparation of Medical Records and data </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2">Health and Safety, Security, Fire</td>
+                                  </tr>
+                                  <tr>
+                                    <td>1.Health and safety information relevant to the department</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>2.Issuing of fire instructions and procedure</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>3.Location of fire-fighting equipment</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>4.Assembly point in case of fire</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>5.Accident/ Incident reporting</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>6.First aid facilities</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>7.Loss of personal items </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>8.Cleanliness of working area , toy management </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>9.Arrangement for keys, ID Badges , flash cards , materials etc.</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>10.Waste Management</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>11.Violence and aggressive behaviour</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>12.Infection control.</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>13.Major Incident procedures and actions to take</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2">Conduct</td>
+                                  </tr>
+                                  <tr>
+                                    <td>1.Personal presentation</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>2.Disciplinary procedures</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>3.Courtesy to the customer and the public</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>4.Confidentiality</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>5.Noise Control</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>6.Acceptance of gifts</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>7.Local rules regarding smoking</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>8.Private use of telephones</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>9.Standards of Business Conduct</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2">Facilities</td>
+                                  </tr>
+                                  <tr>
+                                    <td>1.Pantry</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>2.Washroom </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2">Training and Promotion</td>
+                                  </tr>
+                                  <tr>
+                                    <td>1.Means of advancement, promotion opportunities</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>2.Employee appraisal, review systems</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>3.Company’s policies and procedures and Code of Ethics </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2">Communication</td>
+                                  </tr>
+                                  <tr>
+                                    <td>1.Supervisors</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>2.Communication arrangements- meetings </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>3.Information sources, e.g. notice boards, circulars etc.</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>4.Handling Complaints</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>5.Parent’s communication book.</td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2">Items Specific to Department</td>
+                                  </tr>
+                                  <tr>
+                                    <td>1.Payroll </td>
+                                    <td>
+                                      <div class="radio-group">
+                                        <label><input type="radio" name="option" value="option1" required>
+                                          Complete</label>
+                                        <label><input type="radio" name="option" value="option2" required>
+                                          InComplete</label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                          <h2>Employee’s Declaration:</h2>
+                          <p>I have been informed about and understand the above items.</p>
+                          <div class="form-group">
+                            <label for="phone">Employee Name:</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Your phone number" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="phone">Employee Signature:</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Your phone number" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="text">Date</label>
+                            <input type="date" id="date">
+                          </div>
+                          <p>I confirm that the above Induction Programme has been completed for the above member of
+                            staff.</p>
+                          <div class="form-group">
+                            <label for="phone">HR/CLINIC MANAGER Name:</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Your phone number" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="phone">HR/CLINIC MANAGER Signature:</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Your phone number" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="text">Date</label>
+                            <input type="date" id="date">
+                          </div>
+                          <h4>STAFF INDUCTION DOCUMENT</h4>
+                          <p>I, <input type="tel" id="phone" name="phone" class="width30">, acknowledge that I have
+                            received guidance and understood staff induction program the provided by <input type="tel"
+                              id="phone" name="phone" class="width30">. I understand the policies, procedures, and terms
+                            and conditions outlined during induction and agree to abide by them during my employment
+                            with <input type="tel" id="phone" name="phone" class="width30"></p>
+                          <p>By signing this form, I confirm that I have understood and agree to comply with all the
+                            guidelines and requirements set forth in the staff induction program.</p>
+                          <h4>FIRST PARTY</h4>
+                          <div class="form-row">
+                            <div class="form-group">
+                              <label for="phone">Name:</label>
+                              <input type="tel" id="phone" name="phone" placeholder="Your phone number" required>
+                            </div>
+                            <div class="form-group">
+                              <label for="email">Position:</label>
+                              <input type="email" id="email" name="email" placeholder="Your email" required>
+                            </div>
+                            <div class="form-group">
+                              <label for="phone">Signature:</label>
+                              <input type="tel" id="phone" name="phone" placeholder="Your phone number" required>
+                            </div>
+                            <h4>BRIDGES SPEECH CENTER LLC Speech Center</h4>
+                          </div>
+                          <h4>SECOND PARTY</h4>
+                          <div class="form-row">
+                            <div class="form-group">
+                              <label for="email">Name:</label>
+                              <input type="email" id="email" name="email" placeholder="Your email" required>
+                            </div>
+                            <div class="form-group">
+                              <label for="phone">Passport Number:</label>
+                              <input type="tel" id="phone" name="phone" placeholder="Your phone number" required>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group">
+                              <label for="text">Current address:</label>
+                              <input type="text" id="text" placeholder="Enter text">
+                            </div>
+                            <div class="form-group">
+                              <label for="text">Date</label>
+                              <input type="date" id="date">
+                            </div>
+                            <div class="form-group">
+                              <label for="text">Signature</label>
+                              <input type="text" id="text" placeholder="Enter text">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <button type="submit">Submit</button>
+                            <button type="reset">Reset</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+        </div>
+      </div>
+  </div>
+  <script>
+    document.getElementById('staff_id').addEventListener('change', async function () {
+      const staffId = this.value;
+      if (!staffId) {
+        document.getElementById('staff_name').value = '';
+        return;
+      }
+      try {
+        const res = await fetch('/staff/get-staff-details', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ staff_id: staffId })
+        });
+        const data = await res.json();
+        if (data && data.staff && data.staff.staff_name) {
+          document.getElementById('staff_name').value = data.staff.staff_name;
+        } else {
+          document.getElementById('staff_name').value = '';
+          alert('Staff not found.');
+        }
+      } catch (error) {
+        console.error('Error fetching staff details:', error);
+        alert('Server error occurred.');
+      }
+    });
+    const randomNumber = Math.floor(Math.random() * 9000 + 1000);
+    document.getElementById('staff_name').addEventListener('input', function () {
+      // Get the staff_name value
+      const staffName = this.value.trim();
+
+      // Check if the name has at least two words (first and last name)
+      const nameParts = staffName.split(' ');
+
+      if (nameParts.length >= 2) {
+        // Extract the first name and last name
+        const firstName = nameParts[0];
+        const lastName = nameParts[1];
+
+        // Generate the staff_id
+        const staffId = firstName.slice(0, 2).toUpperCase() + lastName.slice(0, 2).toUpperCase() + randomNumber; // Random 4-digit number
+
+        // Set the staff_id value to the generated ID
+        document.getElementById('staff_id').value = staffId;
+      } else {
+        document.getElementById('staff_id').value = '';
+      }
+    });
+  </script>
+  <%- include('../partials/footer') %>

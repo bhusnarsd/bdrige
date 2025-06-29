@@ -1,0 +1,172 @@
+<%- include('../partials/header') %>
+<div class="container">
+  <%- include('../partials/left-panel') %>
+  <div class="right-panel">
+    <div class="banner">
+      <img src="../images/banner-img.jpg" alt="Logo">
+    </div>
+    <div class="content-area">
+      <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+      <div style="color: red; margin-bottom: 20px;">
+        <%= errorMessage %>
+      </div>
+      <% } %>
+      <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+      <div style="color: green; margin-bottom: 20px;">
+        <%= successMessage %>
+      </div>
+      <% } %>
+
+      <div class="breadcrumbs">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/staff/warning-letter/list">Warning Letters</a></li>
+          <li>Add Warning Letter</li>
+        </ul>
+      </div>
+      <div class="form-area">
+        <h2>Staff Warning Letter</h2>
+        <div class="form-box">
+          <form action="/staff/warning-letter" method="POST" enctype="multipart/form-data">
+            <div class="content">
+              <div class="tablewrapper">
+                <div class="table-responsive">
+                  <table class="table table-condensed table-striped">
+                    <tbody class="tablebody">
+                      <tr>
+                        <td>Unique id:</td>
+                        <td>
+                          <select id="staff_id" name="staff_id" required>
+                            <option value="">-- Select Unique ID --</option>
+                            <% if (staffList && staffList.length) { %>
+                              <% staffList.forEach(staff => { %>
+                                <option value="<%= staff.staff_id %>"><%= staff.staff_id %></option>
+                              <% }) %>
+                            <% } else { %>
+                              <option value="">No staff found</option>
+                            <% } %>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Employee Name</td>
+                        <td>
+                          <input type="text" id="staff_name" name="staff_name" placeholder="Staff Name" required>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Date of issue</td>
+                        <td><input type="date" id="doi" name="doi"></td>
+                      </tr>
+                      <tr>
+                        <td>Department</td>
+                        <td><select class="minimal" name="department" id="department" required>
+                            <option value="">Select a subject</option>
+                            <option value="Speech Therapy">Speech Therapy</option>
+                            <option value="ABA">ABA</option>
+                            <option value="Occupational Therapy">Occupational Therapy</option>
+                            <option value="Physiotherapy">Physiotherapy</option>
+                            <option value="Psychology">Psychology</option>
+                            <option value="Readiness Program">Readiness Program</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Clinic Manager">Clinic Manager</option>
+                            <option value="Cleaning Staff">Cleaning Staff</option>
+                            <option value="Clinic (MS)">Clinic (MS)</option>
+                          </select></td>
+                      </tr>
+                      <tr>
+                        <td>Brief description of the issue/concern</td>
+                        <td><input type="text" id="issues_concerns" name="issues_concerns" placeholder="" required></td>
+                      </tr>
+                      <tr>
+                        <td>describe any relevant background information or events leading up to the problem</td>
+                        <td><input type="text" id="background_info" name="background_info" placeholder="" required></td>
+                      </tr>
+                      <tr>
+                        <td>explain the effects or consequences of the problem</td>
+                        <td><input type="text" id="ecotp" name="ecotp" placeholder="" required></td>
+                      </tr>
+                      <tr>
+                        <td>Actions Required to be taken</td>
+                        <td>Action 1: <input type="text" id="action1" name="action1" placeholder="" required><br />
+                          Action 2: <input type="text" id="action2" name="action2" placeholder="" required><br />
+                          Action 3: <input type="text" id="action3" name="action3" placeholder="" required></td>
+                      </tr>
+                      <tr>
+                        <td>Should be completed by deadline</td>
+                        <td><input type="date" id="deadline_date" name="deadline_date"></td>
+                      </tr>
+                      <tr>
+                        <td>Email address to respond to </td>
+                        <td><input type="text" id="email_to_respond" name="email_to_respond" placeholder="" required></td>
+                      </tr>
+                      <tr>
+                        <td>Date when address appropriately </td>
+                        <td><input type="date" id="appropriate_date" name="appropriate_date"></td>
+                      </tr>
+                      <tr>
+                        <td>Response </td>
+                        <td><input type="text" id="response" name="response" placeholder="" required></td>
+                      </tr>
+                      <tr>
+                        <td>Responded by</td>
+                        <td><input type="text" id="responded_by" name="responded_by" placeholder="" required></td>
+                      </tr>
+                      <tr>
+                        <td>Conclusion</td>
+                        <td><input type="text" id="conclusion" name="conclusion" placeholder="" required></td>
+                      </tr>
+                      <tr>
+                        <td>Any Document</td>
+                        <td><input type="file" id="any_document" name="any_document" placeholder="Upload your file" required>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div><br />
+              <div class="form-group">
+                <button type="submit">Submit</button>
+                <button type="reset">Reset</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.getElementById('staff_id').addEventListener('change', async function () {
+    const staffId = this.value;
+    if (!staffId) {
+      document.getElementById('staff_name').value = '';
+      // document.getElementById('department').value = '';
+      // document.getElementById('job_title').value = '';
+      return;
+    }
+  
+    try {
+      const res = await fetch('/staff/get-staff-details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ staff_id: staffId })
+      });
+  
+      const data = await res.json();
+  
+      if (data.staff) {
+        document.getElementById('staff_name').value = data.staff.staff_name || '';
+        // document.getElementById('department').value = data.staff.department || '';
+        // document.getElementById('job_title').value = data.staff.job_title || '';
+      } else {
+        alert('Staff not found');
+      }
+    } catch (err) {
+      console.error('Error fetching staff data:', err);
+      // alert('Server error occurred.');
+    }
+  });
+  </script>
+  
+<%- include('../partials/footer') %>

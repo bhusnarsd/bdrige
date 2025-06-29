@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KPI Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .form-section {
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #000;
+    }
+
+    th,
+    td {
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Key Performance Indicator</h2>
+  <div class="form-section">
+    <p><strong>Date:</strong> <%= kpi_date %></p>
+    <p><strong>Department:</strong> <%= department %></p>
+    <p><strong>Evaluation Period:</strong> <%= e_period === '1' ? '1st Q: Jan-May' : e_period === '2' ? '2nd Q: June-Sept' : '3rd Q: Oct-Dec' %></p>
+  </div>
+
+  <div class="form-section">
+    <h4>Key Performance Indicator</h4>
+    <p><strong>KPI Text 1:</strong> <%= kpi_text1 %></p>
+  </div>
+
+  <div class="form-section">
+    <!-- Ensure the images are served via the static path -->
+    <h4>Signatures</h4>
+    <p><strong>HR Signature:</strong><br><img src="<%= hr_sign %>" width="200px" /></p>
+<p><strong>Staff Signature:</strong><br><img src="<%= staff_sign %>" width="200px" /></p>
+<p><strong>HOD Signature:</strong><br><img src="<%= hod_sign %>" width="200px" /></p>
+<p><strong>Director Signature:</strong><br><img src="<%= director_sign %>" width="200px" /></p>
+
+    <!-- Output the image path to help debug -->
+<p>HR Signature Path: <%= hr_sign %></p>
+<p>Staff Signature Path: <%= staff_sign %></p>
+<p>HOD Signature Path: <%= hod_sign %></p>
+<p>Director Signature Path: <%= director_sign %></p>
+
+  </div>
+
+  <div class="form-section">
+    <h4>Rating Scale</h4>
+    <p><strong>Rating:</strong> <%= rating_scale %></p>
+  </div>
+
+  <div class="form-section">
+    <h4>Overall Performance</h4>
+    <p><strong>Performance Scale:</strong> <%= ps_scale %></p>
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,1075 @@
+<%- include('../../partials/header') %>
+<div class="container">
+  <%- include('../../partials/left-panel') %>
+  <div class="right-panel">
+    <div class="content-area">
+      <% if (messages.error) { %>
+      <div style="color: red; margin-bottom: 20px;">
+        <%= messages.error %>
+      </div>
+      <% } %>
+      <% if (messages.success) { %>
+      <div style="color: green; margin-bottom: 20px;"><%= messages.success %></div>
+      <% } %>
+
+      <div class="breadcrumbs">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/hr/kpi">KPI</a></li>
+          <li>Key Performance Indicator</li>
+        </ul>
+      </div>
+      <div class="form-area">
+        <h2>Key Performance Indicator</h2>
+        <div class="form-box">
+          <form action="/hr/kpi/create" method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="staff_id">Unique id:</label>
+                <select id="staff_id" name="staff_id" required>
+                  <option value="">-- Select Unique ID --</option>
+                  <% if (staffList && staffList.length) { %>
+                    <% staffList.forEach(staff => { %>
+                      <option value="<%= staff.staff_id %>"><%= staff.staff_id %></option>
+                    <% }) %>
+                  <% } else { %>
+                    <option value="">No staff found</option>
+                  <% } %>
+                </select>
+                <!-- <input type="text" id="staff_id_search" name="staff_id_search" placeholder="Staff Id" required>
+                <input type="hidden" id="staff_id" name="staff_id"> -->
+              </div>
+              <div class="form-group">
+                <label for="staff_name">Employee Name:</label>
+                <input type="text" id="staff_name" name="staff_name" placeholder="staff_name" readonly>
+              </div>
+              <div class="form-group">
+                <label for="current_phone">Current Phone (In Dubai)</label>
+                <input type="tel" id="current_phone" name="current_phone" placeholder="Current Phone (In Dubai)">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="kpi_date">Date:</label>
+                <input type="date" id="kpi_date" name="kpi_date">
+              </div>
+              <div class="form-group">
+                <label for="dept">Department</label>
+                <select class="minimal" name="department" required>
+                  <option value="">Select a Department</option>
+                  <option value="feedback">Feedback</option>
+                  <option value="inquiry">Inquiry</option>
+                  <option value="support">Support</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="email">Evaluation period</label>
+                <label><input type="radio" name="e_period" value="1st Q: Jan-May" required> 1st Q: Jan-May</label>
+                <label><input type="radio" name="e_period" value="2nd Q: June-Sept" required> 2nd Q: June-Sept</label>
+                <label><input type="radio" name="e_period" value="3rd Q: Oct-Dec" required> 3rd Q: Oct-Dec</label>
+              </div>
+            </div>
+            <h4>Key Performance Indicator</h4>
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="" colspan="2">Quarter: </th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody">
+                    <tr>
+                      <td>1.</td>
+                      <td><input type="text" id="kpi_text1" name="kpi_text1" value="ddd" required></td>
+                    </tr>
+                    <tr>
+                      <td>2.</td>
+                      <td><input type="text" id="kpi_text2" name="kpi_text2" value="bbbb" required></td>
+                    </tr>
+                    <tr>
+                      <td>3.</td>
+                      <td><input type="text" id="kpi_text3" name="kpi_text3" value="nnnn" required></td>
+                    </tr>
+                    <tr>
+                      <td>4.</td>
+                      <td><input type="text" id="kpi_text4" name="kpi_text4" value="mmmmm" required></td>
+                    </tr>
+                    <tr>
+                      <td>5.</td>
+                      <td><input type="text" id="kpi_text5" name="kpi_text5" value="sssss" required></td>
+                    </tr>
+                    <tr>
+                      <td>Employee Signature:
+                        <label for="staff_sign">Employee’s Signature</label><br>
+                        <canvas id="staff_sign" width="400" height="150" style="border:1px solid #333;"></canvas>
+                        <input type="hidden" id="staff_sign_input" name="staff_sign_input">
+                        <!-- <canvas id="staff_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br>
+                        <input type="hidden" id="staff_sign_input" name="staff_sign_input"> -->
+                        <!-- <input type="hidden" id="staff_sign_input" name="staff_sign_input"> -->
+                      </td>
+                      <td>HOD/Supervisor Signature:
+                        <label for="hod_sign">HOD/Supervisor Signature</label><br>
+                        <canvas id="hod_sign" width="400" height="150" style="border:1px solid #333;"></canvas>
+                        <input type="hidden" id="hod_sign_input" name="hod_sign_input">
+                        <!-- <label for="hod_sign">HOD/Supervisor Signature</label>
+                        <canvas id="hod_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br>
+                        <input type="hidden" id="hod_sign_input" name="hod_sign_input"> -->
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <h4>Rating Scale</h4>
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="">O </th>
+                      <th class="">BT </th>
+                      <th class="">MT </th>
+                      <th class="">LT </th>
+                      <th class="">UN </th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody">
+                    <tr>
+                      <td><label><input type="radio" name="rating_scale" id="rating_scale" value="5" required> 5</label></td>
+                      <td><label><input type="radio" name="rating_scale" id="rating_scale" value="4" required> 4</label></td>
+                      <td><label><input type="radio" name="rating_scale" id="rating_scale" value="3" required> 3</label></td>
+                      <td><label><input type="radio" name="rating_scale" id="rating_scale" value="2" required> 2</label></td>
+                      <td><label><input type="radio" name="rating_scale" id="rating_scale" value="1" required> 1</label></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <h4>Performance Targets:</h4>
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="">Target 1: Administration </th>
+                      <th class="">Q: </th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody" id="block1">
+                    <tr>
+                      <td>Attendance/Reporting time</td>
+                      <td><input type="number" class="block1-input" id="trg1_art" name="trg1_art" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Rapport with administration desk</td>
+                      <td><input type="number" class="block1-input" id="trg1_rwad" name="trg1_rwad" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Report writing skills</td>
+                      <td><input type="number" class="block1-input" id="trg1_rws" name="trg1_rws" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Maintaining body checklist </td>
+                      <td><input type="number" class="block1-input" id="trg1_mbc" name="trg1_mbc" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Property /Premise care </td>
+                      <td><input type="number" class="block1-input" id="trg1_ppc" name="trg1_ppc" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Total </td>
+                      <td>Sum of above value (A): <span class="block1-sum"></span>
+                      <input type="hidden" name="trg1_sum" id="block1-sum"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div><br /><br />
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="">Target 2: Planning and Organization </th>
+                      <th class="">Q: </th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody" id="block2">
+                    <tr>
+                      <td>Planning of session</td>
+                      <td><input type="number" class="block2-input" id="trg2_pos" name="trg2_pos" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Supporting fellow therapist</td>
+                      <td><input type="number" class="block2-input" id="trg2_sft" name="trg2_sft" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Creativity /Customization as per client</td>
+                      <td><input type="number" class="block2-input" id="trg2_ccapc" name="trg2_ccapc" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Clean and organized station </td>
+                      <td><input type="number" class="block2-input" id="trg2_caos" name="trg2_caos" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Problem Solving</td>
+                      <td><input type="number" class="block2-input" id="trg2_ps" name="trg2_ps" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Counselling</td>
+                      <td><input type="number" class="block2-input" id="trg2_counslng" name="trg2_counslng" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Total </td>
+                      <td>Sum of above value (B) <span class="block2-sum"></span>
+                        <input type="hidden" name="trg2_sum" id="block2-sum"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div><br /><br />
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="">Target 3: Performance and conduct</th>
+                      <th class="">Q: </th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody" id="block3">
+                    <tr>
+                      <td>Communication skills</td>
+                      <td><input type="number" class="block3-input" id="trg3_cs" name="trg3_cs" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Decision making</td>
+                      <td><input type="number" class="block3-input" id="trg3_dm" name="trg3_dm" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Initiation</td>
+                      <td><input type="number" class="block3-input" id="trg3_init" name="trg3_init" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Consistent performance</td>
+                      <td><input type="number" class="block3-input" id="trg3_cp" name="trg3_cp" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Grooming/ Presentation skills</td>
+                      <td><input type="number" class="block3-input" id="trg3_gps" name="trg3_gps" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Teamwork</td>
+                      <td><input type="number" class="block3-input" id="trg3_tw" name="trg3_tw" value="1" required></td>
+                    </tr>
+                    <tr>
+                      <td>Total </td>
+                      <td>Sum of above value (C) <span class="block3-sum"></span>
+                        <input type="hidden" name="trg3_sum" id="block3-sum"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <h4>Strength and skills noted during this Quarter</h4>
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <tbody class="tablebody">
+                    <tr>
+                      <td><input type="text" id="sasndtq1" name="sasndtq1" value="test" required></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="sasndtq2" name="sasndtq2" value="test" required></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="sasndtq3" name="sasndtq3" value="test" required></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="sasndtq4" name="sasndtq4" value="test" required></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="sasndtq5" name="sasndtq5" value="test" required></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="sasndtq6" name="sasndtq6" value="test" required></td>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <h4>*Overall performance</h4>
+            <p>SCORE: Sum of A+B+C <span id="block-total-display"></span>
+            <input type="hidden" name="trg_total" id="block-total"></p>
+            <h4>*Performance Scoring:</h4>
+            <p>
+            <ul>
+              <li>O: Outstanding Performance - Conduct and performance consistently superior</li>
+              <li>BT: Beyond Target - Conduct and performance beyond set targets</li>
+              <li>MT: Meeting Target - Conduct and performance just meeting set targets</li>
+              <li>LT: Below Target - Conduct and performance fail to meet set targets</li>
+              <li>UN: Unsatisfactory - Conduct and performance consistently unsatisfactory</li>
+            </ul>
+            </p>
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="">O </th>
+                      <th class="">BT </th>
+                      <th class="">MT </th>
+                      <th class="">LT </th>
+                      <th class="">UN </th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody">
+                    <tr>
+                      <td><label><input type="radio" name="ps_scale" id="ps_scale" value="above-80" required> Above 80</label></td>
+                      <td><label><input type="radio" name="ps_scale" id="ps_scale" value="80-70" required> 80-70</label></td>
+                      <td><label><input type="radio" name="ps_scale" id="ps_scale" value="70-60" required> 70-60</label></td>
+                      <td><label><input type="radio" name="ps_scale" id="ps_scale" value="60-50" required> 60-50</label></td>
+                      <td><label><input type="radio" name="ps_scale" id="ps_scale" value="50-40" required> 50-
+
+                          < 40 </label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div><br /><br />
+            <div class="form-row">
+              <div class="form-group">
+                <label for="hr_sign">HR’s Signature</label><br>
+                <canvas id="hr_sign" width="400" height="150" style="border:1px solid #333;"></canvas>
+                <input type="hidden" id="hr_sign_input" name="hr_sign_input">
+                <!-- <label for="hr_sign">HR signature</label>
+                <canvas id="hr_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br>
+                <input type="hidden" id="hr_sign_input" name="hr_sign_input"> -->
+              </div>
+              <div class="form-group">
+                <label for="director_sign">Director’s Signature</label><br>
+                <canvas id="director_sign" width="400" height="150" style="border:1px solid #333;"></canvas>
+                <input type="hidden" id="director_sign_input" name="director_sign_input">
+                <!-- <label for="director_sign">Director</label>
+                <canvas id="director_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br>
+                <input type="hidden" id="director_sign_input" name="director_sign_input"> -->
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="staff_sign1">Employee’s Signature</label><br>
+                <canvas id="staff_sign1" width="400" height="150" style="border:1px solid #333;"></canvas>
+                <input type="hidden" id="staff_sign1_input" name="staff_sign1_input">
+                <!-- <label for="staff_sign1">Employee’s Signature</label>
+                <canvas id="staff_sign1" width="400" height="200" style="border: 1px solid black;"></canvas><br>
+                <input type="hidden" id="staff_sign1_input" name="staff_sign1_input"> -->
+              </div>
+              <div class="form-group">
+                <label for="hod_sign1">HOD/Supervisor 2nd Signature</label><br>
+                <canvas id="hod_sign1" width="400" height="150" style="border:1px solid #333;"></canvas>
+                <input type="hidden" id="hod_sign1_input" name="hod_sign1_input">
+                <!-- <label for="hod_sign1">HOD/Supervisor Signature</label>
+                <canvas id="hod_sign1" width="400" height="200" style="border: 1px solid black;"></canvas><br>
+                <input type="hidden" id="hod_sign1_input" name="hod_sign1_input"> -->
+              </div>
+            </div>
+            <div class="form-group">
+              <button type="submit">Submit</button>
+              <button type="button">Print</button>
+              <button type="button">Download</button>
+              <button type="reset">Reset</button>
+              <p id="errorMessage" style="color: red; display: none;">Please enter a valid 8-character staff ID.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+  // Auto-fill name and department based on staff ID
+  document.getElementById('staff_id').addEventListener('change', async function () {
+    const staffId = this.value;
+    if (!staffId) {
+      document.getElementById('staff_name').value = '';
+      document.getElementById('department').value = '';
+      return;
+    }
+    try {
+      const res = await fetch('/staff/get-staff-details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ staff_id: staffId })
+      });
+      const data = await res.json();
+      if (data.staff) {
+        document.getElementById('staff_name').value = data.staff.staff_name || '';
+        document.getElementById('department').value = data.staff.department || '';
+      } else {
+        alert('Staff not found');
+      }
+    } catch (err) {
+      console.error('Error fetching staff data:', err);
+    }
+  });
+
+  // Initialize a signature canvas
+  function initializeSignatureCanvas(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    let drawing = false, lastX = 0, lastY = 0;
+
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+      return { x, y };
+    }
+
+    ['mousedown','touchstart'].forEach(evt =>
+      canvas.addEventListener(evt, e => {
+        e.preventDefault();
+        drawing = true;
+        ({ x: lastX, y: lastY } = getPos(e));
+      })
+    );
+    ['mouseup','mouseout','touchend','touchcancel'].forEach(evt =>
+      canvas.addEventListener(evt, () => drawing = false)
+    );
+    ['mousemove','touchmove'].forEach(evt =>
+      canvas.addEventListener(evt, e => {
+        if (!drawing) return;
+        const { x, y } = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        lastX = x; lastY = y;
+      })
+    );
+  }
+
+  // Sum block calculation logic (unchanged)
+  function updateSum(blockClass, sumClass) {
+    const inputs = document.querySelectorAll(`.${blockClass}`);
+    let sum = Array.from(inputs).reduce((acc, i) => acc + (parseFloat(i.value) || 0), 0);
+    document.querySelector(`.${sumClass}`).textContent = sum;
+    document.getElementById(sumClass).value = sum;
+    const totalAll = ['block1-sum','block2-sum','block3-sum']
+      .reduce((a, id) => a + (parseFloat(document.getElementById(id).value) || 0), 0);
+    document.getElementById('block-total').value = totalAll;
+    document.getElementById('block-total-display').textContent = totalAll;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Wire up sum recalculation
+    ['block1-input','block2-input','block3-input'].forEach((cls,i) => {
+      document.querySelectorAll(`.${cls}`).forEach(inp =>
+        inp.addEventListener('input', () => updateSum(cls, `block${i+1}-sum`))
+      );
+    });
+    // Initial sums
+    updateSum('block1-input','block1-sum');
+    updateSum('block2-input','block2-sum');
+    updateSum('block3-input','block3-sum');
+
+    // Initialize all signature canvases
+    ['staff_sign','hod_sign','hr_sign','director_sign','staff_sign1','hod_sign1']
+      .forEach(initializeSignatureCanvas);
+
+    // Single submit handler
+    const form = document.querySelector('form');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      // Copy each canvas → hidden input
+      ['staff_sign','hod_sign','hr_sign','director_sign','staff_sign1','hod_sign1']
+        .forEach(id => {
+          const canvas = document.getElementById(id);
+          const input  = document.getElementById(`${id}_input`);
+          if (canvas && input) {
+            input.value = canvas.toDataURL();
+          } else {
+            console.warn(`Missing #${id} or #${id}_input`);
+          }
+        });
+
+      // (Optional) inspect in console:
+      console.log('staff_sign_input:', document.getElementById('staff_sign_input').value.substring(0,30));
+
+      form.submit();
+    });
+  });
+</script>
+
+<!-- <script>
+  // Auto-fill name and department based on staff ID
+  document.getElementById('staff_id').addEventListener('change', async function () {
+    const staffId = this.value;
+    if (!staffId) {
+      document.getElementById('staff_name').value = '';
+      document.getElementById('department').value = '';
+      return;
+    }
+
+    try {
+      const res = await fetch('/staff/get-staff-details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ staff_id: staffId })
+      });
+
+      const data = await res.json();
+
+      if (data.staff) {
+        document.getElementById('staff_name').value = data.staff.staff_name || '';
+        document.getElementById('department').value = data.staff.department || '';
+      } else {
+        alert('Staff not found');
+      }
+    } catch (err) {
+      console.error('Error fetching staff data:', err);
+    }
+  });
+
+  // Initialize signature canvas
+  function initializeSignatureCanvas(canvasId, inputId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    let lastX = 0, lastY = 0;
+
+    function getPosition(e) {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.touches ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
+      const y = e.touches ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
+      return { x, y };
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      drawing = true;
+      ({ x: lastX, y: lastY } = getPosition(e));
+    });
+    canvas.addEventListener('mouseup', () => drawing = false);
+    canvas.addEventListener('mousemove', (e) => {
+      if (drawing) {
+        const { x, y } = getPosition(e);
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        lastX = x;
+        lastY = y;
+      }
+    });
+
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      drawing = true;
+      ({ x: lastX, y: lastY } = getPosition(e));
+    });
+    canvas.addEventListener('touchmove', (e) => {
+      if (drawing) {
+        const { x, y } = getPosition(e);
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        lastX = x;
+        lastY = y;
+      }
+    });
+    canvas.addEventListener('touchend', () => drawing = false);
+  }
+
+  // Set base64 signature values and submit form
+  function handleFormSubmit(event) {
+    const form = document.querySelector('form');
+
+    // Collect signature base64 and assign to hidden inputs
+    ['staff_sign', 'hod_sign', 'hr_sign', 'director_sign', 'staff_sign1', 'hod_sign1'].forEach(id => {
+      const canvas = document.getElementById(id);
+      const input = document.getElementById(`${id}_input`);
+      if (canvas && input) {
+        input.value = canvas.toDataURL();
+      }
+    });
+
+    // Debug: Show trimmed base64 output
+    console.log('Signature base64 sample:', {
+      staff_sign: document.getElementById('staff_sign_input').value?.substring(0, 30),
+      hod_sign: document.getElementById('hod_sign_input').value?.substring(0, 30),
+    });
+
+    form.submit(); // ✅ Safe to submit
+  }
+
+  // Sum block calculation logic
+  function updateSum(blockClass, sumClass, callback) {
+    const inputs = document.querySelectorAll(`.${blockClass}`);
+    const totalDisplay = document.querySelector(`.${sumClass}`);
+    const totalInput = document.querySelector(`#${sumClass}`);
+    const totalAllInput = document.querySelector('#block-total');
+    const totalAllDisplay = document.querySelector('#block-total-display');
+
+    let sum = 0;
+    inputs.forEach(input => sum += parseFloat(input.value) || 0);
+
+    totalDisplay.textContent = sum;
+    totalInput.value = sum;
+
+    const totalAll = ['block1-sum', 'block2-sum', 'block3-sum']
+      .map(id => parseFloat(document.querySelector(`#${id}`)?.value) || 0)
+      .reduce((a, b) => a + b, 0);
+
+    totalAllInput.value = totalAll;
+    totalAllDisplay.textContent = totalAll;
+
+    if (typeof callback === 'function') callback();
+  }
+
+  // DOM Ready logic
+  document.addEventListener('DOMContentLoaded', function () {
+    const staffIdInput = document.getElementById('staff_id');
+    const staffIdSearchInput = document.getElementById('staff_id_search');
+    const staffNameInput = document.getElementById('staff_name');
+    const currentPhoneInput = document.getElementById('current_phone');
+    const submitButton = document.querySelector('button[type="submit"]');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Disable submit initially
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.style.backgroundColor = 'gray';
+    }
+
+    if (staffIdSearchInput) {
+      staffIdSearchInput.addEventListener('input', async () => {
+        const staffId = staffIdSearchInput.value;
+
+        if (staffId.length === 8) {
+          try {
+            const response = await fetch('/staff/get-staff-details', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ staff_id: staffId })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.staff) {
+              staffIdInput.value = data.staff.id || '';
+              staffNameInput.value = data.staff.staff_name || '';
+              currentPhoneInput.value = data.staff.ccdetails || '';
+              submitButton.disabled = false;
+              submitButton.style.backgroundColor = '';
+              errorMessage.style.display = 'none';
+            } else {
+              alert(data.error || 'Staff not found');
+              submitButton.disabled = true;
+              errorMessage.style.display = 'block';
+              errorMessage.textContent = 'Staff ID not found. Please check again.';
+            }
+          } catch (error) {
+            console.error('Fetch error:', error);
+            alert('Server error');
+            submitButton.disabled = true;
+          }
+        } else {
+          submitButton.disabled = true;
+          errorMessage.style.display = 'block';
+          errorMessage.textContent = 'Staff ID must be exactly 8 characters.';
+          staffIdInput.value = '';
+          staffNameInput.value = '';
+          currentPhoneInput.value = '';
+        }
+      });
+    }
+
+    // Recalculate KPI blocks on input
+    ['block1-input', 'block2-input', 'block3-input'].forEach((cls, i) => {
+      document.querySelectorAll(`.${cls}`).forEach(input => {
+        input.addEventListener('input', () => updateSum(cls, `block${i + 1}-sum`));
+      });
+    });
+
+    // Initial sum calculation
+    updateSum('block1-input', 'block1-sum');
+    updateSum('block2-input', 'block2-sum');
+    updateSum('block3-input', 'block3-sum');
+
+    // Setup signature canvases
+    initializeSignatureCanvas('staff_sign', 'staff_sign_input');
+    initializeSignatureCanvas('hod_sign', 'hod_sign_input');
+    initializeSignatureCanvas('hr_sign', 'hr_sign_input');
+    initializeSignatureCanvas('director_sign', 'director_sign_input');
+    initializeSignatureCanvas('staff_sign1', 'staff_sign1_input');
+    initializeSignatureCanvas('hod_sign1', 'hod_sign1_input');
+
+    // Final form submit trigger
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); // stop default
+      updateSum('block1-input', 'block1-sum', () => {
+        updateSum('block2-input', 'block2-sum', () => {
+          updateSum('block3-input', 'block3-sum', () => {
+            console.log('staff_sign canvas:', document.getElementById('staff_sign'));
+console.log('staff_sign_input before set:', document.getElementById('staff_sign_input').value);
+console.log('staff_sign base64:', document.getElementById('staff_sign').toDataURL().substring(0, 100));
+
+            handleFormSubmit(event);
+          });
+        });
+      });
+    });
+  });
+</script> -->
+
+
+<!-- <script>
+ document.getElementById('staff_id').addEventListener('change', async function () {
+    const staffId = this.value;
+    if (!staffId) {
+      document.getElementById('staff_name').value = '';
+      document.getElementById('department').value = '';
+      document.getElementById('job_title').value = '';
+      return;
+    }
+  
+    try {
+      const res = await fetch('/staff/get-staff-details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ staff_id: staffId })
+      });
+  
+      const data = await res.json();
+  
+      if (data.staff) {
+        document.getElementById('staff_name').value = data.staff.staff_name || '';
+        document.getElementById('department').value = data.staff.department || '';
+        document.getElementById('job_title').value = data.staff.job_title || '';
+      } else {
+        alert('Staff not found');
+      }
+    } catch (err) {
+      console.error('Error fetching staff data:', err);
+      // alert('Server error occurred.');
+    }
+  });
+
+
+  // Function to initialize the canvas drawing behavior
+  function initializeSignatureCanvas(canvasId, inputId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    // Function to get the position of the pointer (mouse or touch)
+    function getPosition(event) {
+      const rect = canvas.getBoundingClientRect();
+      const x = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
+      const y = event.touches ? event.touches[0].clientY - rect.top : event.clientY - rect.top;
+      return {
+        x,
+        y
+      };
+    }
+
+    // Start drawing when mouse is pressed or touch starts
+    canvas.addEventListener('mousedown', (event) => {
+      drawing = true;
+
+      // Get the mouse position relative to the canvas
+      // const rect = canvas.getBoundingClientRect();
+      // lastX = event.clientX - rect.left;
+      // lastY = event.clientY - rect.top;
+      const {
+        x,
+        y
+      } = getPosition(event);
+      lastX = x;
+      lastY = y;
+    });
+    // Start drawing on touch start (mobile/tablets)
+    canvas.addEventListener('touchstart', (event) => {
+      event.preventDefault(); // Prevents the default touch action (scrolling)
+      drawing = true;
+      const {
+        x,
+        y
+      } = getPosition(event);
+      lastX = x;
+      lastY = y;
+    });
+
+    // Stop drawing when mouse is released or touch ends
+    canvas.addEventListener('mouseup', () => {
+      drawing = false;
+    });
+    // Stop drawing on touch end
+    canvas.addEventListener('touchend', () => {
+      drawing = false;
+    });
+
+    // Draw on canvas when mouse is moved or touch moves and drawing is true
+    canvas.addEventListener('mousemove', (event) => {
+      if (drawing) {
+        // const rect = canvas.getBoundingClientRect();
+        // const x = event.clientX - rect.left;
+        // const y = event.clientY - rect.top;
+        const {
+          x,
+          y
+        } = getPosition(event);
+
+        // Draw a line from the last position to the current position
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        lastX = x; // Update lastX to the current position
+        lastY = y; // Update lastY to the current position
+      }
+    });
+    // Draw on canvas when touch moves
+    canvas.addEventListener('touchmove', (event) => {
+      if (drawing) {
+        const {
+          x,
+          y
+        } = getPosition(event);
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        lastX = x;
+        lastY = y;
+      }
+    });
+  }
+
+  // Function to handle form submission
+  function handleFormSubmit(event) {
+    // Get the canvas data for each signature field
+    const staffSignData = document.getElementById('staff_sign').toDataURL();
+    const hodSignData = document.getElementById('hod_sign').toDataURL();
+    const hrSignData = document.getElementById('hr_sign').toDataURL();
+    const directorSignData = document.getElementById('director_sign').toDataURL();
+    const staffSign1Data = document.getElementById('staff_sign1').toDataURL();
+    const hodSign1Data = document.getElementById('hod_sign1').toDataURL();
+
+    // Set the hidden input fields with the canvas data
+    document.getElementById('staff_sign_input').value = staffSignData;
+    document.getElementById('hod_sign_input').value = hodSignData;
+    document.getElementById('hr_sign_input').value = hrSignData;
+    document.getElementById('director_sign_input').value = directorSignData;
+    document.getElementById('staff_sign1_input').value = staffSign1Data;
+    document.getElementById('hod_sign1_input').value = hodSign1Data;
+
+    // console.log('Form data:', {
+    //   staffSignData,
+    //   hodSignData,
+    //   hrSignData,
+    //   directorSignData,
+    //   staffSign1Data,
+    //   hodSign1Data
+    // });
+
+    // Proceed with the form submission after populating the signature data
+    // If you're submitting with AJAX, prevent the default behavior
+    // event.preventDefault(); // Only needed for AJAX submission
+    document.querySelector('form').submit(); // Submit the form after setting the hidden inputs
+  }
+
+  // Initialize all signature canvases
+  window.onload = function() {
+    // Initialize signature canvases
+    initializeSignatureCanvas('staff_sign', 'staff_sign_input');
+    initializeSignatureCanvas('hod_sign', 'hod_sign_input');
+    initializeSignatureCanvas('hr_sign', 'hr_sign_input');
+    initializeSignatureCanvas('director_sign', 'director_sign_input');
+    initializeSignatureCanvas('staff_sign1', 'staff_sign1_input');
+    initializeSignatureCanvas('hod_sign1', 'hod_sign1_input');
+
+    // Add submit event listener to the form
+    document.querySelector('form').addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevent form submission for manual handling
+
+      handleFormSubmit(event); // Handle form submission after populating signature fields
+
+      // Optionally, submit the form via AJAX if you're not doing a regular form post
+      // form.submit(); // Or manually trigger the form submission after handling signatures
+    });
+  };
+
+
+
+
+  // Select the staff_id input field
+  const staffIdInput = document.getElementById('staff_id');
+  const staffIdSearchInput = document.getElementById('staff_id_search');
+  const staffNameInput = document.getElementById('staff_name');
+  const currentPhoneInput = document.getElementById('current_phone');
+  const submitButton = document.querySelector('button[type="submit"]');
+  const errorMessage = document.getElementById('errorMessage');
+
+  // Initially disable the submit button
+  submitButton.disabled = true;
+  submitButton.style.backgroundColor = 'gray';
+
+  // Add an event listener to detect when the user types in the staff_id input
+  staffIdSearchInput.addEventListener('input', async () => {
+    const staffId = staffIdSearchInput.value;
+
+    // Only trigger the API call if the staff_id has exactly 8 characters
+    if (staffId.length === 8) {
+      try {
+        const response = await fetch('/staff/get-staff-details', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            staff_id: staffId
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Show the staff details (you can adjust based on your UI structure)
+          console.log(data.staff);
+          // Populate the form fields with the fetched staff data
+          staffIdInput.value = data.staff.id || '';
+          staffNameInput.value = data.staff.staff_name || '';
+          currentPhoneInput.value = data.staff.ccdetails || '';
+
+          // Enable the submit button when valid staff_id is found
+          submitButton.disabled = false;
+          submitButton.style.backgroundColor = ''; // Indicate readiness to submit
+          errorMessage.style.display = 'none'; // Hide error message
+        } else {
+          // Show error if staff_id doesn't exist
+          alert(data.error);
+
+          // Disable the submit button if no valid staff found
+          submitButton.disabled = true;
+          // Show error message and disable button
+          submitButton.style.backgroundColor = 'gray'; // Reset button style
+          errorMessage.style.display = 'block'; // Display error message
+          errorMessage.textContent = 'Staff ID not found. Please check again.';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Something went wrong!');
+        // Disable the submit button in case of error
+        submitButton.disabled = true;
+      }
+    } else {
+      // If staff_id is not exactly 8 characters, disable the submit button
+      submitButton.disabled = true;
+      // Reset the form and error message if staff_id is invalid
+      submitButton.style.backgroundColor = 'gray'; // Reset button style
+      errorMessage.style.display = 'block'; // Show error message
+      errorMessage.textContent = 'Staff ID must be exactly 8 characters.';
+
+      staffIdInput.value = '';
+      staffNameInput.value = '';
+      currentPhoneInput.value = '';
+    }
+  });
+
+
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+  // Function to calculate and update the sum for a specific block
+  function updateSum(blockClass, sumClass) {
+    const inputs = document.querySelectorAll(`.${blockClass}`);
+    const totalDisplay = document.querySelector(`.${sumClass}`);
+    const totalDisplayInTxt = document.querySelector(`#${sumClass}`);
+    const allTotalDisplayInTxt = document.querySelector('#block-total');
+    const totalDisplayElement = document.querySelector('#block-total-display');
+
+    if (!totalDisplay || !totalDisplayInTxt || !allTotalDisplayInTxt || !totalDisplayElement) {
+        console.error('One or more elements are missing!');
+        return;  // Prevent errors if elements don't exist
+    }
+
+    let total = 0;
+
+    // Loop through the inputs in the block and calculate the total sum
+    inputs.forEach(input => {
+      total += parseFloat(input.value) || 0;  // Handle invalid inputs by using 0 as fallback
+    });
+
+    // Update the sum in the designated span
+    totalDisplay.textContent = total;
+    totalDisplayInTxt.value = total;
+    
+    // Log the individual block total
+    console.log(`Total for block: ${total}`);
+
+    // Update the total of all `totalDisplayInTxt` values (block1-sum, block2-sum, block3-sum)
+    const allTotal = [
+        document.querySelector('#block1-sum'),
+        document.querySelector('#block2-sum'),
+        document.querySelector('#block3-sum')
+    ].reduce((acc, sumElement) => acc + (parseFloat(sumElement.value) || 0), 0);
+
+    // Log the sum of all blocks
+    console.log(`All total: ${allTotal}`);
+
+    // Update the overall total in #block-total
+    // Force a reflow by resetting and updating the value
+    allTotalDisplayInTxt.value = '';  // Reset first
+    allTotalDisplayInTxt.value = allTotal;  // Update with the total
+
+    // Update the displayed total
+    totalDisplayElement.textContent = allTotal;  // Update span with total
+    console.log(`Updated block-total: ${allTotalDisplayInTxt.value}`);
+  }
+
+  // Add event listeners to input fields in each block to update the sum dynamically
+  document.querySelectorAll('.block1-input').forEach(input => {
+    input.addEventListener('input', () => updateSum('block1-input', 'block1-sum'));
+  });
+  
+  document.querySelectorAll('.block2-input').forEach(input => {
+    input.addEventListener('input', () => updateSum('block2-input', 'block2-sum'));
+  });
+
+  document.querySelectorAll('.block3-input').forEach(input => {
+    input.addEventListener('input', () => updateSum('block3-input', 'block3-sum'));
+  });
+
+  // Call the updateSum function once on page load for each block
+  updateSum('block1-input', 'block1-sum');
+  updateSum('block2-input', 'block2-sum');
+  updateSum('block3-input', 'block3-sum');
+});
+document.querySelector('form').addEventListener('submit', (event) => {
+  event.preventDefault(); // Prevent immediate submission
+
+  // ✅ Recalculate and update all sum fields
+  updateSum('block1-input', 'block1-sum');
+  updateSum('block2-input', 'block2-sum');
+  updateSum('block3-input', 'block3-sum');
+
+  // ✅ You may also want to revalidate or clean signatures here
+  handleFormSubmit(event); // (if it populates signature fields)
+
+  // ✅ Submit the form manually after all values are set
+  event.target.submit(); // ✅ This line is required
+});
+
+</script> -->
+
+<%- include('../../partials/footer') %>

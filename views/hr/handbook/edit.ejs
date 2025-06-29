@@ -1,0 +1,728 @@
+<%- include('../../partials/header') %>
+<div class="container">
+  <%- include('../../partials/left-panel') %>
+  <div class="right-panel">
+    <div class="content-area">
+      <% if (successMessages.length) { %>
+        <div style="color: green; margin-bottom: 20px;">
+          <% successMessages.forEach(msg => { %><div><%= msg %></div><% }) %>
+        </div>
+      <% } %>
+      <% if (errorMessages.length) { %>
+        <div style="color: red; margin-bottom: 20px;">
+          <% errorMessages.forEach(msg => { %><div><%= msg %></div><% }) %>
+        </div>
+      <% } %>
+
+      <div class="breadcrumbs">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/hr/hb">Staff Handbook List</a></li>
+          <li>Edit Handbook</li>
+        </ul>
+      </div>
+
+      <div class="form-area">
+        <h2>Edit Staff Handbook</h2>
+        <form action="/hr/handbook/edit/<%= hb.id %>" method="POST">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Unique ID</label>
+              <input type="text" name="staff_id" value="<%= hb.staff_id %>" readonly>
+            </div>
+            <div class="form-group">
+              <label>Employee Name</label>
+              <input type="text" name="staff_name" value="<%= hb.StaffDetail ? hb.StaffDetail.staff_name : '' %>" readonly>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Passport</label>
+              <input type="text" name="passport" value="<%= hb.passport %>">
+            </div>
+            <div class="form-group">
+              <label>Current Phone</label>
+              <input type="text" name="cphone" value="<%= hb.cphone %>">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>DOB</label>
+              <input type="date" name="dob" value="<%= hb.dob ? hb.dob : '' %>">
+            </div>
+            <div class="form-group">
+              <label>Emergency Contact</label>
+              <input type="text" name="econtact" value="<%= hb.econtact %>">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Permanent Address</label>
+              <input type="text" name="paddress" value="<%= hb.paddress %>">
+            </div>
+            <div class="form-group">
+              <label>Temporary Address</label>
+              <input type="text" name="taddress" value="<%= hb.taddress %>">
+            </div>
+            <div class="form-group">
+              <label>References</label>
+              <input type="text" name="references" value="<%= hb.references %>">
+            </div>
+          </div>
+          <div class="content">
+            <h2>Employee Handbook and Code of Conduct</h2>
+            <h2>(Document: A)</h2>
+            <h4>INTRODUCTION</h4>
+            <p>This Employee Handbook contains information about the employment policies and practices of
+              the ABC, here after referred to as the "BRIDGES". We expect each employee to read this
+              Employee Handbook carefully, as it is a valuable reference for understanding your job and
+              the "BRIDGES". The policies outlined in this Employment Handbook should be regarded as
+              management guidelines only, which in a developing business will require changes from time to
+              time. "ABC retains the right to make decisions involving employment as needed in order to
+              conduct its work in a manner that is beneficial to the employees and to "BRIDGES”. This
+              Employee Handbook supersedes and replaces any and all prior Employment Handbooks and
+              inconsistent verbal or written policy statements. Except for the policy of at-will
+              employment, which can only be changed by the Director of the "ABC. In writing, the “ABC
+              reserves the right to revise, delete and add to the provisions of this Employee Handbook.
+              All such revisions, deletions, or additions must be in writing and must be signed by the
+              Director of the "ABC. No oral statements or representations can change the provisions of
+              this Employee Handbook.</p>
+            <h4>STATEMENT OF PHILOSOPHY</h4>
+            <p> BRIDGES SPEECH CENTER LLC wishes to maintain a work environment that fosters personal and
+              professional growth for all employees. Maintaining such an environment is the responsibility
+              of every staff person. Because of their role, Administrators and Department coordinators has
+              the additional responsibility to lead in a manner which fosters an environment of respect
+              for each person.</p>
+            <p>It is the responsibility of all staff to:</p>
+            <ul>
+              <li>Foster cooperation and communication among each other</li>
+              <li>Treat each other in a fair manner, with dignity and respect</li>
+              <li>Promote harmony and teamwork in all relationships</li>
+              <li>Strive for mutual understanding of standards for performance expectations, and
+                communicate routinely to reinforce that understanding</li>
+              <li>Encourage and consider opinions of other employees or members, and invite their
+                participation in decisions that affect their work and their careers</li>
+              <li>Encourage growth and development of employees by helping them achieve their personal
+                goals at the Centre and beyond.</li>
+              <li>Seek to avoid workplace conflict, and if it occurs, respond fairly and quickly to
+                provide the means to resolve it</li>
+              <li>Administer all policies equitably and fairly, recognizing that jobs are different, but
+                each is important; that individual performance should be recognized and measured against
+                predetermined standards; and that each employee has the right to fair treatment.</li>
+              <li>Recognize that employees in their personal lives may experience crisis and show
+                compassion and understanding.</li>
+            </ul>
+            <h4>WHO WE ARE</h4>
+            <p>Our organisation is an at-will employer. This means that regardless of any provision in
+              this employee handbook, either you or "BRIDGES” may terminate the employment relationship at
+              any time for any reason, with or without cause or notice. Nothing in this Employee Handbook
+              or in any document or statement, written or oral, shall limit the right to terminate
+              employment-at-will. No officer, employee or representative of the "BRIDGES SPEECH CENTER
+              LLC” is authorized to enter into an agreement express or implied -with any employee for
+              employment other than at-will.</p>
+            <h4>Vision</h4>
+            <ul>
+              <li>To provide exemplary clinical care that sets a world community standard for excellence
+                as measured by outcomes.</li>
+              <li>To be the employer of choice, providing a highly rewarding environment for our employees
+                thus attracting and retaining the most competent and productive work force.</li>
+            </ul>
+            <h4>Mission</h4>
+            <ul>
+              <li>Provide quality value-added service by exceeding the expectations of our clients by
+                helping them through cost-effective and quality service.</li>
+              <li>Help in advancing our profession through our commitment to education, and be a resource
+                to our community.</li>
+              <li>Promote a family-oriented and rewarding environment to enhance the personal and
+                professional lives of our employees.</li>
+            </ul>
+            <h4>Values</h4>
+            <ul>
+              <li>Holding ourselves to the highest possible standards in ethical and integrity-based
+                business practices.</li>
+              <li>Treating all our clients with respect regardless of race, color or creed.</li>
+              <li>Provide a good work-life balance for our employees.</li>
+              <li>Uncompromising commitment to excellence in all we do.</li>
+            </ul>
+            <h4>EMPLOYMENT AT ABC </h4>
+            <p>Equal Employment Opportunity</p>
+            <p>The provisions of this Employee Handbook are not intended to create contractual obligations
+              with respect to any matters it covers. Nor is this Employee Handbook intended to create a
+              contract guaranteeing that you will be employed for any specific time period.</p>
+            <p>Our organisation is committed to equal employment opportunity. We will not discriminate
+              against employees or applicants for employment on any legally-recognized basis.</p>
+            <h4>Recruitment and Selection</h4>
+            <p>Applicants are invited to submit their application, along with a current résumé,
+              demonstrating that they meet the minimum criteria for the position being sought. At the
+              closing date, all applications are screened, and candidates selected for interview are
+              contacted. If the interview is positive, references will be contacted. Depending on the
+              feedback provided, a position may be offered to the applicant.</p>
+            <h4>Introductory Period</h4>
+            <p>Full-time and Part-time regular employees are on a probationary period, which is stated in
+              their employment contract.</p>
+            <p>During this time, you will be able to determine if your new job is suitable for you and
+              your supervisor will have an opportunity to evaluate your work performance. However, the
+              completion of the probationary period does not guarantee employment for any period of time.
+            </p>
+            <h4>New Employee Orientation </h4>
+            <p>Upon joining our organisation, you were given this copy of our Employee Handbook. After
+              reading this Employee Handbook, please sign the receipt page and return it to our manager.
+              You will be asked to complete all the necessary forms. Your supervisor is responsible for
+              the operations of your department. He or She is a good source of information about the "ABC
+              and your job.
+            </p>
+            <h4>Performance Reviews</h4>
+            <p>Your performance is important to our organisation.</p>
+            <p>Our performance review program provides the basis for better understanding between you and
+              your immediate supervisor, with respect to your job performance, potential and development
+              within the "ABC</p>
+            <p>Therapists will be supervised quarterly by their direct supervisors. Supervisors will be
+              reviewed by, the Clinical Director quarterly too. However, all staff are constantly reviewed
+              through competency checklists (KPI’S) for the therapists and the supervisors on a 4 monthly
+              basis.</p>
+            <p>We will be providing rewards for the consultants, based on the parents’ testimonials.</p>
+            <h4>Promotions</h4>
+            <p>We believe that career advancement is rewarding for both the employee and the organization.
+              We will promote qualified employees to new or vacated positions whenever possible</p>
+            <h4>Changes in Personal Data</h4>
+            <p>To aid you and/or your family in matters of personal emergency, we need to maintain
+              up-to-date information.
+              Changes in name, address, telephone number, marital status, number of dependents or changes
+              in account / or beneficiaries should be given to your immediate supervisor promptly.
+            </p>
+            <h4>Probation</h4>
+            <p>The <input type="text" id="probation_txt" name="probation_txt" class="width30" value="<%= hb.probation_txt %>"> of
+              employment are probationary. During this time both parties may assess suitability for
+              employment with the Employer. This also provides management an opportunity to assess skill
+              levels and address areas of potential concern.</p>
+            <h4>Hours of work</h4>
+            <p><input type="text" id="how1" name="how1" class="width30" value="<%= hb.how1 %>">hours are expected to work on a
+              weekly basis.</p>
+            <h4>Payday</h4>
+            <p>You will be paid by "ABC through a client wire transfer into your bank account. We will
+              need your account details before being able to set up any salary payments. Payment of salary
+              is made at the end of the month for the month worked. (before 5th of next month)</p>
+            <h4>Care of Equipment</h4>
+            <p>You are expected to demonstrate proper care when using the ABC’s property and equipment. No
+              property may be removed from the premises without the proper authorisation of senior
+              management. If you lose, break or damage any property, report it to your supervisor/ Clinic
+              Manager /Coordinator at once.</p>
+            <h4>Clean Up</h4>
+            <p>Be mindful of the toys and materials you use during the session. These should be placed
+              back in their rightful area as much as possible by the end of the session. Your workstation
+              should be neat and clean and properly organised. </p>
+            <h4>Breakfast Protocol</h4>
+            <p>Please ensure that you finish your breakfast before the start of your workday. Our working
+              hours are dedicated to our professional responsibilities, and admin hours should not be
+              utilized for eating breakfast. Beginning your day with a healthy breakfast before work will
+              help you start with the energy and focus needed for our tasks. Please reach the center 30
+              minutes early to have your breakfast and start the sessions on time.</p>
+            <h4>No Food or Beverages in Therapy and Staff Rooms</h4>
+            <p>As we work in a medical field, it is crucial to maintain a clean and professional
+              environment. Eatable items are not allowed inside the therapy rooms or staff rooms. Therapy
+              time is exclusively for the kids, and it is important that we create a distraction-free and
+              hygienic space for their sessions. Please refrain from ordering or consuming coffee, juice,
+              or any other beverages inside the therapy rooms during session time</p>
+            <h4>Professionalism</h4>
+            <p>When representing ABC staff should dress and behave appropriately. Employees should choose
+              to dress in a manner which presents a professional image to the public and is respectful of
+              others. Excessive use of profanity is neither professional nor respectful to co-workers and
+              will not be tolerated. </p>
+            <h4>Discipline</h4>
+            <p>ABC shall be progressive, depending on the nature of the problem. Its purpose is to
+              identify unsatisfactory performance and / or unacceptable behaviour. The stages may be:</p>
+            <ul>
+              <li>Verbal Warning </li>
+              <li>Written Warning in the form of Memo</li>
+              <li>Termination</li>
+            </ul>
+            <p>Some circumstances may be serious enough that all three steps are not used. Some examples
+              of these types of situations are theft, assault or wilful neglect of duty. In all cases,
+              documentation should be included in the employee’s personnel file. </p>
+            <h4>Hours of Work</h4>
+            <p>The regular office hours for ABC is 8 am to 10pm for 6 days a week, Where your Schedule
+              schedule will be<input type="text" id="how2" name="how2" class="width30"> will be an off day
+              .Employees are required to fill up a leave form and email, in advance, of planned days away
+              from the office. Unplanned absences from the office should be reported to the Clinical
+              Director and the Center manager as soon as could reasonably be expected and email the leave
+              form with the sick leave certificate. </p>
+            <h4>Attendance and Punctuality</h4>
+            <p>Attendance and punctuality are important factors for your success within our organisation.
+            </p>
+            <p>In case of emergency leave due to illness: If you are going to be late for work or absent,
+              notify your Clinical Director/Manager as far in advance as is feasible under the
+              circumstances, but not later than before the start of your workday. You must speak to your
+              Clinical Director/Manager. Voicemail messages are not accepted.</p>
+            <p>Personal issues requiring time away from your work, such as doctor's appointments or other
+              matters, should be scheduled during your non-working hours if possible.</p>
+            <p>If you are absent for three days without notifying ABC Organisation, it is assumed that you
+              have voluntarily abandoned your position with ABC organisation, and you will be removed from
+              the position.</p>
+            <h4>Overtime</h4>
+            <p>There will be times when you will need to work overtime so that we may meet the needs of
+              our children and families. Although you will be given advance notice when feasible, this is
+              not always possible.</p>
+            <h4>Pay Advances</h4>
+            <p>Pay advances will not be granted to employees. </p>
+            <h4>If You Must Leave Us</h4>
+            <p>Your thoughtfulness is appreciated and will be noted favourably should you ever wish to
+              reapply for employment with ABC. Employees, who are rehired following a break in service in
+              excess of three months, other than an approved leave of absence, must serve a new initial
+              probationary period whether or not such period was previously completed. Such employees are
+              considered new employees from the effective date of their reemployment for all purposes,
+              including the purposes of measuring benefits.</p>
+            <p>Generally, we will confirm upon request our employees' dates of employment, salary history
+              and job title.</p>
+            <p>Additionally, all resigning employees should complete a brief exit interview prior to
+              leaving. All ABC property and resources including this Employee Handbook, must be returned
+              upon discharge. Otherwise, ABC may take action to recoup any replacement costs and/or seek
+              the return of organisation property through appropriate legal recourse.</p>
+            <p>You should notify ABC of any address changes for future contact purposes.</p>
+            <h4>Sick Leave</h4>
+            <p>The employee is not entitled to any paid sick leave during the probation period. However,
+              the employee is entitled to sick leave after completion of the probationary period.</p>
+            <p>Employees will be entitled to 10 DAYS of sick leave per calendar year and will only be
+              available upon regularization also without doctor’s certification will be a non-paid Sick
+              leave.</p>
+            <h4>Sandwich Leave Policy</h4>
+            <p>company deducts leaves of an employee for week offs if that employee applies to leave the
+              day after and before the week offs.</p>
+            <h4>Vacation leave </h4>
+            <p>Employees will be allowed up to annual leave with the conditions of </p>
+            <ul>
+              <li>It should be filed three months before the desired days.</li>
+              <li>A Vacation Leave form should be filled properly for the filing.</li>
+              <li>All clients should be indorsed properly to anther therapist before going on leave.</li>
+              <li>The Clinical Director should approve the leave.</li>
+              <li>You must give an exact date when to resume at work. </li>
+              <li>All the days should be accumulated before year end.</li>
+              <li>These days of vacation will not be paid upon terminating the contract without finishing
+                One year of Service. </li>
+            </ul>
+            <h4>CME/CPD LEAVE</h4>
+            <p>As part of our commitment to fostering professional growth and development, we are
+              providing continuing Professional Development (CPD) and Continuing Medical Education (CME)
+              leave policy. Licensed candidates will be entitled to two days of CPD/CME leave annually.
+              This initiative aims to encourage and support your efforts to enhance your skills, stay
+              abreast of industry advancements, and contribute to your overall professional development.
+              We strongly encourage all eligible staff members to utilize these leave days to attend
+              workshops, seminars, and other relevant events that contribute to their professional
+              knowledge and skills. Staying informed about the latest techniques and updates in your field
+              is not only beneficial to your personal growth but also vital for maintaining our center's
+              high standards of care.</p>
+            <p>In line with our commitment to support our staff, the center is open to assisting those who
+              may require financial assistance to participate in CPD/CME activities. If you find yourself
+              in need of support, please don't hesitate to reach out to Clinic Manager/Director to discuss
+              available options.</p>
+            <h4>Employment of Relatives</h4>
+            <p>A supervisor may not hire or supervise an individual if that individual and the supervisor
+              have an ongoing romantic relationship, including but not limited to, marriage, or if that
+              individual is a member of the supervisor's immediate family. The term "Immediate Family"
+              refers to parents, children, sisters, brothers, nieces, nephews or other family members
+              residing in the same household.</p>
+            <p>In the case of marriage of persons within the same department. An effort will be made to
+              assign comparable job duties so as to minimise problems of supervision, safety, security and
+              morale.</p>
+            <h4>Personal Telephone Calls</h4>
+            <p>It is important to keep our telephone lines free for business calls. Although the
+              occasional use of the ABC’s telephones for a personal emergency may be necessary, routine
+              personal calls should be kept to a minimum.</p>
+            <p>Personal Cellular telephones must be turned off or set to a silent alert during working
+              hours while on the ABC premises. </p>
+            <h4>Internet Usage and Monitoring</h4>
+            <p>As a growing Organisation, we recognise the need to stay on the cutting edge of technology.
+              This is one of the reasons we allow employees to have access to the Internet.</p>
+            <p>The Internet is intended for business use only. Use of the Internet for any non-business
+              purpose, including but not limited to, personal communication or solicitation, purchasing
+              personal goods or services, gambling and downloading files for personal use, is strictly
+              prohibited. (E.g. Facebook, YouTube and Tinder)</p>
+            <p>Our organisation's policies against sexual and other types of harassment apply fully to
+              internet usage. Violations of those policies are not permitted and may result in
+              disciplinary action, up to and including discharge. Therefore, employees are also prohibited
+              from displaying, transmitting and/or downloading sexually explicit images, messages. Ethnic
+              slurs, racial epithets or anything that could be constructed as harassment or disparaging to
+              others. </p>
+            <p>The time you spend on the Internet may be tracked through activity logs for business
+              purposes. All abnormal or inappropriate usage will be investigated thoroughly. For business
+              purposes, management reserves the right to search and/or monitor the ABC's Internet usage
+              and the files/transmissions of any employee without advance notice. Employees should expect
+              that communications that they send and receive by the Internet will be disclosed to
+              management. Employees should not assume that communications that they send and receive by
+              the Internet are private or confidential.</p>
+            <p>Employees learning of any misuse of the Internet shall notify a member of management.</p>
+            <p>Violation of this policy may result in disciplinary action up to and including discharge.
+            </p>
+            <h4>Acceptable Use of Electronic Communications</h4>
+            <p>This policy contains guidelines for Electronic Communications created, send, received,
+              used, transmitted, or stored using organisation communication systems or equipment and
+              employee provided systems or equipment used either in the workplace, during working time or
+              to accomplish work tasks. "Electronic Communications" include, among other things, messages,
+              images, data or any other information used in e-mail, instant messages, voice mail, fax
+              machines, computers, personal digital assistants (Blackberry, Phone, or similar devices),
+              text messages, pagers, telephones, cellular and mobile phones including those with cameras,
+              Intranet, Internet, back-up storage, information on a memory or flash key or card, jump or
+              zip drive or any other type of internal or external removable storage - drives. In the
+              remainder of this policy, all of these communication devices are collectively referred to as
+              "Systems".</p>
+            <p>Employees may use our Systems to communication internally with co-workers or externally
+              with children and families, suppliers, vendors, advisors, and other business acquaintances
+              for business purposes.</p>
+            <p>All Electronic Communications in the organisation system are organisation records and/or
+              property. Although an employee may have an individual password to access our Systems, the
+              Systems and Electronic Communications belong to the ABC. The Systems and Electronic
+              Communications are accessible to ABC at all times including periodic unannounced
+              inspections. Our Systems and Electronic Communications are subject to use, access,
+              monitoring, review, recording, and disclosure without further notice.</p>
+            <p>Our Systems and Electronic Communications are not confidential or private. ABC's right to
+              use, access, monitor, record and disclose Electronic Communications without further notice
+              applies equally to employee-provided systems or equipment used in the workplace, during
+              working time, or to accomplish work tasks.</p>
+            <p>Although incidental and occasional personal use of our Systems that does not interfere or
+              conflict with productivity or ABC's business or violate policy is permitted, personal
+              communications in our Systems are treated the same as all other Electronic Communications
+              and will be used, accessed, recorded, monitored, and disclosed by ABC at any time without
+              further notice. Since all Electronic Communications and Systems can be accessed without
+              advance notice, employees should not use our Systems for communication or information that
+              employees would not want revealed to third parties.</p>
+            <p>Employees may not use our System in a manner that violates our policies including but not
+              limited to Non-Harassment, Sexual Harassment, Equal Employment Opportunity, Confidentiality
+              of Organisation Matters, Care of Children and Families' Records, Protecting Information,
+              Solicitation and Distribution, and Internet Usage. Employees may not use our Systems in any
+              way that may be seen as insulting, disruptive, obscene, offensive, or harmful to morale.
+              Examples of prohibited uses include, but are not limited to, sexually-explicit drawings,
+              messages, images, cartoons, or jokes; propositions or love letters; ethnic or racial slurs,
+              threats, or derogatory comments; or any other message or image that may be in violation of
+              organisation policies.</p>
+            <h4>In addition, employees may not use our Systems:</h4>
+            <ul>
+              <li>To download, save, send or access any defamatory, discriminatory or obscene material.
+              </li>
+              <li>To download, save, send or access any music, audio, or video file</li>
+              <li>To download anything from the Internet (including shareware or free software) without
+                the advance written permission of the Systems supervisor</li>
+              <li>To download, save, send or access any site or content the ABC might deem "adult
+                entertainment"</li>
+              <li>to access any "blog" or otherwise post a personal opinion on the internet;</li>
+              <li>To solicit employees or others</li>
+              <li>To attempt or to gain unauthorized or unlawful access to computers, equipment, networks,
+                or systems of ABC or any other person or entity</li>
+            </ul>
+            <p>In connection with any infringement of intellectual property rights, including but not
+              limited to copyrights</p>
+            <p>In connection with the violation or attempted violation of any law</p>
+            <p>An employee may not misrepresent, disguise, or conceal his or her identity or another's
+              identity in any way while using Electronic Communications; make changes to Electronic
+              Communications without clearly indicating such changes; or use another person's account,
+              mail box, password, etc. without prior written approval of the account owner and without
+              identifying the actual author.</p>
+            <p>Employees must always respect intellectual property rights such as copyrights and
+              trademarks. Employees must not copy, use, or transfer proprietary materials of ABC or others
+              without appropriate authorization.</p>
+            <p>All systems passwords and encryption keys must be available and known to ABC. Employees may
+              not install password or encryption programs without the written permission of your
+              supervisor. Employees may not use the passwords and encryption keys belonging to others.</p>
+            <p>Violations of this policy may result in disciplinary action up to and including discharge
+              as well as possible civil liabilities or criminal prosecution. Where appropriate, ABC may
+              advise legal officials or appropriate third parties of policy violations and cooperate with
+              official investigations. We will not, of course, retaliate against anyone who reports
+              possible policy violations or assists with investigations.</p>
+            <p>if you have questions about the acceptable use of our Systems or the content of Electronic
+              Communications, ask your supervisor for advance clarification.</p>
+            <h4>Social Media</h4>
+            <p>ABC has in place policies that govern use of its own electronic communication systems,
+              equipment, and resources which employees must follow. ABC may also have an interest in your
+              electronic communications with co-workers, children and families, vendors, suppliers,
+              competitors, and the general public on your own time. Inappropriate communications, even
+              made on your own time using your own resources, may be grounds for discipline up to and
+              including immediate termination. We encourage you to use good judgment when communicating
+              via blogs, online chat rooms, networking internet sites, social internet sites, and other
+              electronic and non-electronic forums (collectively "social media"). The following is a
+              general and non-exhaustive list of guidelines you should keep in mind:
+            <p>
+            <ul>
+              <li>Make it clear that views expressed in social media are yours alone. Do not purport to
+                represent the views of the Organisation in any fashion.</li>
+              <li>Do not disclose confidential or proprietary information regarding ABC or your
+                co-workers. Use of copyrighted or trademarked ABC’S information, trade secrets; or other
+                sensitive information may subject you to legal action. If you doubt about whether it is
+                proper to disclose information, please discuss it with your supervisor.</li>
+              <li>Do not disclose information that could subject ABC to legal liability. If ABC is
+                subjected to government investigation or financial liability based on your disclosures,
+                ABC may seek to hold you personally responsible.</li>
+              <li>Do not use ABC logos, trademarks, or other symbols in social media. You may not use ABC
+                name to endorse, promote, denigrate or otherwise comment on any product, opinion, cause or
+                person.</li>
+              <li>Be respectful of the privacy and dignity of your co-workers. Do not use or post photos
+                of co-workers without their express consent.</li>
+              <li>Harassing, obscene, defamatory, threatening, or other offensive content must be avoided.
+                Harassing or discriminatory comments, particularly if made on the basis of gender, race,
+                religion, age, national origin, or another protected characteristic, may be deemed
+                inappropriate even if ABC name is not mentioned. If social media communications in any way
+                may adversely affect your relationships at work or violate organisation policy, you may be
+                subject to discipline' up to and including immediate termination under various
+                organisation policies.</li>
+              <li>Ensure that engaging in social media does not interfere with your work commitments.</li>
+              <li>Social media and similar communications have the potential to reflect on both you and
+                ABC. We hope that you will show respect for your employees, children and families,
+                affiliates and competitors.</li>
+            </ul>
+            <h4>Dress Policy </h4>
+            <p>Employees are expected to maintain the highest standards of personal cleanliness and
+              present a neat, professional, and clean appearance at all times.
+            <p>
+            <p>Our children and families' satisfaction represents the most important and challenging
+              aspect of our business. Whether or not your job responsibilities place you in direct
+              children and families' contact, you represent ABC with your appearance as well as your
+              actions. </p>
+            <p>The properly attired individual helps to create a favourable image for ABC, to the public
+              and fellow employees. Scrub suits/Uniforms will be provided to all medical professionals.
+              Please ensure that you wear the provided scrub suits along with black shoes or black Crocs.
+              This helps maintain a professional appearance and ensures compliance with our dress code.
+            </p>
+            <p>If you have questions regarding appropriate work attire, please contact the Administrator
+              for further clarification.</p>
+            <h4>Outside Employment</h4>
+            <p>We hope that you will not find it necessary to seek additional outside employment. However,
+              if you are planning to accept an outside position, you must notify the Center Director
+              /Clinic Manager in writing.</p>
+            <p>Outside employment must not conflict in any way with your responsibilities within our
+              organisation. You may not work for competitors, nor may you take an ownership position with
+              a competitor. </p>
+            <p>Employees may not conduct outside work or use organisation property, equipment or
+              facilities in connection with outside work while on organisation time.</p>
+            <h4>Reference Checks</h4>
+            <p>Our organisation will not honour any oral request for references. All requests must be in
+              writing and on company letterhead. Generally, we will only confirm our employees' date of
+              employment, salary and job title.
+            <p>
+            <p>Under no circumstances should an employee provide another individual with information
+              regarding current or former employees of our organisation. If you receive a request for
+              reference information, please forward it to your immediate supervisor.</p>
+            <h4>Contact with the Media</h4>
+            <p>All media inquiries regarding ABC and its operations must be referred to the director. Only
+              the director is authorized to make or approve public statements on behalf of ABC. No
+              employees, unless specifically designated by the director, are authorized to make statements
+              on behalf of or as a representative of ABC.</p>
+            <h4>Office Supplies</h4>
+            <p>Our organisation maintains a stock of basic office supplies such as pens, paper clips,
+              staples, note pads, etc. used on day-to-day basis by employees. All office supplies can be
+              located in the supply closet. You can contact the office boy/girl for the same.</p>
+            <p>If you need additional items not regularly stocked, please speak to your supervisor to
+              place a special order.</p>
+            <p>All office supplies are for business use only and should not be removed from the office for
+              non-business use. Violations of this policy may result in disciplinary action up to and
+              including discharge.</p>
+            <h4>Workplace Searches</h4>
+            <p>To protect the property and to ensure the safety of all employees, children and families
+              and ABC, ABC reserves the right to conduct personal searches consistent with state law, and
+              to inspect any packages, parcels, purses, handbags, brief cases, lunch boxes or any other
+              possessions or articles carried to and from ABC 's property. In addition, ABC reserves the
+              right to search any employee's office, desk, files, locker, equipment or any other area or
+              article on our premises. In this regard, it should be noted that all offices, desks, files,
+              lockers, equipment, etc. are the property of ABC, and are issued for the use of employees
+              only during their employment. Inspection may be conducted at any time at the discretion of
+              ABC.</p>
+            <p>Persons entering the premises who refuse to cooperate in an inspection conducted pursuant
+              to this policy may not be permitted to enter the premises. Employees working on or entering
+              or leaving the premises who refuse to cooperate in an inspection, as well as employees who
+              after the inspection are believed to be in possession of stolen property or illegal
+              substances, will be subject to disciplinary action, up to and including discharge, if upon
+              investigation they are found to be in violation of ABC security procedures or any other
+              rules and regulations.</p>
+            <h4>Workplace violence</h4>
+            <p>Violence by an employee or anyone else against an employee, supervisor or member of
+              management will not be tolerated. The purpose of this policy is to minimize the potential
+              risk of personal injuries to employees at work and to reduce the possibility of damage to
+              organisation property in the event of someone, for whatever reason, may be unhappy with the
+              organisation decision or action by an employee or member of management.</p>
+            <p>If you receive or overhear any threatening communications from an employee or outside third
+              party, report it to your immediate supervisor at once. Do not engage in either physical or
+              verbal confrontation with a potentially violent individual. If you encounter an individual
+              who is threatening immediate harm to an employee or visitor to our premises, contact an
+              emergency (such as 999) immediately.</p>
+            <p>All reports of work-related threats will be kept confidential to the extent possible,
+              investigated and documented. Employees are expected to report and participate in an
+              investigation of any suspected or actual cases of workplace violence and will not be
+              subjected to disciplinary consequences for such reports or cooperation. Violations of this
+              policy, including your failure to report or fully cooperate in ABC’s investigation, may
+              result in disciplinary action, up to and including discharge.</p>
+            <h4>Good Housekeeping</h4>
+            <p>Good work habits and neat place to work are essential for job safety and efficiency. You
+              are expected to keep your place of work always organized and materials in good order. Report
+              anything that needs repair or replacement to your supervisor.</p>
+            <h4>Smoking in the Workplace</h4>
+            <p>Our organisation is committed to providing a safe and healthy environment for employees and
+              visitors. Smoking is not permitted. Employees are requested not to smoke with our clients.
+              Violations of this policy may result in disciplinary action, up to and including discharge.
+            </p>
+            <p>Non-Harassment-We prohibit harassment of one employee by another employee, supervisor or
+              third party for any reason. Harassment of third parties by our employees is also prohibited.
+            </p>
+            <h4>Good Housekeeping</h4>
+            Communication is truly the best way to relay important information to co-workers, business
+            partners, clients and parents. In the centre we strive our best to make good communication for
+            the benefit of all through: <p>
+            <h4>Internal Communication </h4>
+            <ul>
+              <li>Staff Meeting</li>
+              <li>Parent Meetings </li>
+              <li>Progress meetings</li>
+              <li>Supervisions</li>
+            </ul>
+            <h4>External Communication </h4>
+            <p>Communication with parents can only be through the center phone. No communication with
+              clients is allowed through personal SMS, email, WhatsApp, Facebook, or phone calls. </p>
+            <h4>Staff Meeting </h4>
+            <p>Staff meetings should be at least once in a week to discuss policies and procedures,
+              concerns, feed backs and future plans in the Centre. Everyone is required to attend this
+              meeting as ABC believe that having one goal is the best way to run the Centre. </p>
+            <h4>Parent Meeting </h4>
+            <p>Parent meeting usually happens when there is service change or any concern the parents has
+              to relay to the therapist. This kind of meeting is usually done by the clinical
+              director/HODs together with the therapists if needed. </p>
+            <h4>Progress Meetings </h4>
+            <p>Progress meetings usually happen every 3 months where the parents, the therapists and the
+              Hods will be there to discuss the progress of the client’s therapy. </p>
+            <h4>Supervisions </h4>
+            <p>Supervisions is a type of communication pertaining to your performance form the supervisor,
+              clinic manager and managing director in this meeting they will address everything regarding
+              with your performance and from this meeting you can also tell them anything that could help
+              you improve your performance. </p>
+            <h4>External Communication</h4>
+            <p>Talking to clients and business partners are encouraged to all the staff. But messaging
+              business partners and clients regarding services and complains is unethical and will not be
+              tolerated by the company. If a parent or a business partner happened to have any concerns
+              regarding our services or complains then it is better to relay it to the supervisors or
+              clinic manager so they can communicate it to the higher management. Or you can advise the
+              other party to email the manager/admin and the message will be attended in 3 working days.
+            </p>
+            <h4>NON -COMPETE </h4>
+            <p>The Employee shall not (without the prior written consent of the Company) during the term
+              of this Contract and at any time within 12 months following termination of this Contract as
+              per article 10 of federal labour law UAE, in any manner, directly or indirectly, either
+              individually or in conjunction with others or in any other manner whatsoever, within Dubai,
+              carry on or be engaged in or be concerned with or interested in or advise any person or
+              persons, firm, association, syndicate, company or corporation engaged in or concerned with
+              or interested in a business similar to the business being carried on by the Company
+              presently and/or at the time of the termination of the Employee's employment. Any violation
+              of this clause while employed by the Company shall be cause for termination without notice
+              or payment in lieu of notice. </p>
+            <h4>NON- SOLICITATION </h4>
+            <ul>
+              <li>The Employee agrees that he/she shall not, at any time during the term of [his/her]
+                employment or within one year following the termination of [his/her] employment, either
+                directly or indirectly, individually or in conjunction with any other person or in any
+                manner whatsoever within the UAE, solicit any of the Company's customers or persons whom
+                the Company was soliciting as customers at the time of the termination of the Employee's
+                employment hereunder. Solicitation while employed by the Company shall be cause for
+                termination without notice or payment in lieu of notice. </li>
+              <li>The Employee agrees that he/she shall not, during the term of [his/her] employment or
+                within one year following the termination of [his/her] employment, either directly or
+                indirectly, individually or in conjunction with any other person or any manner whatsoever
+                within the UAE, entice or try to entice away any employee of the Company. Any violation of
+                this clause while employed by the Company shall be cause for termination without notice or
+                payment in lieu of notice. </li>
+            </ul>
+            <h4>CONFIDENTIALITY /NON- DISCLOSURE </h4>
+            <ul>
+              <li>The Employee acknowledges that in the performance of [his/her] duties he/she will
+                acquire detailed and confidential knowledge of the Company's operations and other
+                confidential documents and information. </li>
+              <li>The Employee agrees that he/she shall not in any way use, divulge, furnish, or make
+                accessible to any person, either during [his/her] employment or any time thereafter, any
+                confidential information relating to the business of the Company, acquired by the Employee
+                during [his/her] employment with the Company, unless such disclosure is compelled by a
+                competent court of by the applicable law.</li>
+            </ul>
+            <h4>Receipt of Employee Handbook and Employment-At-Will Statement</h4>
+            <p>This is to acknowledge that I have received a copy of ABC Employee Handbook and I
+              understand that it contains information about the employment policies and practices of ABC.
+              I agree to read and comply with this Employee Handbook. I understand that the policies
+              outlined in this Employee Handbook are management guidelines only, which in a developing
+              business will require changes from time to time. I understand that ABC retains the right to
+              make decisions involving employment as needed in order to conduct its work in a manner that
+              is beneficial to the employees and ABC. I understand that this Employee Handbook supersedes
+              and replaces any and all prior Employee Handbooks and any inconsistent verbal or written
+              policy statements.</p>
+            <p>I understand that except for the policy of at-will employment, which can only be changed by
+              the Director of ABC in a signed written contract, the organisation reserves the right to
+              revise, delete and add to the provisions of this Employee Handbook at any time without
+              further notice. All such revisions, deletions or additions to the Employee Handbook will be
+              in writing and will be signed by the Director of ABC. I understand that no oral statements
+              or representations can change the provisions of this Employee Handbook.</p>
+            <p>I understand that this Employee Handbook is not intended to create contractual obligations
+              with respect to any matters it covers and that the Employee Handbook does not create a
+              contract guaranteeing that I will be employed for any specific time period.</p>
+            <p>I understand that this Employee Handbook refers to current benefit plans maintained by ABC
+              and that I must refer to the actual plan documents and summary plan descriptions as these
+              documents are controlling.</p>
+            <p>If I have questions regarding the content or interpretation of this Employee Handbook, I
+              will ask my immediate supervisor or a member of the management.</p>
+            <p>I also understand that if a written contract is inconsistent with the Employee Handbook, my
+              employment contract is controlling.</p>
+            <h4>FIRST PARTY</h4>
+          <h4>First Party</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Unique ID</label>
+              <input type="text" name="fpunique_id" value="<%= hb.fpunique_id %>">
+            </div>
+            <div class="form-group">
+              <label>Employee Name</label>
+              <input type="text" name="fpemp_name" value="<%= hb.fpemp_name %>">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Position</label>
+              <input type="text" name="fpposition" value="<%= hb.fpposition %>">
+            </div>
+            <div class="form-group">
+              <label>Emergency Contact</label>
+              <input type="text" name="fpecontact" value="<%= hb.fpecontact %>">
+            </div>
+            <div class="form-group">
+              <label>Signature</label>
+              <input type="text" name="fpsign" value="<%= hb.fpsign %>">
+            </div>
+          </div>
+
+          <h4>Second Party</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" name="spname" value="<%= hb.spname %>">
+            </div>
+            <div class="form-group">
+              <label>Passport Number</label>
+              <input type="text" name="sppassport" value="<%= hb.sppassport %>">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Current Address</label>
+              <input type="text" name="spcaddress" value="<%= hb.spcaddress %>">
+            </div>
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" name="spdate" value="<%= hb.spdate ? hb.spdate.toISOString().split('T')[0] : '' %>">
+            </div>
+            <div class="form-group">
+              <label>Signature</label>
+              <input type="text" name="spsign" value="<%= hb.spsign %>">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <button type="submit">Update</button>
+            <a href="/hr/hb" class="btn">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../../partials/footer') %>

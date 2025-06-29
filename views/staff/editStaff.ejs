@@ -1,0 +1,476 @@
+<%- include('../partials/header') %>
+  <div class="container">
+    <%- include('../partials/left-panel') %>
+      <div class="right-panel">
+        <div class="content-area">
+          <% if (typeof errorMessage !=='undefined' && errorMessage) { %>
+            <div style="color: red; margin-bottom: 20px;">
+              <%= errorMessage %>
+            </div>
+            <% } %>
+              <% if (typeof successMessage !=='undefined' && successMessage) { %>
+                <div style="color: green; margin-bottom: 20px;">
+                  <%= successMessage %>
+                </div>
+                <% } %>
+
+                  <div class="breadcrumbs">
+                    <ul>
+                      <li><a href="/">Home</a></li>
+                      <li><a href="/staff">Staff</a></li>
+                      <li>Edit Staff Details</li>
+                    </ul>
+                  </div>
+
+                  <div class="form-area">
+                    <h2>Edit Staff Details</h2>
+                    <form action="/staff/edit/<%= staff.id %>" method="POST" enctype="multipart/form-data">
+                      <div class="form-row">
+                        <div class="form-group">
+                          <label for="staff_name">Employee Name:</label>
+                          <input type="text" id="staff_name" name="staff_name" value="<%= staff.staff_name %>" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="staff_id">Unique Id:</label>
+                          <input type="text" id="staff_id" name="staff_id" value="<%= staff.staff_id %>" readonly>
+                        </div>
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-group">
+                          <label for="staff_email">Personal Email:</label>
+                          <input type="email" id="staff_email" name="staff_email" value="<%= staff.staff_email %>"
+                            required>
+                        </div>
+                        <div class="form-group">
+                          <label for="staff_phone">Current Phone (In Dubai):</label>
+                          <input type="tel" id="staff_phone" name="staff_phone" value="<%= staff.staff_phone %>"
+                            required>
+                        </div>
+                        <div class="form-group">
+                          <label for="dob">Date Of Birth:</label>
+                          <input type="date" id="dob" name="dob" value="<%= staff.dob %>">
+                        </div>
+                        <div class="form-group">
+                          <label for="econtact">Emergency Contact Details:</label>
+                          <input type="text" id="econtact" name="econtact" value="<%= staff.econtact %>">
+                        </div>
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-group">
+                          <label for="bank_acc">Bank Account Details:</label>
+                          <input type="text" id="bank_acc" name="bank_acc" value="<%= staff.bank_acc %>">
+                        </div>
+                        <div class="form-group">
+                          <label for="permanent_address">Permanent Address:</label>
+                          <input type="text" id="permanent_address" name="permanent_address"
+                            value="<%= staff.permanent_address %>">
+                        </div>
+                        <div class="form-group">
+                          <label for="temporary_address">Temporary Address:</label>
+                          <input type="text" id="temporary_address" name="temporary_address"
+                            value="<%= staff.temporary_address %>">
+                        </div>
+                        <div class="form-group">
+                          <label for="ccdetails">Current Contact Details:</label>
+                          <input type="text" id="ccdetails" name="ccdetails" value="<%= staff.ccdetails %>">
+                        </div>
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-group">
+                          <label for="references">References:</label>
+                          <input type="text" id="references" name="references" value="<%= staff.references %>">
+                        </div>
+                      </div>
+
+                      <div class="tablewrapper">
+                        <div class="table-responsive">
+                          <table class="table table-condensed table-striped">
+                            <thead class="tablehead">
+                              <tr>
+                                <th>Steps</th>
+                                <th>Date of Completion</th>
+                                <th>Expiry date</th>
+                                <th>Status</th>
+                              </tr>
+                            </thead>
+                            <tbody class="tablebody">
+                              <tr>
+                                <td>Day 1: Trainee will receive Induction program Sheet</td>
+                                <td><input type="date" id="twrips_date" name="twrips_date"
+                                    value="<%= staff.twrips_date %>"></td>
+                                <td>--</td>
+                                <td>
+                                  <div class="radio-group">
+                                    <label><input type="radio" name="twrips" value="1" <% if (staff.twrips==1) { %>
+                                      checked <% } %>> Active</label>
+                                    <label><input type="radio" name="twrips" value="0" <% if (staff.twrips==0) { %>
+                                      checked <% } %>> Inactive</label>
+
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>1.Introduction to Center Premises - direct</td>
+                                <td>
+                                  <% const selectedItcpd=staff.itcpd ? staff.itcpd.split(',').map(item=> item.trim()) :
+                                    []; %>
+
+                                    <div class="checkbox-group">
+                                      <label>
+                                        <input type="checkbox" name="itcpd[]" value="director"
+                                          <%=selectedItcpd.includes('director') ? 'checked' : '' %> >Director
+                                      </label>
+
+                                      <label>
+                                        <input type="checkbox" name="itcpd[]" value="supervisors"
+                                          <%=selectedItcpd.includes('supervisors') ? 'checked' : '' %> >Supervisors
+                                      </label><br />
+
+                                      <label>
+                                        <input type="checkbox" name="itcpd[]" value="pantry area"
+                                          <%=selectedItcpd.includes('pantry area') ? 'checked' : '' %> >Pantry area
+                                      </label>
+
+                                      <label>
+                                        <input type="checkbox" name="itcpd[]" value="toy room work area"
+                                          <%=selectedItcpd.includes('toy room work area') ? 'checked' : '' %> >Toy
+                                        Room/Work Area
+                                      </label><br />
+
+                                      <label>
+                                        <input type="checkbox" name="itcpd[]" value="resource room"
+                                          <%=selectedItcpd.includes('resource room') ? 'checked' : '' %> >Resource Room
+                                      </label>
+
+                                      <label>
+                                        <input type="checkbox" name="itcpd[]" value="training area"
+                                          <%=selectedItcpd.includes('training area') ? 'checked' : '' %> >Training Area
+                                      </label>
+                                    </div>
+
+                                </td>
+                                <td>--</td>
+                                <td><input type="text" id="itcpd_status" name="itcpd_status" placeholder="Enter status"
+                                    value="<%= staff.itcpd_status %>">
+                                </td>
+                              </tr>
+                              <tr>
+                                <td colspan="5">2. Document Submission</td </tr>
+                              <tr>
+                                <td>Passport</td>
+                                <td>
+                                  <div class="file-wrapper">
+                                    <input type="file" id="passport_file" name="passport_file">
+                                </td>
+
+                                <span class="file-name" style="display:none; cursor:pointer;"></span>
+                        </div>
+                        <td><input type="date" id="passport_expiry" name="passport_expiry"
+                            value="<%= staff.passport_expiry %>"></td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="passport" value="1" <% if (staff.passport==1) { %>
+                              checked <% } %>> Active</label>
+                            <label><input type="radio" name="passport" value="0" <% if (staff.passport==0) { %>
+                              checked <% } %>> Inactive</label>
+                          </div>
+                        </td>
+                        </tr>
+                        <tr>
+                          <td>Visa</td>
+                          <td><input type="file" id="visa_file" name="visa_file"></td>
+                          <td> <input type="date" id="visa_expiry" name="visa_expiry" value="<%= staff.visa_expiry %>">
+                          </td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="visa" value="1" <% if (staff.visa==1) { %> checked
+                                <% } %>>
+                                  Active
+                              </label>
+                              <label><input type="radio" name="visa" value="0" <% if (staff.visa==0) { %> checked
+                                <% } %>>
+                                  Inactive
+                              </label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Experience letter</td>
+                          <td><input type="file" id="exp_letter_file" name="exp_letter_file"></td>
+                          <td><input type="date" id="exp_letter_date" name="exp_letter_date"
+                              value="<%= staff.exp_letter_date %>"></td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="experience" value="1" <% if (staff.experience==1) { %>
+                                checked <% } %>> Active</label>
+                              <label><input type="radio" name="experience" value="0" <% if (staff.experience==0) { %>
+                                checked <% } %>> Inactive</label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>License copy</td>
+                          <td><input type="file" id="license_file" name="license_file"></td>
+                          <td> <input type="date" id="license_expiry" name="license_expiry"
+                              value="<%= staff.license_expiry %>"></td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="license" value="1" <% if (staff.license==1) { %>
+                                checked <% } %>> Active</label>
+                              <label><input type="radio" name="license" value="0" <% if (staff.license==0) { %>
+                                checked <% } %>> Inactive</label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Emirates ID (EID)</td>
+                          <td><input type="file" id="emirates_id_file" name="emirates_id_file"></td>
+                          <td> <input type="date" id="emirates_id_expiry" name="emirates_id_expiry"
+                              value="<%= staff.emirates_id_expiry %>"></td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="emirates_id" value="1" <% if (staff.emirates_id==1) { %>
+                                checked <% } %>> Active</label>
+                              <label><input type="radio" name="emirates_id" value="0" <% if (staff.emirates_id==0) { %>
+                                checked <% } %>> Inactive</label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Hepatitis B vaccination card</td>
+                          <td><input type="file" id="hepatitis_b_file" name="hepatitis_b_file"></td>
+                          <td> <input type="date" id="hepatitis_b_expiry" name="hepatitis_b_expiry"
+                              value="<%= staff.hepatitis_b_expiry %>"></td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="hepatitis_b" value="1" <% if (staff.hepatitis_b==1) { %>
+                                checked <% } %>> Active</label>
+                              <label><input type="radio" name="hepatitis_b" value="0" <% if (staff.hepatitis_b==0) { %>
+                                checked <% } %>> Inactive</label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Basic Life Support (BLS) training certificate</td>
+                          <td><input type="file" id="bls_file" name="bls_file"></td>
+                          <td> <input type="date" id="bls_file_date" name="bls_file_date"
+                              value="<%= staff.bls_file_date %>"></td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="bls" value="1" <% if (staff.bls==1) { %>
+                                checked <% } %>> Active</label>
+                              <label><input type="radio" name="bls" value="0" <% if (staff.bls==0) { %>
+                                checked <% } %>> Inactive</label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Attested Highest degree certificate</td>
+                          <td><input type="file" id="hdc_file" name="hdc_file"></td>
+                          <td> <input type="date" id="hdc_file_date" name="hdc_file_date"
+                              value="<%= staff.hdc_file_date %>"></td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="hdc" value="1" <% if (staff.hdc==1) { %>
+                                checked <% } %>> Active</label>
+                              <label><input type="radio" name="hdc" value="0" <% if (staff.hdc==0) { %>
+                                checked <% } %>> Inactive</label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>DHA /CDA license</td>
+                          <td><input type="file" id="dhacda_license_file" name="dhacda_license_file"></td>
+                          <td> <input type="date" id="dhacda_license_expiry" name="dhacda_license_expiry"
+                              value="<%= staff.dhacda_license_expiry %>"></td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="dhacda_license" value="1" <% if (staff.dhacda_license==1)
+                                  { %>
+                                checked <% } %>> Active</label>
+                              <label><input type="radio" name="dhacda_license" value="0" <% if (staff.dhacda_license==0)
+                                  { %>
+                                checked <% } %>> Inactive</label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="5">3. Roles and Responsibilities (To be given for signature). Provide
+                            designation-specific roles and responsibilities</td>
+                        </tr>
+                        <tr>
+                          <td>Employment contract</td>
+                          <td><input type="file" id="employment_contract_file" name="employment_contract_file">
+                          </td>
+                          <td> <input type="date" id="employment_contract_expiry" name="employment_contract_expiry"
+                              value="<%= staff.employment_contract_expiry %>">>
+                          </td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="employment_contract" value="1" <% if
+                                  (staff.employment_contract==1) { %>
+                                checked <% } %>> Active</label>
+                              <label><input type="radio" name="employment_contract" value="0" <% if
+                                  (staff.employment_contract==0) { %>
+                                checked <% } %>> Inactive</label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Confidentiality Contract</td>
+                          <td><input type="file" id="confidentiality_contract_file"
+                              name="confidentiality_contract_file"></td>
+                          <td> <input type="date" id="confidentiality_contract_expiry"
+                              name="confidentiality_contract_expiry"
+                              value="<%= staff.confidentiality_contract_expiry %>"></td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="confidentiality_contract" value="1" <% if
+                                  (staff.confidentiality_contract==1) { %>
+                                checked <% } %>> Active</label>
+                              <label><input type="radio" name="confidentiality_contract" value="0" <% if
+                                  (staff.confidentiality_contract==0) { %>
+                                checked <% } %>> Inactive</label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Employee Handbook</td>
+                          <td><input type="file" id="employee_handbook_file" name="employee_handbook_file"></td>
+                          <td> <input type="date" id="employee_handbook_expiry" name="employee_handbook_expiry"
+                              value="<%= staff.employee_handbook_expiry %>">
+                          </td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="employee_handbook" value="1" <% if
+                                  (staff.employee_handbook==1) { %>
+                                checked <% } %>> Active</label>
+                              <label><input type="radio" name="employee_handbook" value="0" <% if
+                                  (staff.employee_handbook==0) { %>
+                                checked <% } %>> Inactive</label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>4. Policy Overview: Standard DHA and CDA policies</td>
+                          <td><input type="file" id="dhacda_policies_file" name="dhacda_policies_file"></td>
+                          <td> <input type="date" id="dhacda_policies_expiry" name="dhacda_policies_expiry"
+                              value="<%= staff.dhacda_policies_expiry %>"></td>
+                          <td>
+                            <div class="radio-group">
+                              <label><input type="radio" name="dhacda_policies" value="1" <% if
+                                  (staff.dhacda_policies==1) { %>
+                                checked <% } %>> Active</label>
+                              <label><input type="radio" name="dhacda_policies" value="0" <% if
+                                  (staff.dhacda_policies==0) { %>
+                                checked <% } %>> Inactive</label>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                        </table>
+                      </div>
+                  </div>
+                  <!-- Save Button -->
+                  <div class="form-row">
+                    <div class="form-group">
+                      <button type="submit">Update Staff</button>
+                    </div>
+                  </div>
+                  </form>
+        </div>
+      </div>
+  </div>
+  </div>
+  <script>
+  const sectionMap = {
+    passport: 'passport',
+    visa: 'visa',
+    experience: 'exp_letter',
+    license: 'license',
+    emirates_id: 'emirates_id',
+    hepatitis_b: 'hepatitis_b',
+    bls: 'bls',
+    hdc: 'hdc',
+    dhacda_license: 'dhacda_license',
+    employment_contract: 'employment_contract',
+    confidentiality_contract: 'confidentiality_contract',
+    employee_handbook: 'employee_handbook',
+    dhacda_policies: 'dhacda_policies'
+  };
+
+  // Always disable on load
+  function disableAllInitially() {
+    Object.keys(sectionMap).forEach(section => {
+      const prefix = sectionMap[section];
+
+      const fileInput = document.getElementById(`${prefix}_file`);
+      const dateInput =
+        document.getElementById(`${prefix}_expiry`) ||
+        document.getElementById(`${prefix}_date`) ||
+        document.querySelector(`[id^="${prefix}_"][type="date"]`);
+
+      if (fileInput) fileInput.disabled = true;
+      if (dateInput) dateInput.disabled = true;
+    });
+  }
+
+  // Enable or disable on manual change
+  function handleToggle(sectionName) {
+    const prefix = sectionMap[sectionName];
+    const isActive = document.querySelector(`input[name="${sectionName}"]:checked`)?.value === "1";
+
+    const fileInput = document.getElementById(`${prefix}_file`);
+    const dateInput =
+      document.getElementById(`${prefix}_expiry`) ||
+      document.getElementById(`${prefix}_date`) ||
+      document.querySelector(`[id^="${prefix}_"][type="date"]`);
+
+    if (fileInput) fileInput.disabled = !isActive;
+    if (dateInput) dateInput.disabled = !isActive;
+  }
+
+  // Run on load
+  window.onload = function () {
+    disableAllInitially(); // Step 1: Always disable on load
+
+    // Step 2: Add event listeners
+    Object.keys(sectionMap).forEach(section => {
+      document.querySelectorAll(`input[name="${section}"]`).forEach(radio => {
+        radio.addEventListener("change", () => handleToggle(section));
+      });
+    });
+  };
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const fileWrappers = document.querySelectorAll('.file-wrapper');
+
+      fileWrappers.forEach(wrapper => {
+        const fileInput = wrapper.querySelector('input[type="file"]');
+        const fileNameSpan = wrapper.querySelector('.file-name');
+
+        fileInput.addEventListener('change', () => {
+          if (fileInput.files.length > 0) {
+            const name = fileInput.files[0].name;
+            fileNameSpan.textContent = name;
+            fileNameSpan.style.display = 'inline-block';
+            fileInput.style.display = 'none';
+          }
+        });
+
+        // Optional: click filename to re-select/change file
+        // fileNameSpan.addEventListener('click', () => {
+        //   fileInput.value = "";  // clear existing file
+        //   fileInput.style.display = 'inline-block';
+        //   fileNameSpan.style.display = 'none';
+        //   fileInput.focus();
+        // });
+      });
+    });
+  </script>
+
+  <%- include('../partials/footer') %>

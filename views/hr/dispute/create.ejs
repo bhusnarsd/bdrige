@@ -1,0 +1,209 @@
+<%- include('../../partials/header') %>
+  <div class="container">
+    <%- include('../../partials/left-panel') %>
+      <div class="right-panel">
+        <div class="content-area">
+          <% if (messages.error) { %>
+            <div style="color: red; margin-bottom: 20px;">
+              <%= messages.error %>
+            </div>
+            <% } %>
+              <% if (messages.success) { %>
+                <div style="color: green; margin-bottom: 20px;">
+                  <%= messages.success %>
+                </div>
+                <% } %>
+
+                  <div class="breadcrumbs">
+                    <ul>
+                      <li><a href="/">Home</a></li>
+                      <li><a href="/hr/dispute">Dispute List</a></li>
+                      <li>Dispute Management</li>
+                    </ul>
+                  </div>
+                  <div class="form-area">
+                    <h2>Staff Dispute Management</h2>
+                    <div class="form-box">
+                      <form action="/hr/dispute/create" method="POST">
+                        <div class="form-row">
+                          <div class="form-row">
+                            <div class="form-group">
+                              <label for="staff_id">Unique ID</label>
+                              <select id="staff_id" name="staff_id" required>
+                                <option value="">-- Select Unique ID --</option>
+                                <% if (staffList && staffList.length) { %>
+                                  <% staffList.forEach(staff=> { %>
+                                    <option value="<%= staff.staff_id %>">
+                                      <%= staff.staff_id %>
+                                    </option>
+                                    <% }); %>
+                                      <% } else { %>
+                                        <option value="">No staff found</option>
+                                        <% } %>
+                              </select>
+
+                            </div>
+                            <div class="form-group">
+                              <label for="staff_name">Employee Name:</label>
+                              <input type="text" id="staff_name" name="staff_name" readonly>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group">
+                              <label for="text">Date:</label>
+                              <input type="date" id="doi" name="doi">
+                              <div class="form-group">
+                                <label for="dept">Department</label>
+                                <select class="minimal" name="dept" required>
+                                  <option value="">Select a Department</option>
+                                  <option value="feedback">Feedback</option>
+                                  <option value="inquiry">Inquiry</option>
+                                  <option value="support">Support</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group">
+                                <label for="text">Concern</label>
+                                <input type="text" id="concern" name="concern">
+                              </div>
+                              <div class="form-group">
+                                <label for="text">Email to forward on </label>
+                                <input type="email" id="email_to" name="email_to" required>
+                              </div>
+                              <div class="form-group">
+                                <label for="text">Addressed Date</label>
+                                <input type="date" id="addressed_date" name="addressed_date">
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group">
+                                <label for="text">Response</label>
+                                <input type="date" id="response_date" name="response_date">
+                              </div>
+                              <div class="form-group">
+                                <label for="text">Responded by:</label>
+                                <input type="text" id="responded_by" name="responded_by">
+                              </div>
+                              <div class="form-group">
+                                <label for="text">Conclusion:</label>
+                                <input type="text" id="conclusion" name="conclusion">
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <button type="submit">Submit</button>
+                            <button type="reset">Reset</button>
+                            <p id="errorMessage" style="color: red; display: none;">Please enter a valid 8-character
+                              staff ID.</p>
+                          </div>
+                      </form>
+                    </div>
+                  </div>
+        </div>
+      </div>
+  </div>
+  <script>
+    document.getElementById('staff_id').addEventListener('change', async function () {
+      const staffId = this.value;
+      if (!staffId) {
+        document.getElementById('staff_name').value = '';
+        return;
+      }
+      try {
+        const res = await fetch('/staff/get-staff-details', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ staff_id: staffId })
+        });
+        const data = await res.json();
+        if (data && data.staff && data.staff.staff_name) {
+          document.getElementById('staff_name').value = data.staff.staff_name;
+        } else {
+          document.getElementById('staff_name').value = '';
+          alert('Staff not found.');
+        }
+      } catch (error) {
+        console.error('Error fetching staff details:', error);
+        alert('Server error occurred.');
+      }
+    });
+
+    // Select the staff_id input field
+    const staffIdInput = document.getElementById('staff_id');
+    const staffIdSearchInput = document.getElementById('staff_id_search');
+    const staffNameInput = document.getElementById('staff_name');
+    // const currentPhoneInput = document.getElementById('current_phone');
+    const submitButton = document.querySelector('button[type="submit"]');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Initially disable the submit button
+    submitButton.disabled = true;
+    submitButton.style.backgroundColor = 'gray';
+
+    // Add an event listener to detect when the user types in the staff_id input
+    staffIdSearchInput.addEventListener('input', async () => {
+      const staffId = staffIdSearchInput.value;
+
+      // Only trigger the API call if the staff_id has exactly 8 characters
+      if (staffId.length === 8) {
+        try {
+          const response = await fetch('/staff/get-staff-details', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              staff_id: staffId
+            }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            // Show the staff details (you can adjust based on your UI structure)
+            console.log(data.staff);
+            // Populate the form fields with the fetched staff data
+            staffIdInput.value = data.staff.id || '';
+            staffNameInput.value = data.staff.staff_name || '';
+            // currentPhoneInput.value = data.staff.ccdetails || '';
+
+            // Enable the submit button when valid staff_id is found
+            submitButton.disabled = false;
+            submitButton.style.backgroundColor = ''; // Indicate readiness to submit
+            errorMessage.style.display = 'none'; // Hide error message
+          } else {
+            // Show error if staff_id doesn't exist
+            alert(data.error);
+
+            // Disable the submit button if no valid staff found
+            submitButton.disabled = true;
+            // Show error message and disable button
+            submitButton.style.backgroundColor = 'gray'; // Reset button style
+            errorMessage.style.display = 'block'; // Display error message
+            errorMessage.textContent = 'Staff ID not found. Please check again.';
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Something went wrong!');
+          // Disable the submit button in case of error
+          submitButton.disabled = true;
+        }
+      } else {
+        // If staff_id is not exactly 8 characters, disable the submit button
+        submitButton.disabled = true;
+        // Reset the form and error message if staff_id is invalid
+        submitButton.style.backgroundColor = 'gray'; // Reset button style
+        errorMessage.style.display = 'block'; // Show error message
+        errorMessage.textContent = 'Staff ID must be exactly 8 characters.';
+
+        staffIdInput.value = '';
+        staffNameInput.value = '';
+        // currentPhoneInput.value = '';
+      }
+    });
+  </script>
+  <%- include('../../partials/footer') %>

@@ -1,0 +1,166 @@
+<%- include('../partials/header') %>
+<div class="container">
+  <%- include('../partials/left-panel') %>
+  <div class="right-panel">
+    <div class="banner">
+      <img src="../images/banner-img.jpg" alt="Logo">
+    </div>
+    <div class="content-area">
+        <% if (errorMessages) { %>
+            <div style="color: red; margin-bottom: 20px;"><%= errorMessages %></div>
+          <% } %>
+          
+          <% if (successMessages) { %>
+            <div style="color: green; margin-bottom: 20px;"><%= successMessages %></div>
+          <% } %>
+          
+
+      <div class="breadcrumbs">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/staff/warning-letter/list">Warning Letters</a></li>
+          <li>Edit Warning Letter</li>
+        </ul>
+      </div>
+
+      <div class="form-area">
+        <h2>Edit Staff Warning Letter</h2>
+        <div class="form-box">
+          <form action="/staff/warning-letter/edit/<%= warning.id %>" method="POST" enctype="multipart/form-data">
+            <div class="content">
+              <div class="tablewrapper">
+                <div class="table-responsive">
+                  <table class="table table-condensed table-striped">
+                    <tbody class="tablebody">
+                      <tr>
+                        <td>Unique id:</td>
+                        <td>
+                          <select id="staff_id" name="staff_id" required>
+                            <option value="">-- Select Unique ID --</option>
+                            <% staffList.forEach(staff => { %>
+                              <option value="<%= staff.staff_id %>" <%= warning.staff_id === staff.staff_id ? 'selected' : '' %>><%= staff.staff_id %></option>
+                            <% }) %>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Employee Name</td>
+                        <td>
+                          <input type="text" id="staff_name" name="staff_name" value="<%= warning.staff_name %>" required>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Date of issue</td>
+                        <td><input type="date" id="doi" name="doi" value="<%= warning.doi %>"></td>
+                      </tr>
+                      <tr>
+                        <td>Department</td>
+                        <td>
+                          <select class="minimal" name="department" id="department" required>
+                            <% const departments = ['Speech Therapy', 'ABA', 'Occupational Therapy', 'Physiotherapy', 'Psychology', 'Readiness Program', 'Admin', 'Clinic Manager', 'Cleaning Staff', 'Clinic (MS)']; %>
+                            <option value="">Select a subject</option>
+                            <% departments.forEach(dep => { %>
+                              <option value="<%= dep %>" <%= warning.department === dep ? 'selected' : '' %>><%= dep %></option>
+                            <% }) %>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Brief description of the issue/concern</td>
+                        <td><input type="text" id="issues_concerns" name="issues_concerns" value="<%= warning.issues_concerns %>" required></td>
+                      </tr>
+                      <tr>
+                        <td>Relevant background information</td>
+                        <td><input type="text" id="background_info" name="background_info" value="<%= warning.background_info %>" required></td>
+                      </tr>
+                      <tr>
+                        <td>Effects or consequences of the problem</td>
+                        <td><input type="text" id="ecotp" name="ecotp" value="<%= warning.ecotp %>" required></td>
+                      </tr>
+                      <tr>
+                        <td>Actions Required to be taken</td>
+                        <td>
+                          Action 1: <input type="text" id="action1" name="action1" value="<%= warning.action1 %>" required><br />
+                          Action 2: <input type="text" id="action2" name="action2" value="<%= warning.action2 %>" required><br />
+                          Action 3: <input type="text" id="action3" name="action3" value="<%= warning.action3 %>" required>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Should be completed by deadline</td>
+                        <td><input type="date" id="deadline_date" name="deadline_date" value="<%= warning.deadline_date %>"></td>
+                      </tr>
+                      <tr>
+                        <td>Email address to respond to</td>
+                        <td><input type="email" id="email_to_respond" name="email_to_respond" value="<%= warning.email_to_respond %>" required></td>
+                      </tr>
+                      <tr>
+                        <td>Date when addressed appropriately</td>
+                        <td><input type="date" id="appropriate_date" name="appropriate_date" value="<%= warning.appropriate_date %>"></td>
+                      </tr>
+                      <tr>
+                        <td>Response</td>
+                        <td><input type="text" id="response" name="response" value="<%= warning.response %>" required></td>
+                      </tr>
+                      <tr>
+                        <td>Responded by</td>
+                        <td><input type="text" id="responded_by" name="responded_by" value="<%= warning.responded_by %>" required></td>
+                      </tr>
+                      <tr>
+                        <td>Conclusion</td>
+                        <td><input type="text" id="conclusion" name="conclusion" value="<%= warning.conclusion %>" required></td>
+                      </tr>
+                      <tr>
+                        <td>Any Document</td>
+                        <td>
+                          <input type="file" id="any_document" name="any_document">
+                          <% if (warning.any_document) { %>
+                            <p>Current File: <a href="/uploads/warnings/<%= warning.any_document %>" target="_blank"><%= warning.any_document %></a></p>
+                          <% } %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <br />
+              <div class="form-group">
+                <button type="submit">Update</button>
+                <button type="reset">Reset</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('staff_id').addEventListener('change', async function () {
+    const staffId = this.value;
+    if (!staffId) {
+      document.getElementById('staff_name').value = '';
+      return;
+    }
+
+    try {
+      const res = await fetch('/staff/get-staff-details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ staff_id: staffId })
+      });
+
+      const data = await res.json();
+
+      if (data.staff) {
+        document.getElementById('staff_name').value = data.staff.staff_name || '';
+      } else {
+        alert('Staff not found');
+      }
+    } catch (err) {
+      console.error('Error fetching staff data:', err);
+    }
+  });
+</script>
+
+<%- include('../partials/footer') %>

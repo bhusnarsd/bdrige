@@ -1,0 +1,665 @@
+<%- include('../../partials/header') %>
+<div class="container">
+  <%- include('../../partials/left-panel') %>
+  <div class="right-panel">
+    <div class="content-area">
+      <% if (errorMessages && errorMessages.length > 0) { %>
+      <div style="color: red; margin-bottom: 20px;">
+        <%= errorMessages[0] %>
+      </div>
+      <% } %>
+      <% if (successMessages && successMessages.length > 0) { %>
+      <div style="color: green; margin-bottom: 20px;"><%= successMessages[0] %></div>
+      <% } %>
+
+      <div class="breadcrumbs">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/hr/kpi">KPI</a></li>
+          <li>Key Performance Indicator</li>
+        </ul>
+      </div>
+      <div class="form-area">
+        <h2>Key Performance Indicator</h2>
+        <div class="form-box">
+          <form action="/hr/kpi/edit/<%= kpi.id %>" method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="staff_id">Unique id:</label>
+                <input type="text" id="staff_id_search" name="staff_id_search" value="<%= kpi.StaffDetail ? kpi.StaffDetail.staff_id : '' %>" readonly>
+                <input type="hidden" id="staff_id" name="staff_id" value="<%= kpi.StaffDetail ? kpi.StaffDetail.id : '' %>">
+              </div>
+              <div class="form-group">
+                <label for="staff_name">Employee Name:</label>
+                <input type="text" id="staff_name" name="staff_name" value="<%= kpi.StaffDetail?  kpi.StaffDetail.staff_name : '' %>" readonly>
+              </div>
+              <div class="form-group">
+                <label for="current_phone">Current Phone (In Dubai)</label>
+                <input type="text" id="current_phone" name="current_phone" value="<%= kpi.StaffDetail ? kpi.StaffDetail.ccdetails : '' %>" readonly>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="kpi_date">Date:</label>
+                <input type="date" id="kpi_date" name="kpi_date" value="<%= kpi.kpi_date %>">
+              </div>
+              <div class="form-group">
+                <label for="dept">Department</label>
+                <select class="minimal" name="department" required>
+                  <option value="">Select a Department</option>
+                  <option value="feedback" <%= kpi.department === 'feedback' ? 'selected' : '' %>>Feedback</option>
+                  <option value="inquiry" <%= kpi.department === 'inquiry' ? 'selected' : '' %>>Inquiry</option>
+                  <option value="support" <%= kpi.department === 'support' ? 'selected' : '' %>>Support</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="email">Evaluation period</label>
+                <label><input type="radio" name="e_period" value="1st Q: Jan-May" <%= kpi.e_period === '1st Q: Jan-May' ? 'checked' : '' %> required> 1st Q: Jan-May</label>
+                <label><input type="radio" name="e_period" value="2nd Q: June-Sept" <%= kpi.e_period === '2nd Q: June-Sept' ? 'checked' : '' %> required> 2nd Q: June-Sept</label>
+                <label><input type="radio" name="e_period" value="3rd Q: Oct-Dec" <%= kpi.e_period === '3rd Q: Oct-Dec' ? 'checked' : '' %> required> 3rd Q: Oct-Dec</label>
+              </div>
+            </div>
+            <h4>Key Performance Indicator</h4>
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="" colspan="2">Quarter: </th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody">
+                    <tr>
+                      <td>1.</td>
+                      <td><input type="text" id="kpi_text1" name="kpi_text1" value="<%= kpi.kpi_text1 %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>2.</td>
+                      <td><input type="text" id="kpi_text2" name="kpi_text2" value="<%= kpi.kpi_text2 %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>3.</td>
+                      <td><input type="text" id="kpi_text3" name="kpi_text3" value="<%= kpi.kpi_text3 %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>4.</td>
+                      <td><input type="text" id="kpi_text4" name="kpi_text4" value="<%= kpi.kpi_text4 %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>5.</td>
+                      <td><input type="text" id="kpi_text5" name="kpi_text5" value="<%= kpi.kpi_text5 %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Employee Signature:
+                        <img id="staff_signature_preview" src="<%= kpi.staff_sign %>" alt="Staff Signature" style="max-width: 100%; height: auto;">
+                        <!-- <canvas id="staff_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br> -->
+                        <input type="hidden" id="staff_sign_input" name="staff_sign_input">
+                      </td>
+                      <td>HOD/Supervisor Signature:
+                        <img id="hod_sign_preview" src="<%= kpi.hod_sign %>" alt="HOD Signature" style="max-width: 100%; height: auto;">
+                        <!-- <canvas id="hod_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br> -->
+                        <input type="hidden" id="hod_sign_input" name="hod_sign_input">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <h4>Rating Scale</h4>
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="">O </th>
+                      <th class="">BT </th>
+                      <th class="">MT </th>
+                      <th class="">LT </th>
+                      <th class="">UN </th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody">
+                    <tr>
+                      <td><label><input type="radio" name="rating_scale" id="rating_scale" value="5" <%= kpi.rating_scale === '5' ? 'checked' : '' %> required> 5</label></td>
+                      <td><label><input type="radio" name="rating_scale" id="rating_scale" value="4" <%= kpi.rating_scale === '4' ? 'checked' : '' %> required> 4</label></td>
+                      <td><label><input type="radio" name="rating_scale" id="rating_scale" value="3" <%= kpi.rating_scale === '3' ? 'checked' : '' %> required> 3</label></td>
+                      <td><label><input type="radio" name="rating_scale" id="rating_scale" value="2" <%= kpi.rating_scale === '2' ? 'checked' : '' %> required> 2</label></td>
+                      <td><label><input type="radio" name="rating_scale" id="rating_scale" value="1" <%= kpi.rating_scale === '1' ? 'checked' : '' %> required> 1</label></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <h4>Performance Targets:</h4>
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="">Target 1: Administration </th>
+                      <th class="">Q: <%= kpi.e_period %></th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody" id="block1">
+                    <tr>
+                      <td>Attendance/Reporting time</td>
+                      <td><input type="number" class="block1-input" id="trg1_art" name="trg1_art" value="<%= kpi.trg1_art %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Rapport with administration desk</td>
+                      <td><input type="number" class="block1-input" id="trg1_rwad" name="trg1_rwad" value="<%= kpi.trg1_rwad %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Report writing skills</td>
+                      <td><input type="number" class="block1-input" id="trg1_rws" name="trg1_rws" value="<%= kpi.trg1_rws %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Maintaining body checklist </td>
+                      <td><input type="number" class="block1-input" id="trg1_mbc" name="trg1_mbc" value="<%= kpi.trg1_mbc %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Property /Premise care </td>
+                      <td><input type="number" class="block1-input" id="trg1_ppc" name="trg1_ppc" value="<%= kpi.trg1_ppc %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Total </td>
+                      <td>Sum of above value (A): <span class="block1-sum"><%= kpi.trg1_sum %></span>
+                      <input type="hidden" name="trg1_sum" id="block1-sum" value="<%= kpi.trg1_sum %>"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div><br /><br />
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="">Target 2: Planning and Organization </th>
+                      <th class="">Q: <%= kpi.e_period %></th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody" id="block2">
+                    <tr>
+                      <td>Planning of session</td>
+                      <td><input type="number" class="block2-input" id="trg2_pos" name="trg2_pos" value="<%= kpi.trg2_pos %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Supporting fellow therapist</td>
+                      <td><input type="number" class="block2-input" id="trg2_sft" name="trg2_sft" value="<%= kpi.trg2_sft %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Creativity /Customization as per client</td>
+                      <td><input type="number" class="block2-input" id="trg2_ccapc" name="trg2_ccapc" value="<%= kpi.trg2_ccapc %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Clean and organized station </td>
+                      <td><input type="number" class="block2-input" id="trg2_caos" name="trg2_caos" value="<%= kpi.trg2_caos %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Problem Solving</td>
+                      <td><input type="number" class="block2-input" id="trg2_ps" name="trg2_ps" value="<%= kpi.trg2_ps %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Counselling</td>
+                      <td><input type="number" class="block2-input" id="trg2_counslng" name="trg2_counslng" value="<%= kpi.trg2_counslng %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Total </td>
+                      <td>Sum of above value (B) <span class="block2-sum"><%= kpi.trg2_sum %></span>
+                        <input type="hidden" name="trg2_sum" id="block2-sum" value="<%= kpi.trg2_sum %>"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div><br /><br />
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="">Target 3: Performance and conduct</th>
+                      <th class="">Q: <%= kpi.e_period %></th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody" id="block3">
+                    <tr>
+                      <td>Communication skills</td>
+                      <td><input type="number" class="block3-input" id="trg3_cs" name="trg3_cs" value="<%= kpi.trg3_cs %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Decision making</td>
+                      <td><input type="number" class="block3-input" id="trg3_dm" name="trg3_dm" value="<%= kpi.trg3_dm %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Initiation</td>
+                      <td><input type="number" class="block3-input" id="trg3_init" name="trg3_init" value="<%= kpi.trg3_init %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Consistent performance</td>
+                      <td><input type="number" class="block3-input" id="trg3_cp" name="trg3_cp" value="<%= kpi.trg3_cp %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Grooming/ Presentation skills</td>
+                      <td><input type="number" class="block3-input" id="trg3_gps" name="trg3_gps" value="<%= kpi.trg3_gps %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Teamwork</td>
+                      <td><input type="number" class="block3-input" id="trg3_tw" name="trg3_tw" value="<%= kpi.trg3_tw %>" required></td>
+                    </tr>
+                    <tr>
+                      <td>Total </td>
+                      <td>Sum of above value (C) <span class="block3-sum"><%= kpi.trg3_sum %></span>
+                        <input type="hidden" name="trg3_sum" id="block3-sum" value="<%= kpi.trg3_sum %>"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <h4>Strength and skills noted during this Quarter</h4>
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <tbody class="tablebody">
+                    <tr>
+                      <td><input type="text" id="sasndtq1" name="sasndtq1" value="<%= kpi.sasndtq1 %>" required></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="sasndtq2" name="sasndtq2" value="<%= kpi.sasndtq2 %>" required></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="sasndtq3" name="sasndtq3" value="<%= kpi.sasndtq3 %>" required></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="sasndtq4" name="sasndtq4" value="<%= kpi.sasndtq4 %>" required></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="sasndtq5" name="sasndtq5" value="<%= kpi.sasndtq5 %>" required></td>
+                    </tr>
+                    <tr>
+                      <td><input type="text" id="sasndtq6" name="sasndtq6" value="<%= kpi.sasndtq6 %>" required></td>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <h4>*Overall performance</h4>
+            <p>SCORE: Sum of A+B+C <span id="block-total-display"><%= kpi.trg_total %></span>
+            <input type="hidden" name="trg_total" id="block-total" value="<%= kpi.trg_total %>"></p>
+            <h4>*Performance Scoring:</h4>
+            <p>
+            <ul>
+              <li>O: Outstanding Performance - Conduct and performance consistently superior</li>
+              <li>BT: Beyond Target - Conduct and performance beyond set targets</li>
+              <li>MT: Meeting Target - Conduct and performance just meeting set targets</li>
+              <li>LT: Below Target - Conduct and performance fail to meet set targets</li>
+              <li>UN: Unsatisfactory - Conduct and performance consistently unsatisfactory</li>
+            </ul>
+            </p>
+            <div class="tablewrapper">
+              <div class="table-responsive">
+                <table class="table table-condensed table-striped-height">
+                  <thead class="tablehead">
+                    <tr>
+                      <th class="">O </th>
+                      <th class="">BT </th>
+                      <th class="">MT </th>
+                      <th class="">LT </th>
+                      <th class="">UN </th>
+                    </tr>
+                  </thead>
+                  <tbody class="tablebody">
+                    <tr>
+                      <td><label><input type="radio" name="ps_scale" id="ps_scale" value="above-80" <%= kpi.ps_scale === 'above-80' ? 'checked' : '' %> required> Above 80</label></td>
+                      <td><label><input type="radio" name="ps_scale" id="ps_scale" value="80-70" <%= kpi.ps_scale === '80-70' ? 'checked' : '' %> required> 80-70</label></td>
+                      <td><label><input type="radio" name="ps_scale" id="ps_scale" value="70-60" <%= kpi.ps_scale === '70-60' ? 'checked' : '' %> required> 70-60</label></td>
+                      <td><label><input type="radio" name="ps_scale" id="ps_scale" value="60-50" <%= kpi.ps_scale === '60-50' ? 'checked' : '' %> required> 60-50</label></td>
+                      <td><label><input type="radio" name="ps_scale" id="ps_scale" value="50-40" <%= kpi.ps_scale === '50-40' ? 'checked' : '' %> required> 50-
+
+                          < 40 </label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div><br /><br />
+            <div class="form-row">
+              <div class="form-group">
+                <label for="hr_sign">HR signature</label>
+                <img id="hr_sign_preview" src="<%= kpi.hr_sign %>" alt="HR Signature" style="max-width: 100%; height: auto;">
+                <!-- <canvas id="hr_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br> -->
+                <input type="hidden" id="hr_sign_input" name="hr_sign_input">
+              </div>
+              <div class="form-group">
+                <label for="director_sign">Director</label>
+                <img id="director_sign_preview" src="<%= kpi.director_sign %>" alt="Director Signature" style="max-width: 100%; height: auto;">
+                <!-- <canvas id="director_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br> -->
+                <input type="hidden" id="director_sign_input" name="director_sign_input">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="staff_sign1">Employee’s Signature</label>
+                <img id="staff_sign1_preview" src="<%= kpi.staff_sign1 %>" alt="Employee’s Signature" style="max-width: 100%; height: auto;">
+                <!-- <canvas id="staff_sign1" width="400" height="200" style="border: 1px solid black;"></canvas><br> -->
+                <input type="hidden" id="staff_sign1_input" name="staff_sign1_input">
+              </div>
+              <div class="form-group">
+                <label for="hod_sign1">HOD/Supervisor Signature</label>
+                <img id="hod_sign1_preview" src="<%= kpi.hod_sign1 %>" alt="HOD/Supervisor Signature" style="max-width: 100%; height: auto;">
+                <!-- <canvas id="hod_sign1" width="400" height="200" style="border: 1px solid black;"></canvas><br> -->
+                <input type="hidden" id="hod_sign1_input" name="hod_sign1_input">
+              </div>
+            </div>
+            <div class="form-group">
+              <button type="submit">Submit</button>
+              <button type="button">Print</button>
+              <button type="button">Download</button>
+              <button type="reset">Reset</button>
+              <p id="errorMessage" style="color: red; display: none;">Please enter a valid 8-character staff ID.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+  // Function to initialize the canvas drawing behavior
+  function initializeSignatureCanvas(canvasId, inputId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    // Function to get the position of the pointer (mouse or touch)
+    function getPosition(event) {
+      const rect = canvas.getBoundingClientRect();
+      const x = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
+      const y = event.touches ? event.touches[0].clientY - rect.top : event.clientY - rect.top;
+      return {
+        x,
+        y
+      };
+    }
+
+    // Start drawing when mouse is pressed or touch starts
+    canvas.addEventListener('mousedown', (event) => {
+      drawing = true;
+
+      // Get the mouse position relative to the canvas
+      // const rect = canvas.getBoundingClientRect();
+      // lastX = event.clientX - rect.left;
+      // lastY = event.clientY - rect.top;
+      const {
+        x,
+        y
+      } = getPosition(event);
+      lastX = x;
+      lastY = y;
+    });
+    // Start drawing on touch start (mobile/tablets)
+    canvas.addEventListener('touchstart', (event) => {
+      event.preventDefault(); // Prevents the default touch action (scrolling)
+      drawing = true;
+      const {
+        x,
+        y
+      } = getPosition(event);
+      lastX = x;
+      lastY = y;
+    });
+
+    // Stop drawing when mouse is released or touch ends
+    canvas.addEventListener('mouseup', () => {
+      drawing = false;
+    });
+    // Stop drawing on touch end
+    canvas.addEventListener('touchend', () => {
+      drawing = false;
+    });
+
+    // Draw on canvas when mouse is moved or touch moves and drawing is true
+    canvas.addEventListener('mousemove', (event) => {
+      if (drawing) {
+        // const rect = canvas.getBoundingClientRect();
+        // const x = event.clientX - rect.left;
+        // const y = event.clientY - rect.top;
+        const {
+          x,
+          y
+        } = getPosition(event);
+
+        // Draw a line from the last position to the current position
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        lastX = x; // Update lastX to the current position
+        lastY = y; // Update lastY to the current position
+      }
+    });
+    // Draw on canvas when touch moves
+    canvas.addEventListener('touchmove', (event) => {
+      if (drawing) {
+        const {
+          x,
+          y
+        } = getPosition(event);
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        lastX = x;
+        lastY = y;
+      }
+    });
+  }
+
+  // Function to handle form submission
+  function handleFormSubmit(event) {
+    // Get the canvas data for each signature field
+    const staffSignData = document.getElementById('staff_sign').toDataURL();
+    const hodSignData = document.getElementById('hod_sign').toDataURL();
+    const hrSignData = document.getElementById('hr_sign').toDataURL();
+    const directorSignData = document.getElementById('director_sign').toDataURL();
+    const staffSign1Data = document.getElementById('staff_sign1').toDataURL();
+    const hodSign1Data = document.getElementById('hod_sign1').toDataURL();
+
+    // Set the hidden input fields with the canvas data
+    document.getElementById('staff_sign_input').value = staffSignData;
+    document.getElementById('hod_sign_input').value = hodSignData;
+    document.getElementById('hr_sign_input').value = hrSignData;
+    document.getElementById('director_sign_input').value = directorSignData;
+    document.getElementById('staff_sign1_input').value = staffSign1Data;
+    document.getElementById('hod_sign1_input').value = hodSign1Data;
+
+    // console.log('Form data:', {
+    //   staffSignData,
+    //   hodSignData,
+    //   hrSignData,
+    //   directorSignData,
+    //   staffSign1Data,
+    //   hodSign1Data
+    // });
+
+    // Proceed with the form submission after populating the signature data
+    // If you're submitting with AJAX, prevent the default behavior
+    // event.preventDefault(); // Only needed for AJAX submission
+    document.querySelector('form').submit(); // Submit the form after setting the hidden inputs
+  }
+
+  // Initialize all signature canvases
+  window.onload = function() {
+    // Initialize signature canvases
+    initializeSignatureCanvas('staff_sign', 'staff_sign_input');
+    initializeSignatureCanvas('hod_sign', 'hod_sign_input');
+    initializeSignatureCanvas('hr_sign', 'hr_sign_input');
+    initializeSignatureCanvas('director_sign', 'director_sign_input');
+    initializeSignatureCanvas('staff_sign1', 'staff_sign1_input');
+    initializeSignatureCanvas('hod_sign1', 'hod_sign1_input');
+
+    // Add submit event listener to the form
+    document.querySelector('form').addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevent form submission for manual handling
+
+      handleFormSubmit(event); // Handle form submission after populating signature fields
+
+      // Optionally, submit the form via AJAX if you're not doing a regular form post
+      // form.submit(); // Or manually trigger the form submission after handling signatures
+    });
+  };
+
+
+
+
+  // // Select the staff_id input field
+  // const staffIdInput = document.getElementById('staff_id');
+  // const staffIdSearchInput = document.getElementById('staff_id_search');
+  // const staffNameInput = document.getElementById('staff_name');
+  // const currentPhoneInput = document.getElementById('current_phone');
+  // const submitButton = document.querySelector('button[type="submit"]');
+  // const errorMessage = document.getElementById('errorMessage');
+
+  // // Initially disable the submit button
+  // submitButton.disabled = true;
+  // submitButton.style.backgroundColor = 'gray';
+
+  // // Add an event listener to detect when the user types in the staff_id input
+  // staffIdSearchInput.addEventListener('input', async () => {
+  //   const staffId = staffIdSearchInput.value;
+
+  //   // Only trigger the API call if the staff_id has exactly 8 characters
+  //   if (staffId.length === 8) {
+  //     try {
+  //       const response = await fetch('/staff/get-staff-details', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           staff_id: staffId
+  //         }),
+  //       });
+
+  //       const data = await response.json();
+
+  //       if (response.ok) {
+  //         // Show the staff details (you can adjust based on your UI structure)
+  //         console.log(data.staff);
+  //         // Populate the form fields with the fetched staff data
+  //         staffIdInput.value = data.staff.id || '';
+  //         staffNameInput.value = data.staff.staff_name || '';
+  //         currentPhoneInput.value = data.staff.ccdetails || '';
+
+  //         // Enable the submit button when valid staff_id is found
+  //         submitButton.disabled = false;
+  //         submitButton.style.backgroundColor = ''; // Indicate readiness to submit
+  //         errorMessage.style.display = 'none'; // Hide error message
+  //       } else {
+  //         // Show error if staff_id doesn't exist
+  //         alert(data.error);
+
+  //         // Disable the submit button if no valid staff found
+  //         submitButton.disabled = true;
+  //         // Show error message and disable button
+  //         submitButton.style.backgroundColor = 'gray'; // Reset button style
+  //         errorMessage.style.display = 'block'; // Display error message
+  //         errorMessage.textContent = 'Staff ID not found. Please check again.';
+  //       }
+  //     } catch (error) {
+  //       console.error('Error:', error);
+  //       alert('Something went wrong!');
+  //       // Disable the submit button in case of error
+  //       submitButton.disabled = true;
+  //     }
+  //   } else {
+  //     // If staff_id is not exactly 8 characters, disable the submit button
+  //     submitButton.disabled = true;
+  //     // Reset the form and error message if staff_id is invalid
+  //     submitButton.style.backgroundColor = 'gray'; // Reset button style
+  //     errorMessage.style.display = 'block'; // Show error message
+  //     errorMessage.textContent = 'Staff ID must be exactly 8 characters.';
+
+  //     staffIdInput.value = '';
+  //     staffNameInput.value = '';
+  //     currentPhoneInput.value = '';
+  //   }
+  // });
+
+
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+  // Function to calculate and update the sum for a specific block
+  function updateSum(blockClass, sumClass) {
+    const inputs = document.querySelectorAll(`.${blockClass}`);
+    const totalDisplay = document.querySelector(`.${sumClass}`);
+    const totalDisplayInTxt = document.querySelector(`#${sumClass}`);
+    const allTotalDisplayInTxt = document.querySelector('#block-total');
+    const totalDisplayElement = document.querySelector('#block-total-display');
+
+    if (!totalDisplay || !totalDisplayInTxt || !allTotalDisplayInTxt || !totalDisplayElement) {
+        console.error('One or more elements are missing!');
+        return;  // Prevent errors if elements don't exist
+    }
+
+    let total = 0;
+
+    // Loop through the inputs in the block and calculate the total sum
+    inputs.forEach(input => {
+      total += parseFloat(input.value) || 0;  // Handle invalid inputs by using 0 as fallback
+    });
+
+    // Update the sum in the designated span
+    totalDisplay.textContent = total;
+    totalDisplayInTxt.value = total;
+    
+    // Log the individual block total
+    console.log(`Total for block: ${total}`);
+
+    // Update the total of all `totalDisplayInTxt` values (block1-sum, block2-sum, block3-sum)
+    const allTotal = [
+        document.querySelector('#block1-sum'),
+        document.querySelector('#block2-sum'),
+        document.querySelector('#block3-sum')
+    ].reduce((acc, sumElement) => acc + (parseFloat(sumElement.value) || 0), 0);
+
+    // Log the sum of all blocks
+    console.log(`All total: ${allTotal}`);
+
+    // Update the overall total in #block-total
+    // Force a reflow by resetting and updating the value
+    allTotalDisplayInTxt.value = '';  // Reset first
+    allTotalDisplayInTxt.value = allTotal;  // Update with the total
+
+    // Update the displayed total
+    totalDisplayElement.textContent = allTotal;  // Update span with total
+    console.log(`Updated block-total: ${allTotalDisplayInTxt.value}`);
+  }
+
+  // Add event listeners to input fields in each block to update the sum dynamically
+  document.querySelectorAll('.block1-input').forEach(input => {
+    input.addEventListener('input', () => updateSum('block1-input', 'block1-sum'));
+  });
+  
+  document.querySelectorAll('.block2-input').forEach(input => {
+    input.addEventListener('input', () => updateSum('block2-input', 'block2-sum'));
+  });
+
+  document.querySelectorAll('.block3-input').forEach(input => {
+    input.addEventListener('input', () => updateSum('block3-input', 'block3-sum'));
+  });
+
+  // Call the updateSum function once on page load for each block
+  updateSum('block1-input', 'block1-sum');
+  updateSum('block2-input', 'block2-sum');
+  updateSum('block3-input', 'block3-sum');
+});
+
+</script>
+
+<%- include('../../partials/footer') %>

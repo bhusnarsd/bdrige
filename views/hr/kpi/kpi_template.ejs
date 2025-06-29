@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KPI Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .form-section {
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    /* table.plane {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      border: none;
+    } */
+
+    table,
+    th,
+    td {
+      border: 1px solid #000;
+    }
+
+    th,
+    td {
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="form-area">
+    <h2>Key Performance Indicator</h2>
+    <div class="form-box">
+      <form action="/submit" method="POST">
+        <p>Unique id: <%= StaffDetail.staff_id %></p>
+        <p>Employee Name: <%= StaffDetail.staff_name %></p>
+        <p>Current Phone (In Dubai): <%= StaffDetail.staff_ccdetails %></p>
+        <p>Department: <%= department %></p>
+        <p>Evaluation period: <%= e_period %></p>
+        <p>Date: <%= kpi_date %></p>
+        <h4>Key Performance Indicator</h4>
+        <div class="tablewrapper">
+          <div class="table-responsive">
+            <table class="table table-condensed table-striped-height">
+              <thead class="tablehead">
+                <tr>
+                  <th class="" colspan="2">Quarter: <%= e_period %></th>
+                </tr>
+              </thead>
+              <tbody class="tablebody">
+                <tr>
+                  <td>1.</td>
+                  <td><%= kpi_text1 %></td>
+                </tr>
+                <tr>
+                  <td>2.</td>
+                  <td><%= kpi_text2 %></td>
+                </tr>
+                <tr>
+                  <td>3.</td>
+                  <td><%= kpi_text3 %></td>
+                </tr>
+                <tr>
+                  <td>4.</td>
+                  <td><%= kpi_text4 %></td>
+                </tr>
+                <tr>
+                  <td>5.</td>
+                  <td><%= kpi_text5 %></td>
+                </tr>
+                <tr>
+                  <td>Employee Signature:<br><img src="<%= staff_sign %>" width="200px" /></td>
+                  <td>HOD/Supervisor Signature:<br><img src="<%= hod_sign %>" width="200px" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <h4>Rating Scale</h4>
+        <div class="tablewrapper">
+          <div class="table-responsive">
+            <table class="table table-condensed table-striped-height">
+              <thead class="tablehead">
+                <tr>
+                  <th class="">O </th>
+                  <th class="">BT </th>
+                  <th class="">MT </th>
+                  <th class="">LT </th>
+                  <th class="">UN </th>
+                </tr>
+              </thead>
+              <tbody class="tablebody">
+                <tr>
+                  <td><label>5</label>: <%= rating_scale %></td>
+                  <td><label> 4</label></td>
+                  <td><label> 3</label></td>
+                  <td><label> 2</label></td>
+                  <td><label> 1</label></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <h4>Performance Targets:</h4>
+        <div class="tablewrapper">
+          <div class="table-responsive">
+            <table class="table table-condensed table-striped-height">
+              <thead class="tablehead">
+                <tr>
+                  <th class="">Target 1: Administration </th>
+                  <th class="">Q: <%= e_period %></th>
+                </tr>
+              </thead>
+              <tbody class="tablebody">
+                <tr>
+                  <td>Attendance/Reporting time</td>
+                  <td><%= trg1_art %></td>
+                </tr>
+                <tr>
+                  <td>Rapport with administration desk</td>
+                  <td><%= trg1_rwad %></td>
+                </tr>
+                <tr>
+                  <td>Report writing skills</td>
+                  <td><%= trg1_rws %></td>
+                </tr>
+                <tr>
+                  <td>Maintaining body checklist </td>
+                  <td><%= trg1_mbc %></td>
+                </tr>
+                <tr>
+                  <td>Property /Premise care </td>
+                  <td><%= trg1_ppc %></td>
+                </tr>
+                <tr>
+                  <td>Total </td>
+                  <td>Sum of above value (A): <%= trg1_sum %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div><br /><br />
+        <div class="tablewrapper">
+          <div class="table-responsive">
+            <table class="table table-condensed table-striped-height">
+              <thead class="tablehead">
+                <tr>
+                  <th class="">Target 2: Planning and Organization </th>
+                  <th class="">Q: <%= e_period %></th>
+                </tr>
+              </thead>
+              <tbody class="tablebody">
+                <tr>
+                  <td>Planning of session</td>
+                  <td><%= trg2_pos %></td>
+                </tr>
+                <tr>
+                  <td>Supporting fellow therapist</td>
+                  <td><%= trg2_sft %></td>
+                </tr>
+                <tr>
+                  <td>Creativity /Customization as per client</td>
+                  <td><%= trg2_ccapc %></td>
+                </tr>
+                <tr>
+                  <td>Clean and organized station </td>
+                  <td><%= trg2_caos %></td>
+                </tr>
+                <tr>
+                  <td>Problem Solving</td>
+                  <td><%= trg2_ps %></td>
+                </tr>
+                <tr>
+                  <td>Counselling</td>
+                  <td><%= trg2_counslng %></td>
+                </tr>
+                <tr>
+                  <td>Total </td>
+                  <td>Sum of above value (B): <%= trg2_sum %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div><br /><br />
+        <div class="tablewrapper">
+          <div class="table-responsive">
+            <table class="table table-condensed table-striped-height">
+              <thead class="tablehead">
+                <tr>
+                  <th class="">Target 3: Performance and conduct</th>
+                  <th class="">Q: <%= e_period %></th>
+                </tr>
+              </thead>
+              <tbody class="tablebody">
+                <tr>
+                  <td>Communication skills</td>
+                  <td><%= trg3_cs %></td>
+                </tr>
+                <tr>
+                  <td>Decision making</td>
+                  <td><%= trg3_dm %></td>
+                </tr>
+                <tr>
+                  <td>Initiation</td>
+                  <td><%= trg3_init %></td>
+                </tr>
+                <tr>
+                  <td>Consistent performance</td>
+                  <td><%= trg3_cp %></td>
+                </tr>
+                <tr>
+                  <td>Grooming/ Presentation skills</td>
+                  <td><%= trg3_gps %></td>
+                </tr>
+                <tr>
+                  <td>Teamwork</td>
+                  <td><%= trg3_tw %></td>
+                </tr>
+                <tr>
+                  <td>Total </td>
+                  <td>Sum of above value (C): <%= trg3_sum %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <h4>Strength and skills noted during this Quarter</h4>
+        <div class="tablewrapper">
+          <div class="table-responsive">
+            <table class="table table-condensed table-striped-height">
+              <tbody class="tablebody">
+                <tr>
+                  <td><%= sasndtq1 %></td>
+                </tr>
+                <tr>
+                  <td><%= sasndtq2 %></td>
+                </tr>
+                <tr>
+                  <td><%= sasndtq3 %></td>
+                </tr>
+                <tr>
+                  <td><%= sasndtq4 %></td>
+                </tr>
+                <tr>
+                  <td><%= sasndtq5 %></td>
+                </tr>
+                <tr>
+                  <td><%= sasndtq6 %></td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <h4>*Overall performance</h4>
+        <p>SCORE: Sum of A+B+C: <%= trg_total %></p>
+        <h4>*Performance Scoring:</h4>
+        <p>
+        <ul>
+          <li>O: Outstanding Performance - Conduct and performance consistently superior</li>
+          <li>BT: Beyond Target - Conduct and performance beyond set targets</li>
+          <li>MT: Meeting Target - Conduct and performance just meeting set targets</li>
+          <li>LT: Below Target - Conduct and performance fail to meet set targets</li>
+          <li>UN: Unsatisfactory - Conduct and performance consistently unsatisfactory</li>
+        </ul>
+        </p>
+        <div class="tablewrapper">
+          <div class="table-responsive">
+            <table class="table table-condensed table-striped-height">
+              <thead class="tablehead">
+                <tr>
+                  <th class="">O </th>
+                  <th class="">BT </th>
+                  <th class="">MT </th>
+                  <th class="">LT </th>
+                  <th class="">UN </th>
+                </tr>
+              </thead>
+              <tbody class="tablebody">
+                <tr>
+                  <td><label>Above 80</label> <%= ps_scale %></td>
+                  <td><label> 80-70</label></td>
+                  <td><label> 70-60</label></td>
+                  <td><label> < 60-50</label></td>
+                  <td> 50-<40</label></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div><br /><br />
+        <div class="tablewrapper">
+          <div class="table-responsive">
+            <table class="plane">
+              <tr>
+                <td>HR signature:<br><img src="<%= hr_sign %>" width="200px" /></td>
+                <td>Director Signature:<br><img src="<%= director_sign %>" width="200px" /></td>
+              </tr>
+              <tr>
+                <td>Employee’s Signature:<br><img src="<%= staff_sign1 %>" width="200px" /></td>
+                <td>HOD/Supervisor Signature:<br><img src="<%= hod_sign1 %>" width="200px" /></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+    </div>
+<br>
+    <div class="form-group">
+      <button type="submit">Print</button>
+    </div>
+  </div>
+
+</body>
+
+</html>

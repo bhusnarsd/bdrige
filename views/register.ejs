@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <h1>Registration Form</h1>
+  <form action="/register" method="POST" enctype="multipart/form-data">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br>
+
+    <label for="profileImage">Profile Image:</label>
+    <input type="file" name="profileImage" id="profileImage" accept="image/*"><br>
+
+    <label for="signature">Signature:</label>
+    <canvas id="signature" width="400" height="200" style="border: 1px solid black;"></canvas><br>
+    <input type="hidden" name="signature" id="signatureInput">
+    
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    const canvas = document.getElementById('signature');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+
+    canvas.addEventListener('mousedown', () => { drawing = true; });
+    canvas.addEventListener('mouseup', () => { drawing = false; });
+    canvas.addEventListener('mousemove', (event) => {
+      if (drawing) {
+        ctx.lineTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
+        ctx.stroke();
+      }
+    });
+
+    document.querySelector('form').addEventListener('submit', (event) => {
+      const signatureData = canvas.toDataURL();
+      document.getElementById('signatureInput').value = signatureData;
+    });
+  </script>
+</body>
+</html>

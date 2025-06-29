@@ -1,0 +1,187 @@
+<%- include('../../partials/header') %>
+    <style>
+        /* General styling for the pagination */
+        .pagination ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .pagination ul li {
+            margin: 0 5px;
+        }
+
+        .pagination ul li a {
+            text-decoration: none;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .pagination ul li a:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        .pagination ul li a.active {
+            background-color: #28a745;
+        }
+
+        .pagination ul li a.disabled {
+            background-color: #ccc;
+            pointer-events: none;
+        }
+
+        /* Download buttons styling */
+        .download a {
+            text-decoration: none;
+            color: #007bff;
+            margin: 10px 5px;
+            font-size: 16px;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .download a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Breadcrumb container */
+        .breadcrumbs {
+            margin: 10px 0;
+            padding: 5px 0;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        /* Breadcrumb list */
+        .breadcrumbs ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        /* Breadcrumb items */
+        .breadcrumbs ul li {
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        /* Breadcrumb links */
+        .breadcrumbs ul li a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .breadcrumbs ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Separator */
+        .breadcrumbs ul li::after {
+            content: '/';
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        /* Remove the separator after the last breadcrumb */
+        .breadcrumbs ul li:last-child::after {
+            content: '';
+        }
+    </style>
+    <div class="container">
+        <%- include('../../partials/left-panel') %>
+            <div class="right-panel">
+
+                <div class="banner">
+                    <img src="images/banner-img.jpg" alt="Logo">
+                </div>
+                <div class="content-area">
+                    <div class="breadcrumbs">
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li>Staff Handbook List</li>
+                        </ul>
+                    </div>
+                    <div class="search-area">
+                        <h2>Staff Handbook LIST</h2>
+                        <div class="search-box">
+                            <!-- Search Form -->
+                            <form method="get" action="/hr/hb">
+                                <div class="search-form">
+                                    <input type="text" name="search" value="<%= searchTerm %>"
+                                        placeholder="Search by Name">
+                                </div>
+                                <div class="form-group button-group">
+                                    <button type="submit">Search</button>&nbsp;
+                                    <button type="button" id="reset-button">Reset</button>
+                                </div>
+                            </form>
+                            <a href="/hr/hb/create">Add Staff Handbook</a>
+                            <div class="tablewrapper">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-striped">
+                                        <thead class="tablehead">
+                                            <tr>
+                                                <th>Staff ID</th>
+                                                <th>Staff Name</th>
+                                                <th>Date of Birth</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="tablebody">
+                                            <% hbList.forEach(hb=> { %>
+                                                <tr>
+                                                    <td><%= hb.StaffDetail.staff_id %></td>
+                                                    <td><%= hb.StaffDetail.staff_name %></td>
+                                                    <td><%= hb.dob %></td>
+                                                    <td><a href="/hr/handbook/edit/<%= hb.id %>">Edit</a> | Delete</td>
+                                                </tr>
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Pagination -->
+                            <div class="pagination">
+                                <ul>
+                                    <% for (let i=1; i <=totalPages; i++) { %>
+                                        <li><a href="/hr/es?page=<%= i %>&search=<%= searchTerm %>">
+                                                <%= i %>
+                                            </a></li>
+                                        <% } %>
+                                </ul>
+                            </div>
+                            <!-- Download Buttons -->
+                            <div class="download">
+                                <a href="/export/excel?search=<%= searchTerm %>">Download as Excel</a> |
+                                <a href="/export/pdf?search=<%= searchTerm %>">Download as PDF</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#reset-button').click(function () {
+                // Reset the search input field
+                $('input[name="search"]').val('');
+
+                // Optionally, submit the form to trigger a reset-like behavior
+                $('form').submit();
+            });
+        });
+    </script>
+    <%- include('../../partials/footer') %>

@@ -1,0 +1,214 @@
+<%- include('../partials/header') %>
+<div class="container">
+  <%- include('../partials/left-panel') %>
+  <div class="right-panel">
+    <div class="content-area">
+      <% if (typeof errorMessage !=='undefined' && errorMessage) { %>
+      <div style="color: red; margin-bottom: 20px;">
+        <%= errorMessage %>
+      </div>
+      <% } %>
+      <% if (typeof successMessage !=='undefined' && successMessage) { %>
+      <div style="color: green; margin-bottom: 20px;">
+        <%= successMessage %>
+      </div>
+      <% } %>
+
+      <div class="breadcrumbs">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/admin">Admin</a></li>
+          <li>Enquiry</li>
+        </ul>
+      </div>
+      <div class="form-area">
+        <h2>Enquiry Form</h2>
+        <div class="form-box">
+          <form action="/submit" method="POST">
+            <div class="content">
+              <!-- <h2>Enquiry Form</h2> -->
+              <p>It includes detailed demographic information and consent for
+                proceeding with intervention.</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="first-name">Inquiry number</label>
+                  <input type="text" id="first-name" name="first-name" placeholder="first name" required>
+                </div>
+                <div class="form-group">
+                  <label for="last-name">Date</label>
+                  <input type="date" id="date">
+                </div>
+                <div class="form-group">
+                  <label for="last-name">Name </label>
+                  <input type="text" id="first-name" name="first-name" placeholder="first name" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="phone">Current Phone (In Dubai)</label>
+                  <input type="tel" id="phone" name="phone" placeholder="Your phone number" required>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" placeholder="Your email" required>
+                </div>
+                <div class="form-group">
+                  <label for="last-name">School </label>
+                  <input type="text" id="first-name" name="first-name" placeholder="first name" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Insurance coverage</label>
+                  <div class="radio-group">
+                    <label><input type="radio" name="option" value="option1" required> YES</label>
+                    <label><input type="radio" name="option" value="option2" required> NO</label>
+                    <label><input type="radio" name="option" value="option3" required> UNAWARE Name of the Insurance</label>
+                    <input type="email" id="email" name="email" placeholder="Name of the insurance" required>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">Referral Source</label>
+                  <div class="radio-group">
+                    <label><input type="radio" name="option" value="option1" required> Doctor <input type="text" id="first-name" name="first-name" placeholder="first name" required></label>
+                    <label><input type="radio" name="option" value="option2" required> School <input type="text" id="first-name" name="first-name" placeholder="first name" required></label>
+                    <label><input type="radio" name="option" value="option3" required> Friend/Relative <input type="text" id="first-name" name="first-name" placeholder="first name" required></label>
+                    <label><input type="radio" name="option" value="option3" required> Social Media <input type="text" id="first-name" name="first-name" placeholder="first name" required></label>
+                    <label><input type="radio" name="option" value="option3" required> Staff Member <input type="text" id="first-name" name="first-name" placeholder="first name" required></label>
+                    <label><input type="radio" name="option" value="option1" required> Other<input type="text" id="first-name" name="first-name" placeholder="first name" required></label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="phone">Inquired services by client </label>
+                  <select class="minimal" required>
+                    <option value="">Select a services</option>
+                    <option value="feedback">Speech therapy</option>
+                    <option value="inquiry">Psychology/Counselling</option>
+                    <option value="support">ABA/Beh. Therapy</option>
+                    <option value="feedback">Readiness Program</option>
+                    <option value="feedback">Occupational therapy/Sensory
+                      Integratio</option>
+                    <option value="feedback">Training programs</option>
+                    <option value="feedback">Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="last-name">Other Services </label>
+                  <input type="text" id="first-name" name="first-name" placeholder="first name" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">Has taken intervention before?</label>
+                  <label><input type="radio" name="option" value="option1" required> YES</label>
+                  <label><input type="radio" name="option" value="option2" required> NO</label>
+                </div>
+                <div class="form-group">
+                  <label for="last-name">If Yes, Add details </label>
+                  <input type="text" id="first-name" name="first-name" placeholder="first name" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">Is Assessment required?</label>
+                  <label><input type="radio" name="option" value="option1" required> YES</label>
+                  <label><input type="radio" name="option" value="option2" required> No, only consultation</label>
+                </div>
+                <div class="form-group">
+                  <label for="last-name">If Yes, Add details </label>
+                  <input type="text" id="first-name" name="first-name" placeholder="first name" required>
+                </div>
+              </div>
+              <h2>Details discussed with the client</h2>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">Cost of services mentioned </label>
+                  <input type="text" id="first-name" name="first-name" placeholder="first name" required>
+                </div>
+                <div class="form-group">
+                  <label for="last-name">I Have you mentioned that: In
+                    consultation, report is not provided. If required
+                    consultant will suggest going for assessment </label>
+                  <label><input type="radio" name="option" value="option1" required> YES</label>
+                  <label><input type="radio" name="option" value="option2" required> No</label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">Other information</label>
+                  <input type="text" id="first-name" name="first-name" placeholder="first name" required>
+                </div>
+                <div class="form-group">
+                  <label for="last-name">Is client satisfied with information
+                    provided?</label>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="slider"></span><input type="text" id="first-name" name="first-name" placeholder="first name" required>
+                  </label>
+                </div>
+              </div>
+              <h2>Referral of enquiry to Supervisor/HOD/Clinic manager or relevant
+                Individual</h2>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">Date of enquiry answered</label>
+                  <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                  <label for="last-name">Description of response received from
+                    client as well as who has attended</label><input type="text" id="first-name" name="first-name" placeholder="first name" required>
+                </div>
+              </div>
+              <h2>Has client booked an appointment</h2>
+              <div class="form-row">
+                <div class="form-group">
+                  <label><input type="radio" name="option" value="option1" required> YES <br /><input type="date" id="date" name="date" required><br /><br /><input type="text" id="first-name" name="first-name" placeholder="time" required><br /><br /><input type="text" id="first-name" name="first-name" placeholder="Supervisor/Assistant" required></label>
+                  <label><input type="radio" name="option" value="option2" required> No <input type="text" id="first-name" name="first-name" placeholder="first name" required></label>
+                </div>
+              </div>
+              <h2>Has client attended scheduled session*?</h2>
+              <div class="form-row">
+                <div class="form-group">
+                  <label><input type="radio" name="option" value="option1" required> YES <br /><input type="date" id="date" name="date" required><br /><br /><input type="text" id="first-name" name="first-name" placeholder="time" required><br /><br /><input type="text" id="first-name" name="first-name" placeholder="Supervisor/Assistant" required></label>
+                  <label><input type="radio" name="option" value="option2" required> No <input type="text" id="first-name" name="first-name" placeholder="first name" required></label>
+                </div>
+              </div>
+            </div>
+                        <div class="form-group">
+              <button type="submit">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const randomNumber = Math.floor(Math.random() * 9000 + 1000);
+  document.getElementById('staff_name').addEventListener('input', function() {
+    // Get the staff_name value
+    const staffName = this.value.trim();
+
+    // Check if the name has at least two words (first and last name)
+    const nameParts = staffName.split(' ');
+
+    if (nameParts.length >= 2) {
+      // Extract the first name and last name
+      const firstName = nameParts[0];
+      const lastName = nameParts[1];
+
+      // Generate the staff_id
+      const staffId = firstName.slice(0, 2).toUpperCase() + lastName.slice(0, 2).toUpperCase() + randomNumber; // Random 4-digit number
+
+      // Set the staff_id value to the generated ID
+      document.getElementById('staff_id').value = staffId;
+    } else {
+      document.getElementById('staff_id').value = '';
+    }
+  });
+</script>
+<%- include('../partials/footer') %>

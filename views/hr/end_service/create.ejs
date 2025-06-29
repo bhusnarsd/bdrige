@@ -1,0 +1,629 @@
+<%- include('../../partials/header') %>
+  <div class="container">
+    <%- include('../../partials/left-panel') %>
+      <div class="right-panel">
+        <div class="content-area">
+          <% if (messages.error) { %>
+            <div style="color: red; margin-bottom: 20px;">
+              <%= messages.error %>
+            </div>
+            <% } %>
+              <% if (messages.success) { %>
+                <div style="color: green; margin-bottom: 20px;">
+                  <%= messages.success %>
+                </div>
+                <% } %>
+
+                  <div class="breadcrumbs">
+                    <ul>
+                      <li><a href="/">Home</a></li>
+                      <li><a href="/hr/es">End Service List</a></li>
+                      <li>End Service</li>
+                    </ul>
+                  </div>
+                  <div class="form-area">
+                    <h2>Staff End Service</h2>
+                    <div class="form-box">
+                      <div id="formErrors" class="error-messages" style="color: red; display: none; margin-bottom: 15px;"></div>
+
+                      <form action="/hr/es/create" method="POST">
+                        <div class="form-row">
+                          <div class="form-row">
+                            <div class="form-group">
+                              <label for="staff_id">Unique ID</label>
+                              <select id="staff_id" name="staff_id" required>
+                                <option value="">-- Select Unique ID --</option>
+                                <% if (staffList && staffList.length) { %>
+                                  <% staffList.forEach(staff=> { %>
+                                    <option value="<%= staff.staff_id %>">
+                                      <%= staff.staff_id %>
+                                    </option>
+                                    <% }); %>
+                                      <% } else { %>
+                                        <option value="">No staff found</option>
+                                        <% } %>
+                              </select>
+
+                            </div>
+                            <div class="form-group">
+                              <label for="staff_name">Employee Name</label>
+                              <input type="text" id="staff_name" name="staff_name" placeholder="Staff Name" readonly>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group">
+                              <label for="email">Department</label>
+                              <input type="text" id="dept" name="dept" required>
+                            </div>
+                            <div class="form-group">
+                              <label for="phone">Job Title</label>
+                              <input type="text" id="job_title" name="job_title" required>
+                            </div>
+                          </div>
+                          <div class="content">
+                            <div class="tablewrapper">
+                              <div class="table-responsive">
+                                <table class="table table-condensed table-striped">
+                                  <thead class="tablehead">
+                                    <tr>
+                                      <th>Procedure</th>
+                                      <th>Date</th>
+                                      <th>Complete/ Incomplete</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody class="tablebody">
+                                    <tr>
+                                      <td>Notice of Resignation Submit a formal resignation letter to your medical
+                                        Director /Clinic Manager/HOD via email and hard copy.</td>
+                                      <td><input type="date" id="procd_norsafrl_date" name="procd_norsafrl_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_norsafrl_status" value="Complete"
+                                              required> Complete</label>
+                                          <label><input type="radio" name="procd_norsafrl_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Acknowledgment of Resignation HR acknowledges receipt of the resignation
+                                        letter and provides further instructions.</td>
+                                      <td><input type="date" id="procd_aorharot_date" name="procd_aorharot_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_aorharot_status" value="Complete"
+                                              required> Complete</label>
+                                          <label><input type="radio" name="procd_aorharot_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Exit Interview Schedule and conduct an exit interview with HR to discuss
+                                        reasons for leaving and provide feedback.</td>
+                                      <td><input type="date" id="procd_eisacaeiwh_date" name="procd_eisacaeiwh_date">
+                                      </td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_eisacaeiwh_status" value="Complete"
+                                              required> Complete</label>
+                                          <label><input type="radio" name="procd_eisacaeiwh_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Handover of Duties Complete a detailed handover of duties to the
+                                        supervisor/HOD/successor.</td>
+                                      <td><input type="date" id="procd_hodcadh_date" name="procd_hodcadh_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_hodcadh_status" value="Complete"
+                                              required> Complete</label>
+                                          <label><input type="radio" name="procd_hodcadh_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Return of Company Property </td>
+                                      <td><input type="date" id="procd_rocp_date" name="procd_rocp_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_rocp_status" value="Complete" required>
+                                            Complete</label>
+                                          <label><input type="radio" name="procd_rocp_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>ID’s </td>
+                                      <td><input type="date" id="procd_ids_date" name="procd_ids_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_ids_status" value="Complete" required>
+                                            Complete</label>
+                                          <label><input type="radio" name="procd_ids_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Flash Cards</td>
+                                      <td><input type="date" id="procd_fc_date" name="procd_fc_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_fc_status" value="Complete" required>
+                                            Complete</label>
+                                          <label><input type="radio" name="procd_fc_status" value="InComplete" required>
+                                            InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Keys</td>
+                                      <td><input type="date" id="procd_keys_date" name="procd_keys_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_keys_status" value="Complete" required>
+                                            Complete</label>
+                                          <label><input type="radio" name="procd_keys_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Therapy Resources</td>
+                                      <td><input type="date" id="procd_tr_date" name="procd_tr_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_tr_status" value="Complete" required>
+                                            Complete</label>
+                                          <label><input type="radio" name="procd_tr_status" value="InComplete" required>
+                                            InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Settlement of Accounts: Total Amount</td>
+                                      <td><input type="date" id="procd_soata_date" name="procd_soata_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_soata_status" value="Complete"
+                                              required> Complete</label>
+                                          <label><input type="radio" name="procd_soata_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Outstanding payments</td>
+                                      <td><input type="date" id="procd_op_date" name="procd_op_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_op_status" value="Complete" required>
+                                            Complete</label>
+                                          <label><input type="radio" name="procd_op_status" value="InComplete" required>
+                                            InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Salary</td>
+                                      <td><input type="date" id="procd_sal_date" name="procd_sal_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_sal_status" value="Complete" required>
+                                            Complete</label>
+                                          <label><input type="radio" name="procd_sal_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Gratuity</td>
+                                      <td><input type="date" id="procd_gt_date" name="procd_gt_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_gt_status" value="Complete" required>
+                                            Complete</label>
+                                          <label><input type="radio" name="procd_gt_status" value="InComplete" required>
+                                            InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Unused leaves</td>
+                                      <td><input type="date" id="procd_ul_date" name="procd_ul_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_ul_status" value="Complete" required>
+                                            Complete</label>
+                                          <label><input type="radio" name="procd_ul_status" value="InComplete" required>
+                                            InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Clearance Form Obtain and complete a clearance form, getting necessary
+                                        signatures from relevant departments.</td>
+                                      <td><input type="date" id="procd_cfoacacf_date" name="procd_cfoacacf_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_cfoacacf_status" value="Complete"
+                                              required> Complete</label>
+                                          <label><input type="radio" name="procd_cfoacacf_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>End of Service Benefits Calculation HR calculates end-of-service benefits
+                                        based on company policy and labor laws.</td>
+                                      <td><input type="date" id="procd_eosbchce_date" name="procd_eosbchce_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_eosbchce_status" value="Complete"
+                                              required> Complete</label>
+                                          <label><input type="radio" name="procd_eosbchce_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Cancellation of labor card Cancel the labor card, License under Bridges, and
+                                        insurance.</td>
+                                      <td><input type="date" id="procd_colcctlc_date" name="procd_colcctlc_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_colcctlc_status" value="Complete"
+                                              required> Complete</label>
+                                          <label><input type="radio" name="procd_colcctlc_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Final Settlement Payment Receive final settlement payment, including
+                                        end-of-service benefits and any remaining dues.</td>
+                                      <td><input type="date" id="procd_fsprfsp_date" name="procd_fsprfsp_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_fsprfsp_status" value="Complete"
+                                              required> Complete</label>
+                                          <label><input type="radio" name="procd_fsprfsp_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Release Certificate HR issues an experience letter.</td>
+                                      <td><input type="date" id="procd_rchiael_date" name="procd_rchiael_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_rchiael_status" value="Complete"
+                                              required> Complete</label>
+                                          <label><input type="radio" name="procd_rchiael_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td>Feedback and Follow-up Provide feedback on the resignation process and follow
+                                        up on any pending issues if needed.</td>
+                                      <td><input type="date" id="procd_fafupfot_date" name="procd_fafupfot_date"></td>
+                                      <td>
+                                        <div class="radio-group">
+                                          <label><input type="radio" name="procd_fafupfot_status" value="Complete"
+                                              required> Complete</label>
+                                          <label><input type="radio" name="procd_fafupfot_status" value="InComplete"
+                                              required> InComplete</label>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <h4>RECITALS</h4>
+                            <div class="tablewrapper">
+                              <div class="table-responsive">
+                                <table class="table table-condensed table-striped">
+                                  <tbody class="tablebody">
+                                    <tr>
+                                      <td>What is your primary reason for leaving the company?</td>
+                                      <td><input type="text" id="recit_wiyprfltc" name="recit_wiyprfltc"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>How satisfied were you with your job responsibilities?</td>
+                                      <td><input type="text" id="recit_hswywyjr" name="recit_hswywyjr"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>What did you enjoy most about your job?</td>
+                                      <td><input type="text" id="recit_wdyemayj" name="recit_wdyemayj"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>What did you enjoy least about your job?</td>
+                                      <td><input type="text" id="recit_wdyelayj" name="recit_wdyelayj"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>Were your skills and abilities utilized to their fullest potential?</td>
+                                      <td><input type="text" id="recit_wysaauttfp" name="recit_wysaauttfp"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>Did you receive adequate support and resources to do your job effectively?
+                                      </td>
+                                      <td><input type="text" id="recit_dyrasartdyje" name="recit_dyrasartdyje"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>How would you describe the work environment and culture at the company?</td>
+                                      <td><input type="text" id="recit_hwydtweacatc" name="recit_hwydtweacatc"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>Did you feel valued and appreciated as an employee?</td>
+                                      <td><input type="text" id="recit_dyfvaaaae" name="recit_dyfvaaaae"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>Were there opportunities for professional growth and development?</td>
+                                      <td><input type="text" id="recit_wtofpgad" name="recit_wtofpgad"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>How effective was the communication within your department and across the
+                                        company?</td>
+                                      <td><input type="text" id="recit_hewtcwydaatc" name="recit_hewtcwydaatc"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>Were you satisfied with the level of recognition and feedback you received?
+                                      </td>
+                                      <td><input type="text" id="recit_wyswtlorafyr" name="recit_wyswtlorafyr"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>How would you describe the work environment and culture at the company?</td>
+                                      <td><input type="text" id="recit_hwydtweacatce" name="recit_hwydtweacatce"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>Would you consider rejoining the company in the future? Why or why not?</td>
+                                      <td><input type="text" id="recit_wycrtcitfwown" name="recit_wycrtcitfwown"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>Do you have any suggestions for improving the workplace?</td>
+                                      <td><input type="text" id="recit_dyhasfitw" name="recit_dyhasfitw"></td>
+                                    </tr>
+                                    <tr>
+                                      <td>Is there anything else you would like to share about your experience with the
+                                        company?</td>
+                                      <td><input type="text" id="recit_itaeywltsayewtc" name="recit_itaeywltsayewtc">
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                              <button type="submit">Submit</button>
+                              <button type="reset">Reset</button>
+                              <p id="errorMessage" style="color: red; display: none;">Please enter a valid 8-character
+                                staff ID.</p>
+                            </div>
+                          </div>
+                      </form>
+                    </div>
+                  </div>
+        </div>
+      </div>
+  </div>
+  <script>
+  //    document.addEventListener('DOMContentLoaded', () => {
+  //   const form = document.querySelector('form[action="/hr/es/create"]');
+  //   const formErrorsDiv = document.getElementById('formErrors');
+
+  //   if (!form) {
+  //     console.error("Target form not found!");
+  //     return;
+  //   }
+
+  //   form.addEventListener('submit', function (e) {
+  //     const rows = form.querySelectorAll('.tablebody tr');
+  //     let allValid = true;
+  //     let errorMessages = [];
+
+  //     rows.forEach((row, index) => {
+  //       const radios = row.querySelectorAll('input[type="radio"]');
+  //       const name = radios[0]?.name;
+  //       const dateInput = row.querySelector('input[type="date"]');
+  //       row.style.backgroundColor = ''; // reset highlight
+
+  //       if (name) {
+  //         const checked = row.querySelector(`input[name="${name}"]:checked`);
+  //         if (!checked) {
+  //           allValid = false;
+  //           row.style.backgroundColor = '#ffe0e0';
+  //           errorMessages.push(`Step ${index + 1}: Please select Complete or Incomplete.`);
+  //         } else if (checked.value === 'Complete' && (!dateInput || !dateInput.value)) {
+  //           allValid = false;
+  //           row.style.backgroundColor = '#ffe0e0';
+  //           errorMessages.push(`Step ${index + 1}: Please enter a date for completed procedure.`);
+  //         }
+  //       }
+  //     });
+
+  //     if (!allValid) {
+  //       e.preventDefault(); // 💥 This now works reliably
+  //       formErrorsDiv.innerHTML = errorMessages.map(msg => `<div>${msg}</div>`).join('');
+  //       formErrorsDiv.style.display = 'block';
+  //       formErrorsDiv.scrollIntoView({ behavior: 'smooth' });
+  //     } else {
+  //       formErrorsDiv.style.display = 'none';
+  //     }
+  //   });
+  // });
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form[action="/hr/es/create"]');
+    const formErrorsDiv = document.getElementById('formErrors');
+
+    if (!form) {
+      console.error("Target form not found!");
+      return;
+    }
+
+    // ✅ Enable/disable date input based on radio selection
+    const rows = form.querySelectorAll('.tablebody tr');
+    rows.forEach(row => {
+      const radios = row.querySelectorAll('input[type="radio"]');
+      const dateInput = row.querySelector('input[type="date"]');
+
+      radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          if (radio.value === 'InComplete' && radio.checked) {
+            dateInput.value = '';
+            dateInput.disabled = true;
+          } else if (radio.value === 'Complete' && radio.checked) {
+            dateInput.disabled = false;
+          }
+        });
+
+        // Optional: disable initially if "Incomplete" is selected by default
+        if (radio.value === 'InComplete' && radio.checked) {
+          dateInput.disabled = true;
+        }
+      });
+    });
+
+    // ✅ Form validation on submit
+    form.addEventListener('submit', function (e) {
+      let allValid = true;
+      let errorMessages = [];
+
+      rows.forEach((row, index) => {
+        const radios = row.querySelectorAll('input[type="radio"]');
+        const name = radios[0]?.name;
+        const dateInput = row.querySelector('input[type="date"]');
+        row.style.backgroundColor = ''; // reset highlight
+
+        if (name) {
+          const checked = row.querySelector(`input[name="${name}"]:checked`);
+          if (!checked) {
+            allValid = false;
+            row.style.backgroundColor = '#ffe0e0';
+            errorMessages.push(`Step ${index + 1}: Please select Complete or Incomplete.`);
+          } else if (checked.value === 'Complete' && (!dateInput || !dateInput.value)) {
+            allValid = false;
+            row.style.backgroundColor = '#ffe0e0';
+            errorMessages.push(`Step ${index + 1}: Please enter a date for completed procedure.`);
+          }
+        }
+      });
+
+      if (!allValid) {
+        e.preventDefault();
+        formErrorsDiv.innerHTML = errorMessages.map(msg => `<div>${msg}</div>`).join('');
+        formErrorsDiv.style.display = 'block';
+        formErrorsDiv.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        formErrorsDiv.style.display = 'none';
+      }
+    });
+  });
+    document.getElementById('staff_id').addEventListener('change', async function () {
+      const staffId = this.value;
+      if (!staffId) {
+        document.getElementById('staff_name').value = '';
+        return;
+      }
+      try {
+        const res = await fetch('/staff/get-staff-details', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ staff_id: staffId })
+        });
+        const data = await res.json();
+        if (data && data.staff && data.staff.staff_name) {
+          document.getElementById('staff_name').value = data.staff.staff_name;
+        } else {
+          document.getElementById('staff_name').value = '';
+          alert('Staff not found.');
+        }
+      } catch (error) {
+        console.error('Error fetching staff details:', error);
+        alert('Server error occurred.');
+      }
+    });
+    // Select the staff_id input field
+    const staffIdInput = document.getElementById('staff_id');
+    const staffIdSearchInput = document.getElementById('staff_id_search');
+    const staffNameInput = document.getElementById('staff_name');
+    // const currentPhoneInput = document.getElementById('current_phone');
+    const submitButton = document.querySelector('button[type="submit"]');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Initially disable the submit button
+    submitButton.disabled = true;
+    submitButton.style.backgroundColor = 'gray';
+
+    // Add an event listener to detect when the user types in the staff_id input
+    staffIdSearchInput.addEventListener('input', async () => {
+      const staffId = staffIdSearchInput.value;
+
+      // Only trigger the API call if the staff_id has exactly 8 characters
+      if (staffId.length === 8) {
+        try {
+          const response = await fetch('/staff/get-staff-details', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              staff_id: staffId
+            }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            // Show the staff details (you can adjust based on your UI structure)
+            console.log(data.staff);
+            // Populate the form fields with the fetched staff data
+            staffIdInput.value = data.staff.id || '';
+            staffNameInput.value = data.staff.staff_name || '';
+            // currentPhoneInput.value = data.staff.ccdetails || '';
+
+            // Enable the submit button when valid staff_id is found
+            submitButton.disabled = false;
+            submitButton.style.backgroundColor = ''; // Indicate readiness to submit
+            errorMessage.style.display = 'none'; // Hide error message
+          } else {
+            // Show error if staff_id doesn't exist
+            alert(data.error);
+
+            // Disable the submit button if no valid staff found
+            submitButton.disabled = true;
+            // Show error message and disable button
+            submitButton.style.backgroundColor = 'gray'; // Reset button style
+            errorMessage.style.display = 'block'; // Display error message
+            errorMessage.textContent = 'Staff ID not found. Please check again.';
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Something went wrong!');
+          // Disable the submit button in case of error
+          submitButton.disabled = true;
+        }
+      } else {
+        // If staff_id is not exactly 8 characters, disable the submit button
+        submitButton.disabled = true;
+        // Reset the form and error message if staff_id is invalid
+        submitButton.style.backgroundColor = 'gray'; // Reset button style
+        errorMessage.style.display = 'block'; // Show error message
+        errorMessage.textContent = 'Staff ID must be exactly 8 characters.';
+
+        staffIdInput.value = '';
+        staffNameInput.value = '';
+        // currentPhoneInput.value = '';
+      }
+    });
+  </script>
+  <%- include('../../partials/footer') %>
