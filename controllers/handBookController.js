@@ -27,35 +27,82 @@ exports.handBookList = async (req, res) => {
   });
 };
 
+// exports.handBookCreate = async (req, res) => {
+
+//   console.log('req.body >>> ', JSON.stringify(req.body))
+
+//   // const { ...fieldsToAdd } = req.body;
+
+//   try {
+//     const requestBody = {
+//       ...req.body
+//     };
+
+//     const dateFields = [
+//       'dob',
+//       'spdate'
+//     ];
+
+//     // Iterate over the date fields and remove the ones that are empty or invalid
+//     dateFields.forEach(field => {
+//       if (!req.body[field] || isNaN(Date.parse(req.body[field]))) {
+//         delete requestBody[field];  // Remove the field if it's empty or invalid
+//       }
+//     });
+
+//     // console.log('requestBody >> ', requestBody)
+
+//     const hbResponse = await HandBook.create(requestBody);
+
+//     const hbDetails = await getHandBookDetails(hbResponse.id);
+
+//     req.flash('success', 'Staff Handbook and Code of Conduct added successfully....');
+//     res.redirect('/hr/hb/create');
+//   } catch (error) {
+//     console.error('Error creating Staff Handbook and Code of Conduct:', error);
+//     req.flash('error', 'An error occurred while saving the Staff Handbook and Code of Conduct.');
+//     res.redirect('/hr/hb/create');
+//   }
+
+
+// };
+
+
 exports.handBookCreate = async (req, res) => {
 
-  console.log('req.body >>> ', JSON.stringify(req.body))
-
-  // const { ...fieldsToAdd } = req.body;
-
   try {
-    const requestBody = {
-      ...req.body
-    };
-
-    const dateFields = [
-      'dob',
-      'spdate'
-    ];
-
-    // Iterate over the date fields and remove the ones that are empty or invalid
-    dateFields.forEach(field => {
+    const requestBody = { ...req.body };
+  
+    ['dob', 'spdate'].forEach(field => {
       if (!req.body[field] || isNaN(Date.parse(req.body[field]))) {
-        delete requestBody[field];  // Remove the field if it's empty or invalid
+        delete requestBody[field];
       }
     });
-
-    // console.log('requestBody >> ', requestBody)
-
+  
+    // === Process signature images ===
+    const signatures = [
+      { field: 'fpsign', canvasId: 'signature-pad', filename: 'FirstPartySignature' },
+      { field: 'spsign', canvasId: 'spsign-canvas', filename: 'SecondPartySignature' }
+    ];
+  
+    for (const sig of signatures) {
+      const dataUrl = req.body[sig.field];
+      if (dataUrl && dataUrl.startsWith('data:image')) {
+        const buffer = Buffer.from(dataUrl.split(',')[1], 'base64');
+        const dir = path.join(__dirname, '..', 'public', 'uploads', 'signatures', 'handbook');
+        fs.mkdirSync(dir, { recursive: true });
+        const fileName = `${Date.now()}-${sig.filename}.png`;
+        const filePath = path.join(dir, fileName);
+        fs.writeFileSync(filePath, buffer);
+  
+        // Replace the base64 with a relative path
+        requestBody[sig.field] = `/uploads/signatures/handbook/${fileName}`;
+      }
+    }
+  
     const hbResponse = await HandBook.create(requestBody);
-
-    const hbDetails = await getHandBookDetails(hbResponse.id);
-
+    // const hbDetails = await getHandBookDetails(hbResponse.id);
+  
     req.flash('success', 'Staff Handbook and Code of Conduct added successfully....');
     res.redirect('/hr/hb/create');
   } catch (error) {
@@ -63,13 +110,12 @@ exports.handBookCreate = async (req, res) => {
     req.flash('error', 'An error occurred while saving the Staff Handbook and Code of Conduct.');
     res.redirect('/hr/hb/create');
   }
-
+  
 
 };
-
 exports.renderHandCreatePage = async (req, res) => {
   try {
-    const staffList = await StaffDetails.findAll();
+    const staffList = await StaffDetails.findAll({ where: { is_deleted: false }});
 
     const messages = req.flash(); // ✅ only if using connect-flash
 

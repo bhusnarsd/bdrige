@@ -76,7 +76,11 @@
         employee_handbook: DataTypes.BOOLEAN,
         dhacda_policies_file: DataTypes.STRING(70),
         dhacda_policies_expiry: DataTypes.DATEONLY,
-        dhacda_policies: DataTypes.BOOLEAN
+        dhacda_policies: DataTypes.BOOLEAN,
+        is_deleted: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+          },
     }, {
         tableName: 'staff_details',  // Explicitly specifying the table name 
         timestamps: true,    // Enable createdAt and updatedAt fields
@@ -103,6 +107,12 @@
           as: 'ConfidentialityContracts'
         });
       };
-    
+      StaffDetails.associate = models => {
+        StaffDetails.hasMany(models.DisputeManagement, {
+          foreignKey: 'staff_id',
+          sourceKey:  'staff_id',
+          as:         'Disputes'
+        });
+      };
       return StaffDetails;
     };

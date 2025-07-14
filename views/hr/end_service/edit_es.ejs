@@ -36,9 +36,22 @@
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label for="email">Department</label>
-                <input type="text" id="dept" name="dept" value="<%= es.dept %>" required>
+                <label for="dept">Department</label>
+                <select id="dept" name="dept" required>
+                  <option value="">-- Select Department --</option>
+                  <% 
+                    const departments = [
+                      'Clinic Manager', 'Speech Therapist', 'OT', 'Physiotherapist', 'ABA',
+                      'ABA Supervisor', 'Psychologist', 'Intern-Speech Therapist', 'Light Vehicle Driver',
+                      'Cleaner', 'Admin', 'Driver', 'Marketing Executive', 'Marketing Manager'
+                    ];
+                    departments.forEach(function(dept) { 
+                  %>
+                    <option value="<%= dept %>" <%= es.dept === dept ? 'selected' : '' %>><%= dept %></option>
+                  <% }) %>
+                </select>
               </div>
+              
               <div class="form-group">
                 <label for="phone">Job Title</label>
                 <input type="text" id="job_title" name="job_title" value="<%= es.job_title %>" required>
@@ -343,6 +356,150 @@
   </div>
 </div>
 <script>
+  // === STAFF ID FETCH & FORM ENABLE/DISABLE ===
+  const staffIdInput       = document.getElementById('staff_id');
+  const staffIdSearchInput = document.getElementById('staff_id_search');
+  const staffNameInput     = document.getElementById('staff_name');
+  const submitButton       = document.querySelector('button[type="submit"]');
+  const errorMessage       = document.getElementById('errorMessage');
+  const form               = submitButton.form;
+
+  // Initially disable submit
+  submitButton.disabled = true;
+  submitButton.style.backgroundColor = 'gray';
+
+  function setSubmitEnabled(enabled) {
+    submitButton.disabled = !enabled;
+    submitButton.style.backgroundColor = enabled ? '' : 'gray';
+  }
+
+  staffIdSearchInput.addEventListener('input', async () => {
+    const id = staffIdSearchInput.value.trim();
+    if (id.length === 8) {
+      try {
+        const res  = await fetch('/staff/get-staff-details', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ staff_id: id })
+        });
+        const data = await res.json();
+        if (res.ok && data.staff) {
+          staffIdInput.value   = data.staff.id;
+          staffNameInput.value = data.staff.staff_name;
+          errorMessage.style.display = 'none';
+          setSubmitEnabled(true);
+        } else {
+          throw new Error(data.error || 'Not found');
+        }
+      } catch (e) {
+        staffIdInput.value = '';
+        staffNameInput.value = '';
+        errorMessage.textContent = 'Staff ID not found.';
+        errorMessage.style.display = 'block';
+        setSubmitEnabled(false);
+      }
+    } else {
+      staffIdInput.value = '';
+      staffNameInput.value = '';
+      errorMessage.textContent = 'Staff ID must be exactly 8 characters.';
+      errorMessage.style.display = 'block';
+      setSubmitEnabled(false);
+    }
+  });
+
+  // === MULTI‑FIELD DATE / STATUS VALIDATION ===
+  document.addEventListener('DOMContentLoaded', () => {
+
+    
+    // For each row in the procedures table
+    document.querySelectorAll('tbody.tablebody tr').forEach(row => {
+      const dateInput = row.querySelector('input[type="date"]');
+      const radios    = Array.from(row.querySelectorAll('input[type="radio"]'));
+
+      if (!dateInput || radios.length === 0) return;
+
+      // Determine which radio is selected
+      function getStatus() {
+        const checked = radios.find(r => r.checked);
+        return checked ? checked.value : null;
+      }
+
+      // Update date field based on status
+      function updateRow() {
+        const status = getStatus();
+        if (status === 'InComplete') {
+          dateInput.value     = '';
+          dateInput.disabled  = true;
+          dateInput.required  = false;
+          dateInput.style.borderColor = '';
+        } else if (status === 'Complete') {
+          dateInput.disabled  = false;
+          dateInput.required  = true;
+          dateInput.style.borderColor = dateInput.value ? '' : 'red';
+        } else {
+          dateInput.disabled  = false;
+          dateInput.required  = false;
+          dateInput.style.borderColor = '';
+        }
+      }
+// === Set min attribute to only allow future dates ===
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+const yyyy = tomorrow.getFullYear();
+const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+const dd = String(tomorrow.getDate()).padStart(2, '0');
+const minDate = `${yyyy}-${mm}-${dd}`;
+
+document.querySelectorAll('input[type="date"]').forEach(dateInput => {
+  dateInput.setAttribute('min', minDate);
+
+  // Prevent manual typing of past dates
+  dateInput.addEventListener('input', () => {
+    if (dateInput.value && dateInput.value < minDate) {
+      alert('Please select a future date.');
+      dateInput.value = '';
+    }
+  });
+});
+
+      // Attach listeners
+      radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          updateRow();
+        });
+      });
+      dateInput.addEventListener('input', () => {
+        if (dateInput.value) {
+          dateInput.style.borderColor = '';
+        }
+      });
+
+      // Initialize
+      updateRow();
+    });
+  });
+
+  // === FINAL FORM SUBMIT CHECK ===
+  form.addEventListener('submit', e => {
+    let invalid = false;
+    // Walk through each row: if status=Complete & no date → invalid
+    document.querySelectorAll('tbody.tablebody tr').forEach(row => {
+      const dateInput = row.querySelector('input[type="date"]');
+      const status    = row.querySelector('input[type="radio"]:checked')?.value;
+      if (status === 'Complete' && !dateInput.value) {
+        dateInput.style.borderColor = 'red';
+        invalid = true;
+      }
+    });
+    if (invalid) {
+      e.preventDefault();
+      errorMessage.textContent = 'Please fill all dates marked Complete.';
+      errorMessage.style.display = 'block';
+    }
+  });
+</script>
+
+<!-- <script>
   // Select the staff_id input field
   const staffIdInput = document.getElementById('staff_id');
   const staffIdSearchInput = document.getElementById('staff_id_search');
@@ -416,5 +573,5 @@
       // currentPhoneInput.value = '';
     }
   });
-</script>
+</script> -->
 <%- include('../../partials/footer') %>

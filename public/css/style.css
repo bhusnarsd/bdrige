@@ -86,6 +86,30 @@ button[type="reset"]:hover {
     background: color-mix(in srgb, #4154f1, transparent 20%);
 }
 
+.btn-submit {
+    position: relative;
+    padding-right: 2.5em; /* room for loader */
+  }
+  
+  .btn-loader {
+    position: absolute;
+    right: 1em;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: translateY(-50%) rotate(0deg); }
+    100% { transform: translateY(-50%) rotate(360deg); }
+  }
+  
+
 select {
     background-color: white;
     border-color: color-mix(in srgb, #444444, transparent 80%);

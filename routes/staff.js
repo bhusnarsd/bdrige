@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerStaff, staffList, editStaff, updateStaff, getStaffDetails, renderConfidentialityForm, createContract, renderSipCreatePage, staffConfContract } = require('../controllers/staffController');
+const { registerStaff, staffList, editStaff, updateStaff, getStaffDetails, renderConfidentialityForm, createContract, renderSipCreatePage, staffConfContract, softDeleteStaff, exportExcel, getAllDepartments } = require('../controllers/staffController');
 const { addStaffWarning, listStaffWarning, renderWarCreatePage, editWarningLetterForm, updateWarningLetter } = require('../controllers/StaffActivityController');
 const authMiddleware = require('../middlewares/authMiddleware');
 
@@ -16,8 +16,9 @@ router.get('/enrollment', (req, res) => {
 //   res.render('staff/confidentiality-contract');  // Render the register.ejs file
 // });
 router.post('/enrollment', registerStaff);
-
+router.get('/export/excel', exportExcel);
 router.get('/edit/:id',  editStaff);
+router.delete('/delete/:staff_id',  softDeleteStaff);
 router.post('/edit/:id',  updateStaff);
 
 router.post('/get-staff-details',  getStaffDetails);
@@ -35,6 +36,9 @@ router.post('/warning-letter', addStaffWarning);
 router.get('/warning-letter/edit/:id', editWarningLetterForm);
 router.post('/warning-letter/edit/:id',  updateWarningLetter);
 
+
+
+router.get('/departments', getAllDepartments);
 // router.get('/warning-letter', renderWarCreatePage);
 
 // router.get('/end-service', authMiddleware, (req, res) => { res.render('staff/end-service'); });

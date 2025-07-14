@@ -1,4 +1,4 @@
-const { StaffWarning, StaffDetails, department:DepartmentMdl } = require('../models');
+const { StaffWarning, StaffDetails, Department } = require('../models');
 const path = require('path');
 const multer = require('multer');
 const { Sequelize, Op } = require('sequelize');
@@ -63,27 +63,51 @@ exports.listStaffWarning = async (req, res) => {
 
 // Add Staff Warning
 exports.addStaffWarning = async (req, res) => {
-  upload.fields([
-    { name: 'any_document', maxCount: 1 }
-  ])(req, res, async (err) => {
+  upload.fields([{ name: 'any_document', maxCount: 1 }])(req, res, async (err) => {
+    const staffList = await StaffDetails.findAll({ where: { is_deleted: false } });
+
     if (err) {
       console.error('File upload error:', err);
-      return res.render('staff/warning-letter', { errorMessage: 'Error uploading files' });
+      return res.render('staff/warning-letter', {
+        staffList,
+        errorMessage: 'Error uploading files',
+        successMessage: null
+      });
     }
-    const { staff_id, staff_name, doi, department, issues_concerns, background_info, ecotp, action1, action2, action3, deadline_date, email_to_respond, appropriate_date, response, responded_by, conclusion } = req.body;
-    // let any_document = null;
+
+    const {
+      staff_id,
+      staff_name,
+      doi,
+      department,
+      issues_concerns,
+      background_info,
+      ecotp,
+      action1,
+      action2,
+      action3,
+      deadline_date,
+      email_to_respond,
+      appropriate_date,
+      response,
+      responded_by,
+      conclusion
+    } = req.body;
 
     const anydocument = req.files['any_document'] ? req.files['any_document'][0].filename : null;
 
     try {
-      const departmentObj = await DepartmentMdl.findOne({ where: { name: department } });
-      console.log('departmentObj', JSON.stringify(departmentObj))
+      const departmentObj = await Department.findOne({ where: { name: department } });
+
       if (!departmentObj) {
-        // return res.status(400).json({ message: 'Invalid department.' });
-        return res.render('staff/warning-letter', { errorMessage: 'Invalid department.' });
+        return res.render('staff/warning-letter', {
+          staffList,
+          errorMessage: 'Invalid department.',
+          successMessage: null
+        });
       }
 
-      const newStaffWarning = await StaffWarning.create({
+      await StaffWarning.create({
         staff_id,
         staff_name,
         doi,
@@ -103,23 +127,23 @@ exports.addStaffWarning = async (req, res) => {
         any_document: anydocument,
       });
 
-      const staffList = await StaffDetails.findAll();
-return res.render('staff/warning-letter', {
-  staffList,
-  successMessage: 'Staff warning added successfully.',
-  errorMessage: null,
-});
-      // res.status(201).json({ successMessage: 'Staff warning added successfully.' });
-      // return res.render('staff/warning-letter', { successMessage: 'Staff warning added successfully.' });
+      return res.render('staff/warning-letter', {
+        staffList,
+        successMessage: 'Staff warning added successfully.',
+        errorMessage: null
+      });
     } catch (error) {
       console.error(error);
-      // res.status(500).json({ errorMessage: 'Error adding staff warning.' });
-      return res.render('staff/warning-letter', { errorMessage: 'Error adding staff warning.' });
+      return res.render('staff/warning-letter', {
+        staffList,
+        errorMessage: 'Error adding staff warning.',
+        successMessage: null
+      });
     }
-
   });
-
 };
+
+
 
 // Edit Staff Warning
 exports.editStaffWarning = async (req, res) => {
@@ -136,7 +160,7 @@ exports.editStaffWarning = async (req, res) => {
       return res.status(404).json({ message: 'Staff warning not found.' });
     }
 
-    const departmentObj = await DepartmentMdl.findOne({ where: { id: department } });
+    const departmentObj = await Department.findOne({ where: { id: department } });
     if (!departmentObj) {
       return res.status(400).json({ message: 'Invalid department.' });
     }
@@ -170,9 +194,30 @@ exports.editStaffWarning = async (req, res) => {
 
 // Middleware for file upload
 // exports.uploadFile = upload.single('any_document');
+// exports.renderWarCreatePage = async (req, res) => {
+//   try {
+//     const staffList = await StaffDetails.findAll({ where: { is_deleted: false }});
+//     const errorMessage = req.flash('errorMessage');
+//     const successMessage = req.flash('successMessage');
+
+//     res.render('staff/warning-letter', {
+//       staffList,
+//       errorMessage: errorMessage[0] || null,
+//       successMessage: successMessage[0] || null,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.render('staff/warning-letter', {
+//       staffList: [],
+//       errorMessage: 'Failed to load staff list',
+//       successMessage: null,
+//     });
+//   }
+// };
+
 exports.renderWarCreatePage = async (req, res) => {
   try {
-    const staffList = await StaffDetails.findAll();
+    const staffList = await StaffDetails.findAll({ where: { is_deleted: false } });
     const errorMessage = req.flash('errorMessage');
     const successMessage = req.flash('successMessage');
 
@@ -191,52 +236,60 @@ exports.renderWarCreatePage = async (req, res) => {
   }
 };
 
-// exports.renderWarCreatePage = async (req, res) => {
-//   try {
-//     const staffList = await staffDetails.findAll();
-
-//     const messages = req.flash(); // ✅ only if using connect-flash
-
-//     res.render('staff/warning-letter', {
-//       staffList,
-//       messages, // ✅ pass it here
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.render('staff/warning-letter', {
-//       staffList: [],
-//       messages: { error: 'Failed to load staff list' }, // fallback
-//     });
-//   }
-// };
 
 // Fetch warning letter for editing
 exports.editWarningLetterForm = async (req, res) => {
-  const { id } = req.params;
+  const warningId = parseInt(req.params.id, 10);
   try {
-    const warning = await StaffWarning.findOne({
-      where: { id },
-      include: [{ model: StaffDetails, attributes: ['staff_name', 'staff_id'] }]
+    const warningRecord = await StaffWarning.findOne({
+      where: { id: warningId },
+      include: [{
+        model: StaffDetails,
+        as: 'StaffDetail',          // ← make sure this matches your association!
+        attributes: ['staff_id','staff_name']
+      }]
     });
 
-    if (!warning) {
+    if (!warningRecord) {
       req.flash('error', 'Warning letter not found');
       return res.redirect('/staff/warning-letter/list');
     }
 
-    const staffList = await StaffDetails.findAll(); // For dropdown if needed
-    res.render('staff/warning-letter-edit', {
-      warning: warning.get({ plain: true }),
+    // Pull out a plain object and re‑shape it
+    const warning = warningRecord.get({ plain: true });
+
+    // 1) Copy the StaffDetail name/id to top‐level fields:
+    warning.staff_name = warning.StaffDetail.staff_name;
+    warning.staff_id   = warning.StaffDetail.staff_id;
+
+    // 2) Format each date as 'YYYY‑MM‑DD' so HTML <input type="date"> will show it.
+    ['doi','deadline_date','appropriate_date']
+      .forEach(key => {
+        if (warning[key]) {
+          warning[key] = new Date(warning[key])
+                              .toISOString()
+                              .split('T')[0];
+        } else {
+          warning[key] = '';
+        }
+      });
+
+    // 3) Render
+    const staffList = await StaffDetails.findAll({ where: { is_deleted: false } });
+    return res.render('staff/warning-letter-edit', {
+      warning,
       staffList,
-      errorMessages:null ,
-      successMessages: null,
+      errorMessages:  req.flash('error'),
+      successMessages: req.flash('success'),
     });
   } catch (err) {
     console.error('Error loading warning letter:', err);
     req.flash('error', 'Internal Server Error');
-    res.redirect('/staff/warning-letter/list');
+    return res.redirect('/staff/warning-letter/list');
   }
 };
+
+
 
 // Handle update
 exports.updateWarningLetter = async (req, res) => {

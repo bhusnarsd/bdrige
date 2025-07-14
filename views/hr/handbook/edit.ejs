@@ -684,10 +684,15 @@
               <label>Emergency Contact</label>
               <input type="text" name="fpecontact" value="<%= hb.fpecontact %>">
             </div>
-            <div class="form-group">
-              <label>Signature</label>
-              <input type="text" name="fpsign" value="<%= hb.fpsign %>">
-            </div>
+            <% if (hb.fpsign) { %>
+              <img src="<%= hb.fpsign %>" alt="First Party Signature" style="max-width: 300px; height: auto; border: 1px solid #ccc;">
+              <input type="hidden" name="fpsign" value="<%= hb.fpsign %>">
+            <% } else { %>
+              <canvas id="signature-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+              <button type="button" id="clear-signature">Clear</button>
+              <input type="hidden" id="fpsign" name="fpsign">
+            <% } %>
+            
           </div>
 
           <h4>Second Party</h4>
@@ -710,10 +715,15 @@
               <label>Date</label>
               <input type="date" name="spdate" value="<%= hb.spdate ? hb.spdate.toISOString().split('T')[0] : '' %>">
             </div>
-            <div class="form-group">
-              <label>Signature</label>
-              <input type="text" name="spsign" value="<%= hb.spsign %>">
-            </div>
+            <% if (hb.spsign) { %>
+              <img src="<%= hb.spsign %>" alt="Second Party Signature" style="max-width: 300px; height: auto; border: 1px solid #ccc;">
+              <input type="hidden" name="spsign" value="<%= hb.spsign %>">
+            <% } else { %>
+              <canvas id="spsign-canvas" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+              <button type="button" id="clear-spsign">Clear</button>
+              <input type="hidden" id="spsign" name="spsign">
+            <% } %>
+            
           </div>
 
           <div class="form-group">

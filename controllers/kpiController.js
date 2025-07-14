@@ -49,6 +49,12 @@ exports.kpiList = async (req, res) => {
     searchTerm,
   });
 };
+
+function parseDate(val) {
+  if (!val) return null;                 // empty string or undefined → null
+  const d = new Date(val);
+  return isNaN(d.getTime()) ? null : d;  // invalid → null, valid → Date
+}
 exports.kpiCreate = async (req, res) => {
   console.log('req.body >>>', JSON.stringify(req.body));
 
@@ -60,6 +66,9 @@ exports.kpiCreate = async (req, res) => {
           sasndtq1, sasndtq2, sasndtq3, sasndtq4, sasndtq5, sasndtq6,
           trg_total, ps_scale } = req.body;
 
+          const safeKpiDate       = parseDate(req.body.kpi_date);
+          const safeDeadlineDate  = parseDate(req.body.deadline_date);
+          const safeAppropriate   = parseDate(req.body.appropriate_date);
   // Canvas signature fields
   const images = [
     { field: 'hr_sign', input: 'hr_sign_input', filename: 'hrSignature' },
@@ -88,13 +97,15 @@ exports.kpiCreate = async (req, res) => {
 
     // Create DB record
     const newKpi = await Kpi.create({
-      staff_id, kpi_date, department, e_period,
+      staff_id, kpi_date: safeKpiDate, department, e_period,
       kpi_text1, kpi_text2, kpi_text3, kpi_text4, kpi_text5,
       rating_scale, trg1_art, trg1_rwad, trg1_rws, trg1_mbc, trg1_ppc, trg1_sum,
       trg2_pos, trg2_sft, trg2_ccapc, trg2_caos, trg2_ps, trg2_counslng, trg2_sum,
       trg3_cs, trg3_dm, trg3_init, trg3_cp, trg3_gps, trg3_tw, trg3_sum,
       sasndtq1, sasndtq2, sasndtq3, sasndtq4, sasndtq5, sasndtq6,
       trg_total, ps_scale,
+      deadline_date: safeDeadlineDate,
+      appropriate_date: safeAppropriate,
       hr_sign: imagePaths.hr_sign || null,
       staff_sign: imagePaths.staff_sign || null,
       hod_sign: imagePaths.hod_sign || null,
@@ -392,7 +403,7 @@ exports.kpiUpdate = async (req, res) => {
 
 exports.renderKPICreatePage = async (req, res) => {
   try {
-    const staffList = await StaffDetails.findAll();
+    const staffList = await StaffDetails.findAll({ where: { is_deleted: false }});
 
     const messages = req.flash(); // ✅ only if using connect-flash
 

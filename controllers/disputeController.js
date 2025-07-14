@@ -72,7 +72,7 @@ exports.disputeCreate = async (req, res) => {
 
 exports.renderDisputeCreatePage = async (req, res) => {
   try {
-    const staffList = await StaffDetails.findAll(); // fetch staff list
+    const staffList = await StaffDetails.findAll( { where: { is_deleted: false }}); // fetch staff list
     // console.log("staffList",staffList)
     const messages = req.flash();
     res.render('hr/dispute/create', { staffList, messages, });  // views\hr\dispute\create.ejs

@@ -120,13 +120,14 @@
                                 <div class="search-form">
                                     <input type="text" name="search" value="<%= searchTerm %>"
                                         placeholder="Search by staff name"><br><br>
-									<button type="submit">Search</button>&nbsp;
+                                    <button type="submit">Search</button>&nbsp;
                                     <button type="button" id="reset-button">Reset</button>
                                 </div>
-                                <div class="form-group button-group">                                  
-									<button type="button" onclick="window.location.href='/staff/enrollment'">Add Staff</a>
+                                <div class="form-group button-group">
+                                    <button type="button" onclick="window.location.href='/staff/enrollment'">Add
+                                        Staff</a>
                                 </div>
-                            </form>                            
+                            </form>
                             <div class="tablewrapper">
                                 <div class="table-responsive">
                                     <table class="table table-condensed table-striped">
@@ -144,13 +145,29 @@
                                         <tbody class="tablebody">
                                             <% staffList.forEach(staff=> { %>
                                                 <tr>
-                                                    <td><%= staff.staff_id %></td>
-                                                    <td><%= staff.staff_name %></td>
-                                                    <td><%= staff.staff_email %></td>
-                                                    <td><%= staff.staff_phone %></td>
-                                                    <td><%= staff.confidentiality_contract_file %></td>
-                                                    <td><%= staff.employee_handbook_file %></td>
-                                                    <td><a href="staff/edit/<%= staff.id %>">Edit</a> | Delete</td>
+                                                    <td>
+                                                        <%= staff.staff_id %>
+                                                    </td>
+                                                    <td>
+                                                        <%= staff.staff_name %>
+                                                    </td>
+                                                    <td>
+                                                        <%= staff.staff_email %>
+                                                    </td>
+                                                    <td>
+                                                        <%= staff.staff_phone %>
+                                                    </td>
+                                                    <td>
+                                                        <%= staff.confidentiality_contract_file %>
+                                                    </td>
+                                                    <td>
+                                                        <%= staff.employee_handbook_file %>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/staff/edit/<%= staff.id %>">Edit</a> |
+                                                        <a href="#" onclick="deleteStaff('<%= staff.staff_id %>')"
+                                                            style="color:red;">Delete</a>
+                                                    </td>
                                                 </tr>
                                                 <% }) %>
                                         </tbody>
@@ -169,8 +186,8 @@
                             </div>
                             <!-- Download Buttons -->
                             <div class="download">
-                                <a href="/export/excel?search=<%= searchTerm %>">Download as Excel</a> |
-                                <a href="/export/pdf?search=<%= searchTerm %>">Download as PDF</a>
+                                <a href="/staff/export/excel?search=<%= searchTerm %>">Download as Excel</a>
+                                <!-- <a href="/export/pdf?search=<%= searchTerm %>">Download as PDF</a> -->
                             </div>
                         </div>
                     </div>
@@ -180,6 +197,27 @@
             </div>
     </div>
     <script>
+        function deleteStaff(staffId) {
+            if (confirm("Are you sure you want to delete this staff record?")) {
+                fetch(`/staff/delete/${staffId}`, {
+                    method: 'DELETE'
+                })
+                    .then(res => {
+                        if (res.ok) {
+                            alert("Staff deleted successfully.");
+                            location.reload(); // Refresh the page to reflect changes
+                        } else {
+                            return res.json().then(data => {
+                                alert(data.error || "Failed to delete staff.");
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error deleting staff:", err);
+                        alert("Server error occurred.");
+                    });
+            }
+        }
         $(document).ready(function () {
             $('#reset-button').click(function () {
                 // Reset the search input field

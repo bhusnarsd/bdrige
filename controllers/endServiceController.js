@@ -1,9 +1,4 @@
 const { StaffDetails, EndService } = require('../models');
-const puppeteer = require('puppeteer');
-const ejs = require('ejs');
-const path = require('path');
-const fs = require('fs');
-const department = require('../models/department');
 const { Sequelize, Op } = require('sequelize');
 const { getEndServiceList } = require('../utils/staffUtils');
 
@@ -87,7 +82,7 @@ exports.endServiceCreate = async (req, res) => {
 
 exports.renderEndCreatePage = async (req, res) => {
   try {
-    const staffList = await StaffDetails.findAll(); // fetch staff list
+    const staffList = await StaffDetails.findAll({ where: { is_deleted: false }}); // fetch staff list
     // console.log("staffList",staffList)
     const messages = req.flash();
     res.render('hr/end_service/create', { staffList, messages, });
@@ -114,6 +109,7 @@ const getEndServiceDetails = async (esId) => {
     include: [{
       model: StaffDetails,   // Assuming the name of the staff model is `staffDetails`
       attributes: ['staff_name', 'staff_id', 'ccdetails'], // Specify the columns you want
+      as: 'StaffDetail',
     }],
   });
 

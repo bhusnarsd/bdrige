@@ -21,7 +21,7 @@
                                         <ul>
                                             <li><a href="/">Home</a></li>
                                             <li><a
-                                                   href="/staff/confidentiality-contract/list">confidentiality-contracts</a>
+                                                    href="/staff/confidentiality-contract/list">confidentiality-contracts</a>
                                             </li>
                                             <li>Add confidentiality-contract</li>
                                         </ul>
@@ -29,10 +29,23 @@
                                     <div class="form-area">
                                         <h2>Staff Confidentiality Contract</h2>
                                         <div class="form-box">
-                                       <form action="/contract/confidentiality-contract"  method="POST">
+                                            <form action="/contract/confidentiality-contract" method="POST">
 
                                                 <div class="form-row">
                                                     <div class="form-group">
+                                                        <!-- <select id="staff_id" name="staff_id" required>
+                                                            <option value="">-- Select Unique ID --</option>
+                                                            <% if (staffList && staffList.length) { %>
+                                                                <% staffList.forEach(staff=> { %>
+                                                                    <option value="<%= staff.staff_id %>">
+                                                                        <%= staff.staff_id %>
+                                                                    </option>
+                                                                    <% }) %>
+                                                                        <% } else { %>
+                                                                            <option value="">No staff found</option>
+                                                                            <% } %>
+                                                        </select> -->
+
                                                         <select id="staff_id" name="staff_id" required>
                                                             <option value="">-- Select Unique ID --</option>
                                                             <% if (staffList && staffList.length) { %>
@@ -45,8 +58,6 @@
                                                                             <option value="">No staff found</option>
                                                                             <% } %>
                                                         </select>
-
-
 
                                                     </div>
 
@@ -62,24 +73,24 @@
                                                     <div class="form-group">
                                                         <label for="staff_email">Email</label>
                                                         <input type="email" id="staff_email" name="staff_email"
-                                                            placeholder="Email" required>
+                                                            placeholder="Email" required readonly>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="staff_phone">Current Phone (In Dubai)</label>
                                                         <input type="tel" id="staff_phone" name="staff_phone"
-                                                            placeholder="Phone" required>
+                                                            placeholder="Phone" required readonly>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-row">
                                                     <div class="form-group">
                                                         <label for="dob">Date Of Birth</label>
-                                                        <input type="date" id="dob" name="dob">
+                                                        <input type="date" id="dob" name="dob" readonly>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="econtact">Emergency contact details</label>
                                                         <input type="text" id="econtact" name="econtact"
-                                                            placeholder="Emergency contact">
+                                                            placeholder="Emergency contact" readonly>
                                                     </div>
                                                 </div>
 
@@ -87,17 +98,17 @@
                                                     <div class="form-group">
                                                         <label for="permanent_address">Permanent address</label>
                                                         <input type="text" id="permanent_address"
-                                                            name="permanent_address" placeholder="Enter address">
+                                                            name="permanent_address" placeholder="Enter address" readonly>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="temporary_address">Temporary address</label>
                                                         <input type="text" id="temporary_address"
-                                                            name="temporary_address" placeholder="Enter address">
+                                                            name="temporary_address" placeholder="Enter address" readonly>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="references">References</label>
                                                         <input type="text" id="references" name="references"
-                                                            placeholder="Enter references">
+                                                            placeholder="Enter references" readonly>
                                                     </div>
                                                 </div>
 
@@ -419,8 +430,10 @@
                                                                 placeholder="Signature">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="first_employee_econtact">Emergency contact</label>
-                                                            <input type="text" id="first_employee_econtact" name="first_employee_econtact"
+                                                            <label for="first_employee_econtact">Emergency
+                                                                contact</label>
+                                                            <input type="text" id="first_employee_econtact"
+                                                                name="first_employee_econtact"
                                                                 placeholder="Emergency contact">
                                                         </div>
                                                     </div>
@@ -457,7 +470,7 @@
                                                                 name="second_signature" placeholder="Signature">
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="form-group">
                                                         <button type="submit">Submit</button>
                                                         <button type="reset">Reset</button>
@@ -468,7 +481,7 @@
                                     </div>
                 </div>
             </div>
-            <script>
+            <!-- <script>
                 document.getElementById('staff_id').addEventListener('change', async function () {
                     const staffId = this.value;
                     if (!staffId) {
@@ -496,6 +509,67 @@
                         console.error('Error fetching staff details:', error);
                         alert('Server error occurred.');
                     }
+                });
+            </script> -->
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const staffDropdown = document.getElementById('staff_id');
+
+                    // Initialize Choices.js
+                    const choices = new Choices(staffDropdown, {
+                        searchEnabled: true,
+                        itemSelectText: '',
+                        placeholderValue: '-- Select Unique ID --'
+                    });
+
+                    // On change, fetch staff name
+                    staffDropdown.addEventListener('change', async function () {
+                        const staffId = this.value;
+                        if (!staffId) {
+                            document.getElementById('staff_name').value = '';
+                            return;
+                        }
+
+                        try {
+                            const res = await fetch('/staff/get-staff-details', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ staff_id: staffId })
+                            });
+
+                            const data = await res.json();
+                            if (data && data.staff && data.staff.staff_name) {
+                                document.getElementById('staff_name').value = data.staff.staff_name;
+                                document.getElementById('staff_email').value = data.staff.staff_email;
+                                document.getElementById('staff_phone').value = data.staff.staff_phone;
+                                document.getElementById('dob').value = data.staff.dob;
+
+                                document.getElementById('permanent_address').value = data.staff.permanent_address;
+                                document.getElementById('econtact').value = data.staff.econtact;
+                                document.getElementById('temporary_address').value = data.staff.temporary_address;
+                                document.getElementById('references').value = data.staff.references;
+
+                   
+
+                            } else {
+                                document.getElementById('staff_name').value = '';
+                                document.getElementById('staff_email').value = '';
+                                document.getElementById('staff_email').value = '';
+                                document.getElementById('dob').value = '';
+                                document.getElementById('permanent_address').value = '';
+                                document.getElementById('econtact').value = '';
+                                document.getElementById('temporary_address').value = '';
+                                document.getElementById('references').value = '';
+
+                                alert('Staff not found.');
+                            }
+                        } catch (error) {
+                            console.error('Error fetching staff details:', error);
+                            alert('Server error occurred.');
+                        }
+                    });
                 });
             </script>
 

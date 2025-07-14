@@ -60,19 +60,29 @@
                       </tr>
                       <tr>
                         <td>Department</td>
-                        <td><select class="minimal" name="department" id="department" required>
-                            <option value="">Select a subject</option>
-                            <option value="Speech Therapy">Speech Therapy</option>
-                            <option value="ABA">ABA</option>
-                            <option value="Occupational Therapy">Occupational Therapy</option>
-                            <option value="Physiotherapy">Physiotherapy</option>
-                            <option value="Psychology">Psychology</option>
-                            <option value="Readiness Program">Readiness Program</option>
-                            <option value="Admin">Admin</option>
-                            <option value="Clinic Manager">Clinic Manager</option>
-                            <option value="Cleaning Staff">Cleaning Staff</option>
-                            <option value="Clinic (MS)">Clinic (MS)</option>
-                          </select></td>
+                        <td>
+                          <!-- <select id="department" name="department" required>
+                          <option value="">-- Select Department --</option>
+                          <option value="Clinic Manager">Clinic Manager</option>
+                          <option value="Speech Therapist">Speech Therapist</option>
+                          <option value="OT">OT</option>
+                          <option value="Physiotherapist">Physiotherapist</option>
+                          <option value="ABA">ABA</option>
+                          <option value="ABA Supervisor">ABA Supervisor</option>
+                          <option value="Psychologist">Psychologist</option>
+                          <option value="Intern-Speech Therapist">Intern-Speech Therapist</option>
+                          <option value="Light Vehicle Driver">Light Vehicle Driver</option>
+                          <option value="Cleaner">Cleaner</option>
+                          <option value="Admin">Admin</option>
+                          <option value="Driver">Driver</option>
+                          <option value="Marketing Executive">Marketing Executive</option>
+                          <option value="Marketing Manager">Marketing Manager</option>
+                        </select> -->
+                        <select id="department" name="department" required>
+                          <option value="">-- Select Department --</option>
+                        </select>
+                        
+                      </td>
                       </tr>
                       <tr>
                         <td>Brief description of the issue/concern</td>
@@ -167,6 +177,80 @@
       // alert('Server error occurred.');
     }
   });
+
+
+  document.addEventListener('DOMContentLoaded', async function () {
+    const form = document.querySelector('form');
+    const fileInput = document.getElementById('any_document');
+    const dateFields = ['doi', 'deadline_date', 'appropriate_date'];
+
+    // 🔒 Set min date = tomorrow for all future date fields
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const minDate = tomorrow.toISOString().split('T')[0];
+
+    dateFields.forEach(id => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.setAttribute('min', minDate);
+      }
+    });
+
+    form.addEventListener('submit', function (e) {
+      let hasError = false;
+
+      // ✅ Reset previous styles
+      fileInput.style.border = '';
+
+      // 🔴 Validate file input
+      if (!fileInput.files || fileInput.files.length === 0) {
+        fileInput.style.border = '2px solid red';
+        fileInput.scrollIntoView({ behavior: 'smooth' });
+        hasError = true;
+      }
+
+      // 🔴 Validate future date
+      dateFields.forEach(id => {
+        const input = document.getElementById(id);
+        if (input && input.value) {
+          const selectedDate = new Date(input.value);
+          if (selectedDate <= today) {
+            input.style.border = '2px solid red';
+            hasError = true;
+          } else {
+            input.style.border = '';
+          }
+        }
+      });
+
+      if (hasError) {
+        e.preventDefault();
+      }
+    });
+
+    try {
+      const res = await fetch('/staff/departments');
+      const data = await res.json();
+
+      if (data.success && Array.isArray(data.departments)) {
+        const dropdown = document.getElementById('department');
+        data.departments.forEach(dept => {
+          const option = document.createElement('option');
+          option.value = dept.id;
+          option.textContent = dept.name;
+          dropdown.appendChild(option);
+        });
+      } else {
+        console.warn('No departments found.');
+      }
+    } catch (error) {
+      console.error('Failed to load departments:', error);
+    }
+
+  });
+
+
   </script>
   
 <%- include('../partials/footer') %>

@@ -46,7 +46,8 @@
                       <tr>
                         <td>Employee Name</td>
                         <td>
-                          <input type="text" id="staff_name" name="staff_name" value="<%= warning.staff_name %>" required>
+                          <input type="text" id="staff_name" name="staff_name" 
+                          value="<%= warning.StaffDetail.staff_name %>" readonly>
                         </td>
                       </tr>
                       <tr>
@@ -56,13 +57,28 @@
                       <tr>
                         <td>Department</td>
                         <td>
-                          <select class="minimal" name="department" id="department" required>
-                            <% const departments = ['Speech Therapy', 'ABA', 'Occupational Therapy', 'Physiotherapy', 'Psychology', 'Readiness Program', 'Admin', 'Clinic Manager', 'Cleaning Staff', 'Clinic (MS)']; %>
-                            <option value="">Select a subject</option>
-                            <% departments.forEach(dep => { %>
-                              <option value="<%= dep %>" <%= warning.department === dep ? 'selected' : '' %>><%= dep %></option>
+                          <!-- <select id="dept" name="dept" required>
+                            <option value="">-- Select Department --</option>
+                            <% 
+                              const departments = [
+                                'Clinic Manager', 'Speech Therapist', 'OT', 'Physiotherapist', 'ABA',
+                                'ABA Supervisor', 'Psychologist', 'Intern-Speech Therapist', 'Light Vehicle Driver',
+                                'Cleaner', 'Admin', 'Driver', 'Marketing Executive', 'Marketing Manager'
+                              ];
+                              departments.forEach(function(dept) { 
+                            %>
+                              <option value="<%= dept %>" <%= warning.dept === dept ? 'selected' : '' %>><%= dept %></option>
                             <% }) %>
-                          </select>
+                          </select> -->
+                          <tr>
+                            <td>Department</td>
+                            <td>
+                              <select id="department" name="department_id" required>
+                                <option value="">-- Loading Departments --</option>
+                              </select>
+                            </td>
+                          </tr>
+                          
                         </td>
                       </tr>
                       <tr>
@@ -136,6 +152,7 @@
 </div>
 
 <script>
+  // Fetch staff details on staff ID change
   document.getElementById('staff_id').addEventListener('change', async function () {
     const staffId = this.value;
     if (!staffId) {
@@ -151,7 +168,6 @@
       });
 
       const data = await res.json();
-
       if (data.staff) {
         document.getElementById('staff_name').value = data.staff.staff_name || '';
       } else {
@@ -161,6 +177,33 @@
       console.error('Error fetching staff data:', err);
     }
   });
+
+  // Load department list on DOM load
+  document.addEventListener('DOMContentLoaded', async function () {
+    try {
+      const res = await fetch('/staff/departments');
+      const data = await res.json();
+      const dropdown = document.getElementById('department');
+      dropdown.innerHTML = '<option value="">-- Select Department --</option>'; // Clear initial
+
+      if (data.success && Array.isArray(data.departments)) {
+        data.departments.forEach(dept => {
+          const option = document.createElement('option');
+          option.value = dept.id;
+          option.textContent = dept.name;
+          if (dept.id === <%= warning.department_id %>) {
+            option.selected = true;
+          }
+          dropdown.appendChild(option);
+        });
+      } else {
+        console.warn('No departments found.');
+      }
+    } catch (error) {
+      console.error('Failed to load departments:', error);
+    }
+  });
 </script>
+
 
 <%- include('../partials/footer') %>

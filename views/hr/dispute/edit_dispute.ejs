@@ -29,7 +29,7 @@
                           <div class="form-group">
                             <label for="staff_id">Unique id:</label>
                             <input type="text" id="staff_id_search" name="staff_id_search"
-                              value="<%= dispute.StaffDetail ? dispute.StaffDetail.staff_id : dispute.staff_id %>">
+                              value="<%= dispute.StaffDetail ? dispute.StaffDetail.staff_id : dispute.staff_id %>" readonly>
 
                           </div>
                           <div class="form-group">
@@ -45,14 +45,18 @@
                             <input type="date" id="doi" name="doi" value="<%= dispute.doi %>">
                             <div class="form-group">
                               <label for="dept">Department</label>
-                              <select class="minimal" name="dept" required>
-                                <option value="">Select a Department</option>
-                                <option value="feedback" <%=dispute.dept==='feedback' ? 'selected' : '' %>>Feedback
-                                </option>
-                                <option value="inquiry" <%=dispute.dept==='inquiry' ? 'selected' : '' %>>Inquiry
-                                </option>
-                                <option value="support" <%=dispute.dept==='support' ? 'selected' : '' %>>Support
-                                </option>
+                              <select id="dept" name="dept" required>
+                                <option value="">-- Select Department --</option>
+                                <% 
+                                  const departments = [
+                                    'Clinic Manager', 'Speech Therapist', 'OT', 'Physiotherapist', 'ABA',
+                                    'ABA Supervisor', 'Psychologist', 'Intern-Speech Therapist', 'Light Vehicle Driver',
+                                    'Cleaner', 'Admin', 'Driver', 'Marketing Executive', 'Marketing Manager'
+                                  ];
+                                  departments.forEach(function(dept) { 
+                                %>
+                                  <option value="<%= dept %>" <%= dispute.dept === dept ? 'selected' : '' %>><%= dept %></option>
+                                <% }) %>
                               </select>
                             </div>
                           </div>
@@ -103,6 +107,71 @@
       </div>
   </div>
   <script>
+    // — SELECTORS —
+    const staffIdSearchInput = document.getElementById('staff_id_search');
+    const staffNameInput     = document.getElementById('staff_name');
+    const submitButton       = document.querySelector('button[type="submit"]');
+    const errorMessage       = document.getElementById('errorMessage');
+    const form               = submitButton.form;
+  
+    // — INIT DISABLED STATE —
+    setSubmitEnabled(false);
+  
+    function setSubmitEnabled(enabled) {
+      submitButton.disabled = !enabled;
+      submitButton.style.backgroundColor = enabled ? '' : 'gray';
+    }
+  
+    // — ON STAFF‑ID CHANGE —
+    staffIdSearchInput.addEventListener('input', async () => {
+      const id = staffIdSearchInput.value.trim();
+  
+      // only fetch if exactly 8 chars
+      if (id.length === 8) {
+        try {
+          const res  = await fetch('/staff/get-staff-details', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ staff_id: id })
+          });
+          const data = await res.json();
+  
+          if (res.ok && data.staff) {
+            // PATCH both fields
+            staffIdSearchInput.value = data.staff.staff_id || '';
+            staffNameInput.value     = data.staff.staff_name || '';
+            errorMessage.style.display = 'none';
+            setSubmitEnabled(true);
+          } else {
+            throw new Error(data.error || 'Not found');
+          }
+        } catch (e) {
+          staffNameInput.value = '';
+          errorMessage.textContent = 'Staff ID not found.';
+          errorMessage.style.display = 'block';
+          setSubmitEnabled(false);
+        }
+      }
+      else {
+        // too short/long → reset
+        staffNameInput.value = '';
+        errorMessage.textContent = 'Staff ID must be exactly 8 characters.';
+        errorMessage.style.display = 'block';
+        setSubmitEnabled(false);
+      }
+    });
+  
+    // — FINAL FORM‑SUBMIT CHECK —
+    form.addEventListener('submit', e => {
+      if (!staffNameInput.value) {
+        e.preventDefault();
+        errorMessage.textContent = 'Please resolve the Staff ID before submitting.';
+        errorMessage.style.display = 'block';
+      }
+    });
+  </script>
+  
+  <!-- <script>
     // Select the staff_id input field
     const staffIdInput = document.getElementById('staff_id');
     const staffIdSearchInput = document.getElementById('staff_id_search');
@@ -176,5 +245,5 @@
         // currentPhoneInput.value = '';
       }
     });
-  </script>
+  </script> -->
   <%- include('../../partials/footer') %>

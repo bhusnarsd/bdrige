@@ -45,11 +45,18 @@
               </div>
               <div class="form-group">
                 <label for="dept">Department</label>
-                <select class="minimal" name="department" required>
-                  <option value="">Select a Department</option>
-                  <option value="feedback" <%= kpi.department === 'feedback' ? 'selected' : '' %>>Feedback</option>
-                  <option value="inquiry" <%= kpi.department === 'inquiry' ? 'selected' : '' %>>Inquiry</option>
-                  <option value="support" <%= kpi.department === 'support' ? 'selected' : '' %>>Support</option>
+                <select id="dept" name="department" required>
+                  <option value="">-- Select Department --</option>
+                  <% 
+                    const departments = [
+                      'Clinic Manager', 'Speech Therapist', 'OT', 'Physiotherapist', 'ABA',
+                      'ABA Supervisor', 'Psychologist', 'Intern-Speech Therapist', 'Light Vehicle Driver',
+                      'Cleaner', 'Admin', 'Driver', 'Marketing Executive', 'Marketing Manager'
+                    ];
+                    departments.forEach(function(dept) { 
+                  %>
+                    <option value="<%= dept %>" <%= kpi.department === dept ? 'selected' : '' %>><%= dept %></option>
+                  <% }) %>
                 </select>
               </div>
               <div class="form-group">

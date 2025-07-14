@@ -102,7 +102,7 @@ exports.getStaffDetails =  async (req, res) => {
 };
 exports.renderConfidentialityForm = async (req, res) => {
   try {
-    const staffList = await StaffDetails.findAll(); // or any filtered query
+    const staffList = await StaffDetails.findAll({ where: { is_deleted: false }}); // or any filtered query
     res.render('staff/confidentiality-contract', { staffList });
   } catch (err) {
     console.error(err);

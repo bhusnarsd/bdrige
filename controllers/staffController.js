@@ -1,4 +1,4 @@
-const { staffLoginDetails, StaffDetails, StaffConfidentialityContract } = require('../models');
+const { StaffLoginDetails, StaffDetails, StaffConfidentialityContract, Department } = require('../models');
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
@@ -41,13 +41,33 @@ const storage = multer.diskStorage({
 // Create multer instance for handling file uploads
 const upload = multer({ storage: storage });
 
+// const getStaffList = async (searchTerm, page = 1, limit = 10) => {
+//   const offset = (page - 1) * limit;
+//   const whereCondition = searchTerm
+//     ? {
+//         staff_name: { [Op.iLike]: `%${searchTerm}%` }, // Search by staff name
+//       }
+//     : {};
+
+//   const { rows, count } = await StaffDetails.findAndCountAll({
+//     where: whereCondition,
+//     limit,
+//     offset,
+//   });
+
+//   return { rows, totalCount: count };
+
+// };
+
 const getStaffList = async (searchTerm, page = 1, limit = 10) => {
   const offset = (page - 1) * limit;
-  const whereCondition = searchTerm
-    ? {
-        staff_name: { [Op.iLike]: `%${searchTerm}%` }, // Search by staff name
-      }
-    : {};
+
+  const whereCondition = {
+    is_deleted: false,
+    ...(searchTerm && {
+      staff_name: { [Op.iLike]: `%${searchTerm}%` }
+    })
+  };
 
   const { rows, count } = await StaffDetails.findAndCountAll({
     where: whereCondition,
@@ -56,8 +76,8 @@ const getStaffList = async (searchTerm, page = 1, limit = 10) => {
   });
 
   return { rows, totalCount: count };
-
 };
+
 
 // Get staff list with pagination and search
 exports.staffList =  async (req, res) => {
@@ -104,7 +124,7 @@ exports.getStaffDetails =  async (req, res) => {
     // const staff = await StaffDetails.findOne({ where: { staff_id } });
     const staff = await StaffDetails.findOne({
       where: { staff_id },
-      attributes: ['id', 'staff_name', 'ccdetails'],
+      attributes: ['id', 'staff_name', 'ccdetails','staff_email', 'staff_phone', 'dob','econtact', 'bank_acc', 'permanent_address', 'temporary_address', 'references', ],
     });
 
     if (!staff) {
@@ -151,34 +171,104 @@ exports.renderSipCreatePage = async (req, res) => {
 
 
 // Export staff list to Excel
-exports.exportExcel =  async (req, res) => {
-  const searchTerm = req.query.search || '';
-  const { rows } = await getStaffList(searchTerm, 1, 1000); // Get all staff data for export
 
-  // Convert the staff rows into a format suitable for xlsx
+
+exports.exportExcel = async (req, res) => {
+  const searchTerm = req.query.search || '';
+  const { rows } = await getStaffList(searchTerm, 1, 10000); // Increase limit if needed
+const serverUrl = 'https://stg.bridgesspeechcenter.ae/'
+  // Map each staff entry to all required fields
   const staffData = rows.map(staff => ({
     'Staff ID': staff.staff_id,
-    'Staff Name': staff.staff_name,
+    'Name': staff.staff_name,
     'Email': staff.staff_email,
     'Phone': staff.staff_phone,
-    'Confidentiality Contract': staff.confidentiality_contract_file,
-    'Employee Handbook': staff.employee_handbook_file,
-    // Add other fields as needed
+
+    // Document section
+    'Passport Expiry': staff.passport_expiry,
+    'passport_file': `${serverUrl}${staff.passport_file}`,
+    'Passport Status': staff.passport === 1 ? 'Active' : 'Inactive',
+    'Visa Expiry': staff.visa_expiry,
+    'visa file': `${serverUrl}${staff.visa_file}`,
+    'Visa Status': staff.visa === 1 ? 'Active' : 'Inactive',
+    'Experience Letter Expiry': staff.exp_letter_date,
+    'Experience Letter file':  `${serverUrl}${staff.exp_letter_file}`,
+    'Experience Status': staff.experience === 1 ? 'Active' : 'Inactive',
+    'License Expiry': staff.license_expiry,
+    'License File': `${serverUrl}${staff.license_file}`,
+    'License Status': staff.license === 1 ? 'Active' : 'Inactive',
+    'Emirates ID Expiry': staff.emirates_id_expiry,
+    'Emirates ID File': `${serverUrl}${staff.emirates_id_file}`,
+    'EID Status': staff.emirates_id === 1 ? 'Active' : 'Inactive',
+    'Hepatitis B Expiry': staff.hepatitis_b_file,
+    'Hepatitis B File': `${serverUrl}${staff.emirates_id_file}`,
+    'Hepatitis B Status': staff.hepatitis_b === 1 ? 'Active' : 'Inactive',
+    'BLS Certificate Date': staff.bls_file_date,
+    'BLS Certificate File': `${serverUrl}${staff.bls_file}`,
+    'BLS Status': staff.bls === 1 ? 'Active' : 'Inactive',
+    'Highest Degree Expiry': staff.hdc_file_date,
+    'Highest Degree File': `${serverUrl}${staff.hdc_file}`,
+    'HDC Status': staff.hdc === 1 ? 'Active' : 'Inactive',
+    'DHA/CDA License Expiry': staff.dhacda_license_expiry,
+    'DHA/CDA License File':  `${serverUrl}${staff.dhacda_license_file}`,
+    'DHA/CDA Status': staff.dhacda_license === 1 ? 'Active' : 'Inactive',
+
+    // Contracts & Policies
+    'Employment Contract Expiry': staff.employment_contract_expiry,
+    'Employment Contract File':  `${serverUrl}${staff.employment_contract_file}`,
+    'Employment Contract Status': staff.employment_contract === 1 ? 'Active' : 'Inactive',
+    'Confidentiality Contract Expiry': staff.confidentiality_contract_expiry,
+    'Confidentiality Contract File': `${serverUrl}${staff.confidentiality_contract_file}`,
+    'Confidentiality Status': staff.confidentiality_contract === 1 ? 'Active' : 'Inactive',
+    'Employee Handbook Expiry': staff.employee_handbook_expiry,
+    'Employee Handbook File': `${serverUrl}${staff.employee_handbook_file}`,
+    'Handbook Status': staff.employee_handbook === 1 ? 'Active' : 'Inactive',
+    'DHA/CDA Policies Expiry': staff.dhacda_policies_expiry,
+    'DHA/CDA Policies File': `${serverUrl}${staff.dhacda_policies_file}`,
+    'Policies Status': staff.dhacda_policies === 1 ? 'Active' : 'Inactive'
   }));
 
-  // Create a new workbook and add data
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.json_to_sheet(staffData);
   XLSX.utils.book_append_sheet(wb, ws, 'Staff List');
 
-  // Set the response headers for Excel file download
+  // Headers
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   res.setHeader('Content-Disposition', 'attachment; filename=staff_list.xlsx');
 
-  // Write the Excel file to the response
-  XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' });
-  res.end();
+  // Buffer and send
+  const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' });
+  res.send(buffer);
 };
+
+// exports.exportExcel =  async (req, res) => {
+//   const searchTerm = req.query.search || '';
+//   const { rows } = await getStaffList(searchTerm, 1, 1000); // Get all staff data for export
+
+//   // Convert the staff rows into a format suitable for xlsx
+//   const staffData = rows.map(staff => ({
+//     'Staff ID': staff.staff_id,
+//     'Staff Name': staff.staff_name,
+//     'Email': staff.staff_email,
+//     'Phone': staff.staff_phone,
+//     'Confidentiality Contract': staff.confidentiality_contract_file,
+//     'Employee Handbook': staff.employee_handbook_file,
+//     // Add other fields as needed
+//   }));
+
+//   // Create a new workbook and add data
+//   const wb = XLSX.utils.book_new();
+//   const ws = XLSX.utils.json_to_sheet(staffData);
+//   XLSX.utils.book_append_sheet(wb, ws, 'Staff List');
+
+//   // Set the response headers for Excel file download
+//   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+//   res.setHeader('Content-Disposition', 'attachment; filename=staff_list.xlsx');
+
+//   // Write the Excel file to the response
+//   XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' });
+//   res.end();
+// };
 
 // Export staff list to PDF
 exports.exportPdf =  async (req, res) => {
@@ -237,7 +327,7 @@ exports.registerStaff = async (req, res) => {
       temporary_address,
       ccdetails,
       references,
-      twrips_date,
+      twrips_datetype,
       twrips,
       itcpd,
       itcpd_status,
@@ -333,7 +423,7 @@ exports.registerStaff = async (req, res) => {
         temporary_address,
         ccdetails,
         references,
-        twrips_date,
+        twrips_datetype,
         twrips,
         itcpd: itcpdString,
         itcpd_status,
@@ -389,7 +479,7 @@ exports.registerStaff = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10); // Hash the password with a salt rounds of 10
 
         // Create user with hashed password
-        const staffLoginRes = await staffLoginDetails.create({
+        const staffLoginRes = await StaffLoginDetails.create({
           staff_id: newStaffId,
           name: staff_name,
           email: staff_email,
@@ -681,3 +771,38 @@ exports.health = async (req, res) => {
 
 
 
+exports.softDeleteStaff = async (req, res) => {
+  const { staff_id } = req.params;
+
+  try {
+    const staff = await StaffDetails.findOne({ where: { staff_id } });
+
+    if (!staff) {
+      return res.status(404).json({ error: "Staff not found." });
+    }
+
+    await StaffDetails.update(
+      { is_deleted: true },
+      { where: { staff_id } }
+    );
+
+    return res.status(200).json({ message: "Staff soft-deleted successfully." });
+  } catch (error) {
+    console.error("Soft delete error:", error);
+    return res.status(500).json({ error: "Failed to delete staff." });
+  }
+};
+
+
+exports.getAllDepartments = async (req, res) => {
+  try {
+    const departments = await Department.findAll({
+      attributes: ['id', 'name'], // Optional: only fetch needed fields
+      order: [['name', 'ASC']]
+    });
+    res.json({ success: true, departments });
+  } catch (error) {
+    console.error('Error fetching departments:', error);
+    res.status(500).json({ success: false, message: 'Failed to load departments' });
+  }
+};

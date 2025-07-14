@@ -52,7 +52,7 @@ exports.inductionProgramCreate = async (req, res) => {
 
 exports.renderSipCreatePage = async (req, res) => {
   try {
-    const staffList = await StaffDetails.findAll(); // fetch staff list
+    const staffList = await StaffDetails.findAll({ where: { is_deleted: false }}); // fetch staff list
     // console.log("staffList",staffList)
     res.render('hr/induction_program/create', { staffList });
   } catch (err) {

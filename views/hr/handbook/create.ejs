@@ -63,7 +63,7 @@
                       </div>
                       <div class="form-group">
                         <label for="cphone">Current Phone (In Dubai)</label>
-                        <input type="text" id="cphone" name="cphone" required>
+                        <input type="text" id="cphone" name="cphone" required readonly>
                       </div>
                     </div>
                     <div class="form-row">
@@ -73,21 +73,21 @@
                       </div>
                       <div class="form-group">
                         <label for="econtact">Emergency contact details</label>
-                        <input type="text" id="econtact" name="econtact">
+                        <input type="text" id="econtact" name="econtact" readonly>
                       </div>
                     </div>
                     <div class="form-row">
                       <div class="form-group">
                         <label for="paddress">Permanent address</label>
-                        <input type="text" id="paddress" name="paddress">
+                        <input type="text" id="paddress" name="paddress" readonly>
                       </div>
                       <div class="form-group">
                         <label for="taddress">Temporary address</label>
-                        <input type="text" id="taddress" name="taddress">
+                        <input type="text" id="taddress" name="taddress" readonly>
                       </div>
                       <div class="form-group">
                         <label for="references">References</label>
-                        <input type="text" id="references" name="references">
+                        <input type="text" id="references" name="references" readonly>
                       </div>
                     </div>
                     <div class="content">
@@ -702,8 +702,11 @@
                           <input type="text" id="fpecontact" name="fpecontact">
                         </div>
                         <div class="form-group">
-                          <label for="fpsign">Signature</label>
-                          <input type="text" id="fpsign" name="fpsign">
+                          <label for="fpsign">First Party Signature</label>
+                          <canvas id="signature-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                          <button type="button" id="clear-signature">Clear</button>
+                          <input type="hidden" id="fpsign" name="fpsign">
+                          
                         </div>
                       </div>
                       <h4>SECOND PARTY</h4>
@@ -727,8 +730,10 @@
                           <input type="date" id="spdate" name="spdate">
                         </div>
                         <div class="form-group">
-                          <label for="spsign">Signature</label>
-                          <input type="text" id="spsign" name="spsign">
+                          <label for="spsign">Second Party Signature</label>
+                          <canvas id="spsign-canvas" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                          <button type="button" id="clear-spsign">Clear</button>
+                          <input type="hidden" id="spsign" name="spsign">
                         </div>
                       </div>
                       <div class="form-group">
@@ -744,7 +749,180 @@
         </div>
       </div>
   </div>
+
   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.querySelector('form[action="/hr/hb/create"]');
+      const formErrorsDiv = document.getElementById('formErrors');
+  
+      if (!form) {
+        console.warn("Handbook form not found.");
+        return;
+      }
+  
+      form.addEventListener('submit', function (e) {
+        const errors = [];
+  
+        form.querySelectorAll('.error-highlight').forEach(el => {
+          el.classList.remove('error-highlight');
+        });
+  
+        const requiredFields = [
+          'staff_id', 'passport', 'cphone', 'dob',
+          'econtact', 'paddress', 'taddress', 'references'
+        ];
+  
+        requiredFields.forEach(fieldId => {
+          const field = document.getElementById(fieldId);
+          if (!field || !field.value.trim()) {
+            errors.push(`${fieldId.replace(/_/g, ' ')} is required`);
+            if (field) field.classList.add('error-highlight');
+          }
+        });
+  
+        if (errors.length > 0) {
+          e.preventDefault();
+          formErrorsDiv.innerHTML = errors.map(err => `<div>${err}</div>`).join('');
+          formErrorsDiv.style.display = 'block';
+          formErrorsDiv.scrollIntoView({ behavior: 'smooth' });
+          return;
+        } else {
+          formErrorsDiv.style.display = 'none';
+        }
+  
+        // 👇 Signature capture logic before final form submit
+        if (window.saveFirstPartySign) saveFirstPartySign();
+        if (window.saveSecondPartySign) saveSecondPartySign();
+      });
+  
+      // staff_id change logic remains unchanged...
+      document.getElementById('staff_id').addEventListener('change', async function () {
+        const staffId = this.value;
+        if (!staffId) {
+          document.getElementById('staff_name').value = '';
+          return;
+        }
+  
+        try {
+          const res = await fetch('/staff/get-staff-details', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ staff_id: staffId })
+          });
+  
+          const data = await res.json();
+  
+          if (data && data.staff && data.staff.staff_name) {
+            document.getElementById('staff_name').value = data.staff.staff_name;
+            document.getElementById('econtact').value = data.staff.econtact;
+            document.getElementById('taddress').value = data.staff.temporary_address;
+            document.getElementById('references').value = data.staff.references;
+            document.getElementById('paddress').value = data.staff.permanent_address;
+            document.getElementById('cphone').value = data.staff.staff_phone;
+  
+            const dobInput = document.getElementById('dob');
+            if (data.staff.dob) {
+              dobInput.value = data.staff.dob;
+              dobInput.readOnly = true;
+              dobInput.type = 'date';
+            } else {
+              dobInput.value = '';
+              dobInput.readOnly = false;
+              dobInput.type = 'date';
+              dobInput.required = true;
+              const today = new Date().toISOString().split('T')[0];
+              dobInput.setAttribute('max', today);
+            }
+  
+          } else {
+            document.getElementById('staff_name').value = '';
+            document.getElementById('econtact').value = '';
+            document.getElementById('taddress').value = '';
+            document.getElementById('references').value = '';
+            document.getElementById('paddress').value = '';
+            document.getElementById('cphone').value = '';
+            alert('Staff not found.');
+          }
+  
+        } catch (error) {
+          console.error('Error fetching staff details:', error);
+          alert('Server error occurred.');
+        }
+      });
+  
+      // staff_id search logic (no changes)...
+  
+      // ✅ Signature Canvas Setup Below
+  
+      function setupSignature(canvasId, inputId, clearBtnId) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+        const input = document.getElementById(inputId);
+        const clearBtn = document.getElementById(clearBtnId);
+  
+        if (!canvas || !ctx || !input || !clearBtn) {
+          console.warn(`Missing element for ${canvasId}`);
+          return () => {};
+        }
+  
+        let drawing = false;
+        let lastX = 0, lastY = 0;
+  
+        function getPos(e) {
+          const rect = canvas.getBoundingClientRect();
+          const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+          const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+          return { x, y };
+        }
+  
+        ['mousedown', 'touchstart'].forEach(evt =>
+          canvas.addEventListener(evt, e => {
+            e.preventDefault();
+            drawing = true;
+            const { x, y } = getPos(e);
+            lastX = x;
+            lastY = y;
+          })
+        );
+  
+        ['mouseup', 'mouseout', 'touchend', 'touchcancel'].forEach(evt =>
+          canvas.addEventListener(evt, () => drawing = false)
+        );
+  
+        ['mousemove', 'touchmove'].forEach(evt =>
+          canvas.addEventListener(evt, e => {
+            if (!drawing) return;
+            const { x, y } = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            lastX = x;
+            lastY = y;
+          })
+        );
+  
+        clearBtn.addEventListener('click', () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          input.value = '';
+        });
+  
+        return () => {
+          input.value = canvas.toDataURL();
+        };
+      }
+  
+      // Initialize signature pads
+      window.saveFirstPartySign = setupSignature('signature-pad', 'fpsign', 'clear-signature');
+      window.saveSecondPartySign = setupSignature('spsign-canvas', 'spsign', 'clear-spsign');
+      
+  
+    });
+  </script>
+  
+  <!-- <script>
     document.addEventListener('DOMContentLoaded', function () {
       const form = document.querySelector('form[action="/hr/hb/create"]');
       const formErrorsDiv = document.getElementById('formErrors');
@@ -804,8 +982,41 @@
         const data = await res.json();
         if (data && data.staff && data.staff.staff_name) {
           document.getElementById('staff_name').value = data.staff.staff_name;
+          document.getElementById('econtact').value = data.staff.econtact;
+          document.getElementById('taddress').value = data.staff.temporary_address;
+          document.getElementById('references').value = data.staff.references;
+          // document.getElementById('dob').value = data.staff.dob;
+          document.getElementById('paddress').value = data.staff.permanent_address;
+          document.getElementById('cphone').value = data.staff.staff_phone;
+          // const el = document.getElementById('someElementId');
+          // if (el) {
+          //   el.value = someValue;
+          // }
+          const dobInput = document.getElementById('dob');
+
+if (data.staff.dob) {
+  dobInput.value = data.staff.dob;
+  dobInput.readOnly = true;
+  dobInput.type = 'date'; // Ensure it's a date input
+} else {
+  dobInput.value = '';
+  dobInput.readOnly = false;
+  dobInput.type = 'date';
+  dobInput.required = true;
+
+  // Optional: Set max date (to avoid future DOBs)
+  const today = new Date().toISOString().split('T')[0];
+  dobInput.setAttribute('max', today);
+}
+
         } else {
           document.getElementById('staff_name').value = '';
+          // document.getElementById('dob').value = '';
+          document.getElementById('econtact').value = '';
+          document.getElementById('taddress').value = '';
+          document.getElementById('references').value = '';
+          document.getElementById('paddress').value = '';
+          document.getElementById('cphone').value = '';
           alert('Staff not found.');
         }
       } catch (error) {
@@ -886,7 +1097,7 @@
         // currentPhoneInput.value = '';
       }
     });
-  </script>
+  </script> -->
   <style>
     .error-highlight {
       border: 1px solid red;

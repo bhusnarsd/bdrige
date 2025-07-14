@@ -52,9 +52,30 @@
                           </div>
                           <div class="form-row">
                             <div class="form-group">
+                              <label for="dept">Department</label>
+                              <select id="dept" name="dept" required>
+                                <option value="">-- Select Department --</option>
+                                <option value="Clinic Manager">Clinic Manager</option>
+                                <option value="Speech Therapist">Speech Therapist</option>
+                                <option value="OT">OT</option>
+                                <option value="Physiotherapist">Physiotherapist</option>
+                                <option value="ABA">ABA</option>
+                                <option value="ABA Supervisor">ABA Supervisor</option>
+                                <option value="Psychologist">Psychologist</option>
+                                <option value="Intern-Speech Therapist">Intern-Speech Therapist</option>
+                                <option value="Light Vehicle Driver">Light Vehicle Driver</option>
+                                <option value="Cleaner">Cleaner</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Driver">Driver</option>
+                                <option value="Marketing Executive">Marketing Executive</option>
+                                <option value="Marketing Manager">Marketing Manager</option>
+                              </select>
+                            </div>
+                            
+                            <!-- <div class="form-group">
                               <label for="email">Department</label>
                               <input type="text" id="dept" name="dept" required>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                               <label for="phone">Job Title</label>
                               <input type="text" id="job_title" name="job_title" required>
@@ -414,51 +435,344 @@
         </div>
       </div>
   </div>
-  <script>
-  //    document.addEventListener('DOMContentLoaded', () => {
-  //   const form = document.querySelector('form[action="/hr/es/create"]');
-  //   const formErrorsDiv = document.getElementById('formErrors');
 
-  //   if (!form) {
-  //     console.error("Target form not found!");
-  //     return;
-  //   }
+  <!-- <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('form[action="/hr/es/create"]');
+      const formErrorsDiv = document.getElementById('formErrors');
+      const rows = form.querySelectorAll('.tablebody tr');
+      const staffIdSelect = document.getElementById('staff_id');
+      const staffNameInput = document.getElementById('staff_name');
+      const submitButton = document.querySelector('button[type="submit"]');
+      const errorMessage = document.getElementById('errorMessage');
+    
+      if (!form) {
+        console.error("Target form not found!");
+        return;
+      }
+    
+      // Disable submit initially
+      submitButton.disabled = true;
+      submitButton.style.backgroundColor = 'gray';
+    
+      // ✅ Set default: Incomplete checked + date disabled
+      rows.forEach(row => {
+        const radios = row.querySelectorAll('input[type="radio"]');
+        const dateInput = row.querySelector('input[type="date"]');
+        const inCompleteRadio = Array.from(radios).find(r => r.value === 'InComplete');
+        if (inCompleteRadio) {
+          inCompleteRadio.checked = true;
+        }
+        if (dateInput) {
+          dateInput.disabled = true;
+          dateInput.value = '';
+        }
+    
+        radios.forEach(radio => {
+          radio.addEventListener('change', () => {
+            if (radio.value === 'InComplete' && radio.checked) {
+              if (dateInput) {
+                dateInput.value = '';
+                dateInput.disabled = true;
+                dateInput.style.border = '';
+              }
+            } else if (radio.value === 'Complete' && radio.checked) {
+              if (dateInput) {
+                dateInput.disabled = false;
+              }
+            }
+          });
+        });
+    
+        // ✅ Remove red border on input
+        if (dateInput) {
+          dateInput.addEventListener('input', () => {
+            if (dateInput.value) {
+              dateInput.style.border = '';
+            }
+          });
+        }
+      });
+    
+      // ✅ Form validation on submit
+      // form.addEventListener('submit', function (e) {
+      //   let allValid = true;
+    
+      //   rows.forEach((row) => {
+      //     const radios = row.querySelectorAll('input[type="radio"]');
+      //     const name = radios[0]?.name;
+      //     const dateInput = row.querySelector('input[type="date"]');
+      //     if (dateInput) dateInput.style.border = '';
+    
+      //     const checkedRadio = row.querySelector(`input[name="${name}"]:checked`);
+      //     if (!checkedRadio) {
+      //       allValid = false;
+      //     } else if (checkedRadio.value === 'Complete' && (!dateInput || !dateInput.value)) {
+      //       allValid = false;
+      //       if (dateInput) dateInput.style.border = '2px solid red';
+      //     }
+      //   });
+    
+      //   if (!allValid) {
+      //     e.preventDefault(); // prevent form submission
+      //     formErrorsDiv.style.display = 'none'; // no error block, just field highlight
+      //   }
+      // });
+    
+      form.addEventListener('submit', function (e) {
+  let allValid = true;
 
-  //   form.addEventListener('submit', function (e) {
-  //     const rows = form.querySelectorAll('.tablebody tr');
-  //     let allValid = true;
-  //     let errorMessages = [];
+  rows.forEach((row) => {
+    const radios = row.querySelectorAll('input[type="radio"]');
 
-  //     rows.forEach((row, index) => {
-  //       const radios = row.querySelectorAll('input[type="radio"]');
-  //       const name = radios[0]?.name;
-  //       const dateInput = row.querySelector('input[type="date"]');
-  //       row.style.backgroundColor = ''; // reset highlight
+    // ✅ Skip rows without radios (like recital text inputs)
+    if (radios.length === 0) return;
 
-  //       if (name) {
-  //         const checked = row.querySelector(`input[name="${name}"]:checked`);
-  //         if (!checked) {
-  //           allValid = false;
-  //           row.style.backgroundColor = '#ffe0e0';
-  //           errorMessages.push(`Step ${index + 1}: Please select Complete or Incomplete.`);
-  //         } else if (checked.value === 'Complete' && (!dateInput || !dateInput.value)) {
-  //           allValid = false;
-  //           row.style.backgroundColor = '#ffe0e0';
-  //           errorMessages.push(`Step ${index + 1}: Please enter a date for completed procedure.`);
-  //         }
-  //       }
-  //     });
+    const name = radios[0].name;
+    const dateInput = row.querySelector('input[type="date"]');
+    if (dateInput) dateInput.style.border = '';
 
-  //     if (!allValid) {
-  //       e.preventDefault(); // 💥 This now works reliably
-  //       formErrorsDiv.innerHTML = errorMessages.map(msg => `<div>${msg}</div>`).join('');
-  //       formErrorsDiv.style.display = 'block';
-  //       formErrorsDiv.scrollIntoView({ behavior: 'smooth' });
-  //     } else {
-  //       formErrorsDiv.style.display = 'none';
-  //     }
-  //   });
-  // });
+    const checkedRadio = row.querySelector(`input[name="${name}"]:checked`);
+    if (!checkedRadio) {
+      allValid = false;
+      row.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.parentElement.style.border = '1px solid red';
+      });
+    } else if (checkedRadio.value === 'Complete' && (!dateInput || !dateInput.value)) {
+      allValid = false;
+      if (dateInput) dateInput.style.border = '2px solid red';
+    }
+  });
+
+  if (!allValid) {
+    e.preventDefault(); // prevent form submission
+    formErrorsDiv.style.display = 'none'; // optional: show a message if needed
+  }
+});
+
+      // ✅ Staff ID dropdown change handler
+      staffIdSelect.addEventListener('change', async function () {
+        const staffId = this.value;
+        if (!staffId) {
+          staffNameInput.value = '';
+          submitButton.disabled = true;
+          submitButton.style.backgroundColor = 'gray';
+          return;
+        }
+    
+        try {
+          const res = await fetch('/staff/get-staff-details', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ staff_id: staffId })
+          });
+    
+          const data = await res.json();
+    
+          if (res.ok && data.staff?.staff_name) {
+            staffNameInput.value = data.staff.staff_name;
+            submitButton.disabled = false;
+            submitButton.style.backgroundColor = '';
+            errorMessage.style.display = 'none';
+          } else {
+            staffNameInput.value = '';
+            submitButton.disabled = true;
+            submitButton.style.backgroundColor = 'gray';
+            errorMessage.textContent = 'Staff not found.';
+            errorMessage.style.display = 'block';
+          }
+        } catch (err) {
+          console.error('Error fetching staff:', err);
+          alert('Server error occurred.');
+          staffNameInput.value = '';
+          submitButton.disabled = true;
+          submitButton.style.backgroundColor = 'gray';
+        }
+      });
+    });
+    </script>
+     -->
+    
+     <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('form[action="/hr/es/create"]');
+        const formErrorsDiv = document.getElementById('formErrors');
+        const rows = form.querySelectorAll('.tablebody tr');
+        const staffIdSelect = document.getElementById('staff_id');
+        const staffNameInput = document.getElementById('staff_name');
+        const submitButton = document.querySelector('button[type="submit"]');
+        const errorMessage = document.getElementById('errorMessage');
+      
+        if (!form) {
+          console.error("Target form not found!");
+          return;
+        }
+      
+        // Disable submit initially
+        submitButton.disabled = true;
+        submitButton.style.backgroundColor = 'gray';
+      
+        // ✅ Enforce only future dates
+rows.forEach((row) => {
+  const dateInput = row.querySelector('input[type="date"]');
+
+  if (dateInput) {
+    // Get tomorrow's date in yyyy-mm-dd
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const yyyy = tomorrow.getFullYear();
+    const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+    const dd = String(tomorrow.getDate()).padStart(2, '0');
+    const minDate = `${yyyy}-${mm}-${dd}`;
+
+    dateInput.setAttribute('min', minDate);
+
+    // Optional: if user manually types a past date, block it
+    dateInput.addEventListener('input', () => {
+      if (dateInput.value && dateInput.value < minDate) {
+        alert('Please select a future date only.');
+        dateInput.value = '';
+      }
+    });
+  }
+});
+
+        // Set default: Incomplete checked + date disabled
+        rows.forEach(row => {
+          const radios = row.querySelectorAll('input[type="radio"]');
+          const dateInput = row.querySelector('input[type="date"]');
+      
+          // Only apply radio/date defaults if radios exist
+          if (radios.length > 0) {
+            const inCompleteRadio = Array.from(radios).find(r => r.value === 'InComplete');
+            if (inCompleteRadio) {
+              inCompleteRadio.checked = true;
+            }
+            if (dateInput) {
+              dateInput.disabled = true;
+              dateInput.value = '';
+            }
+      
+            radios.forEach(radio => {
+              radio.addEventListener('change', () => {
+                if (radio.value === 'InComplete' && radio.checked) {
+                  if (dateInput) {
+                    dateInput.value = '';
+                    dateInput.disabled = true;
+                    dateInput.style.border = '';
+                  }
+                } else if (radio.value === 'Complete' && radio.checked) {
+                  if (dateInput) {
+                    dateInput.disabled = false;
+                  }
+                }
+                // Remove red border if any on change
+                radio.parentElement.style.border = '';
+              });
+            });
+      
+            if (dateInput) {
+              dateInput.addEventListener('input', () => {
+                if (dateInput.value) {
+                  dateInput.style.border = '';
+                }
+              });
+            }
+          }
+        });
+      
+        // ✅ Form validation
+        form.addEventListener('submit', function (e) {
+          let allValid = true;
+      
+          rows.forEach((row) => {
+            const radios = row.querySelectorAll('input[type="radio"]');
+            const dateInput = row.querySelector('input[type="date"]');
+      
+            if (radios.length === 0) return; // Skip non-radio rows like recitals
+      
+            const radioName = radios[0].name;
+            const selected = row.querySelector(`input[name="${radioName}"]:checked`);
+      
+            // Reset any old borders
+            radios.forEach(radio => {
+              radio.parentElement.style.border = '';
+            });
+            if (dateInput) {
+              dateInput.style.border = '';
+            }
+      
+            // Check if radio is selected
+            if (!selected) {
+              allValid = false;
+              radios.forEach(radio => {
+                radio.parentElement.style.border = '1px solid red';
+              });
+            }
+      
+            // If "Complete" selected, check date is filled
+            if (selected && selected.value === 'Complete' && (!dateInput || !dateInput.value)) {
+              allValid = false;
+              if (dateInput) {
+                dateInput.style.border = '2px solid red';
+              }
+            }
+          });
+      
+          if (!allValid) {
+            e.preventDefault(); // block submission
+            formErrorsDiv.style.display = 'block';
+            formErrorsDiv.innerHTML = '<div>Please fill out all required fields marked in red.</div>';
+            formErrorsDiv.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            formErrorsDiv.style.display = 'none';
+          }
+        });
+      
+        // ✅ Staff ID validation
+        staffIdSelect.addEventListener('change', async function () {
+          const staffId = this.value;
+          if (!staffId) {
+            staffNameInput.value = '';
+            submitButton.disabled = true;
+            submitButton.style.backgroundColor = 'gray';
+            return;
+          }
+      
+          try {
+            const res = await fetch('/staff/get-staff-details', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ staff_id: staffId })
+            });
+      
+            const data = await res.json();
+      
+            if (res.ok && data.staff?.staff_name) {
+              staffNameInput.value = data.staff.staff_name;
+              submitButton.disabled = false;
+              submitButton.style.backgroundColor = '';
+              errorMessage.style.display = 'none';
+            } else {
+              staffNameInput.value = '';
+              submitButton.disabled = true;
+              submitButton.style.backgroundColor = 'gray';
+              errorMessage.textContent = 'Staff not found.';
+              errorMessage.style.display = 'block';
+            }
+          } catch (err) {
+            console.error('Error fetching staff:', err);
+            alert('Server error occurred.');
+            staffNameInput.value = '';
+            submitButton.disabled = true;
+            submitButton.style.backgroundColor = 'gray';
+          }
+        });
+      });
+      </script>
+      
+  
+  <!-- <script>
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form[action="/hr/es/create"]');
     const formErrorsDiv = document.getElementById('formErrors');
@@ -625,5 +939,5 @@
         // currentPhoneInput.value = '';
       }
     });
-  </script>
+  </script> -->
   <%- include('../../partials/footer') %>

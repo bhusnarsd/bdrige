@@ -52,10 +52,32 @@
                           </div> -->
                         </div>
                         <div class="form-row">
+
                           <div class="form-group">
                             <label for="dept">Department</label>
-                            <input type="text" id="dept" name="dept" placeholder="department" required>
+                            <select id="dept" name="dept" required>
+                              <option value="">-- Select Department --</option>
+                              <option value="Clinic Manager">Clinic Manager</option>
+                              <option value="Speech Therapist">Speech Therapist</option>
+                              <option value="OT">OT</option>
+                              <option value="Physiotherapist">Physiotherapist</option>
+                              <option value="ABA">ABA</option>
+                              <option value="ABA Supervisor">ABA Supervisor</option>
+                              <option value="Psychologist">Psychologist</option>
+                              <option value="Intern-Speech Therapist">Intern-Speech Therapist</option>
+                              <option value="Light Vehicle Driver">Light Vehicle Driver</option>
+                              <option value="Cleaner">Cleaner</option>
+                              <option value="Admin">Admin</option>
+                              <option value="Driver">Driver</option>
+                              <option value="Marketing Executive">Marketing Executive</option>
+                              <option value="Marketing Manager">Marketing Manager</option>
+                            </select>
                           </div>
+                          
+                          <!-- <div class="form-group">
+                            <label for="dept">Department</label>
+                            <input type="text" id="dept" name="dept" placeholder="department" required>
+                          </div> -->
                           <div class="form-group">
                             <label for="job_title">Job Title</label>
                             <input type="text" id="job_title" name="job_title" placeholder="job title" required>
@@ -84,7 +106,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="df_status" value="Complete" required>
                                           Complete</label>
-                                        <label><input type="radio" name="df_status" value="InComplete" required>
+                                        <label><input type="radio" name="df_status" value="InComplete" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -95,7 +117,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="itc_status" value="Complete" required>
                                           Complete</label>
-                                        <label><input type="radio" name="itc_status" value="InComplete" required>
+                                        <label><input type="radio" name="itc_status" value="InComplete" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -106,7 +128,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="neoj_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="neoj_status" value="option2" required>
+                                        <label><input type="radio" name="neoj_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -117,7 +139,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="sup_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="sup_status" value="option2" required>
+                                        <label><input type="radio" name="sup_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -128,7 +150,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="gleae_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="gleae_status" value="option2" required>
+                                        <label><input type="radio" name="gleae_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -147,7 +169,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="iohow_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="iohow_status" value="option2" required>
+                                        <label><input type="radio" name="iohow_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -158,7 +180,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="trfpeiam_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="trfpeiam_status" value="option2" required>
+                                        <label><input type="radio" name="trfpeiam_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -169,7 +191,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="jd_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="jd_status" value="option2" required>
+                                        <label><input type="radio" name="jd_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -180,7 +202,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="ppoe_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="ppoe_status" value="option2" required>
+                                        <label><input type="radio" name="ppoe_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -190,8 +212,8 @@
                                     <td>
                                       <div class="radio-group">
                                         <label><input type="radio" name="btcnaof_status" value="option1" required>
-                                          Complete</label>
-                                        <label><input type="radio" name="btcnaof_status" value="option2" required>
+                                          Complete</label> 
+                                        <label><input type="radio" name="btcnaof_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -202,7 +224,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="riwsiwol_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="riwsiwol_status" value="option2" required>
+                                        <label><input type="radio" name="riwsiwol_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -214,7 +236,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="afrlalslel_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="afrlalslel_status" value="option2" required>
+                                        <label><input type="radio" name="afrlalslel_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -226,7 +248,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="uauppcrditc_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="uauppcrditc_status" value="option2" required>
+                                        <label><input type="radio" name="uauppcrditc_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -237,7 +259,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="dcglosapcp_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="dcglosapcp_status" value="option2" required>
+                                        <label><input type="radio" name="dcglosapcp_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -248,7 +270,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="dwtpc_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="dwtpc_status" value="option2" required>
+                                        <label><input type="radio" name="dwtpc_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -259,7 +281,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="mrpomrad_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="mrpomrad_status" value="option2" required>
+                                        <label><input type="radio" name="mrpomrad_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -273,7 +295,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="hasirttd_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="hasirttd_status" value="option2" required>
+                                        <label><input type="radio" name="hasirttd_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -284,7 +306,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="iofiap_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="iofiap_status" value="option2" required>
+                                        <label><input type="radio" name="iofiap_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -295,7 +317,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="loffe_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="loffe_status" value="option2" required>
+                                        <label><input type="radio" name="loffe_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -306,7 +328,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="apicof_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="apicof_status" value="option2" required>
+                                        <label><input type="radio" name="apicof_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -317,7 +339,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="air_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="air_status" value="option2" required>
+                                        <label><input type="radio" name="air_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -328,7 +350,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="faf_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="faf_status" value="option2" required>
+                                        <label><input type="radio" name="faf_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -339,7 +361,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="lopi_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="lopi_status" value="option2" required>
+                                        <label><input type="radio" name="lopi_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -350,7 +372,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="cowatm_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="cowatm_status" value="option2" required>
+                                        <label><input type="radio" name="cowatm_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -361,7 +383,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="afkibfcme_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="afkibfcme_status" value="option2" required>
+                                        <label><input type="radio" name="afkibfcme_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -372,7 +394,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="wm_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="wm_status" value="option2" required>
+                                        <label><input type="radio" name="wm_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -383,7 +405,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="vaab_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="vaab_status" value="option2" required>
+                                        <label><input type="radio" name="vaab_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -394,7 +416,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="ic_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="ic_status" value="option2" required>
+                                        <label><input type="radio" name="ic_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -405,7 +427,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="mipaatt_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="mipaatt_status" value="option2" required>
+                                        <label><input type="radio" name="mipaatt_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -419,7 +441,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="pp_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="pp_status" value="option2" required>
+                                        <label><input type="radio" name="pp_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -430,7 +452,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="dp_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="dp_status" value="option2" required>
+                                        <label><input type="radio" name="dp_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -441,7 +463,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="cttcatp_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="cttcatp_status" value="option2" required>
+                                        <label><input type="radio" name="cttcatp_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -452,7 +474,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="con_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="con_status" value="option2" required>
+                                        <label><input type="radio" name="con_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -463,7 +485,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="nc_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="nc_status" value="option2" required>
+                                        <label><input type="radio" name="nc_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -474,7 +496,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="aog_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="aog_status" value="option2" required>
+                                        <label><input type="radio" name="aog_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -485,7 +507,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="lrrs_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="lrrs_status" value="option2" required>
+                                        <label><input type="radio" name="lrrs_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -496,7 +518,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="puot_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="puot_status" value="option2" required>
+                                        <label><input type="radio" name="puot_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -507,7 +529,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="sobc_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="sobc_status" value="option2" required>
+                                        <label><input type="radio" name="sobc_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -521,7 +543,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="pan_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="pan_status" value="option2" required>
+                                        <label><input type="radio" name="pan_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -532,7 +554,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="wash_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="wash_status" value="option2" required>
+                                        <label><input type="radio" name="wash_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -546,7 +568,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="moapo_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="moapo_status" value="option2" required>
+                                        <label><input type="radio" name="moapo_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -557,7 +579,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="ears_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="ears_status" value="option2" required>
+                                        <label><input type="radio" name="ears_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -568,7 +590,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="cpapacoe_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="cpapacoe_status" value="option2" required>
+                                        <label><input type="radio" name="cpapacoe_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -582,7 +604,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="super_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="super_status" value="option2" required>
+                                        <label><input type="radio" name="super_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -593,7 +615,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="cam_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="cam_status" value="option2" required>
+                                        <label><input type="radio" name="cam_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -604,7 +626,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="isegnbce_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="isegnbce_status" value="option2" required>
+                                        <label><input type="radio" name="isegnbce_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -615,7 +637,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="hc_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="hc_status" value="option2" required>
+                                        <label><input type="radio" name="hc_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -626,7 +648,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="pcb_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="pcb_status" value="option2" required>
+                                        <label><input type="radio" name="pcb_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -640,7 +662,7 @@
                                       <div class="radio-group">
                                         <label><input type="radio" name="pay_status" value="option1" required>
                                           Complete</label>
-                                        <label><input type="radio" name="pay_status" value="option2" required>
+                                        <label><input type="radio" name="pay_status" value="option2" required checked>
                                           InComplete</label>
                                       </div>
                                     </td>
@@ -735,53 +757,66 @@
       </div>
   </div>
   <script>
-    document.getElementById('staff_id').addEventListener('change', async function () {
-      const staffId = this.value;
-      if (!staffId) {
-        document.getElementById('staff_name').value = '';
-        return;
-      }
-      try {
-        const res = await fetch('/staff/get-staff-details', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ staff_id: staffId })
+    document.addEventListener('DOMContentLoaded', () => {
+      // Grab elements once
+      const staffIdEl   = document.getElementById('staff_id');
+      const staffNameEl = document.getElementById('staff_name');
+      const form        = document.querySelector('form');
+  
+      if (staffIdEl && staffNameEl) {
+        // When staff_id changes, fetch the name
+        staffIdEl.addEventListener('change', async () => {
+          const staffId = staffIdEl.value.trim();
+          staffNameEl.value = '';
+          if (!staffId) return;
+  
+          try {
+            const res  = await fetch('/staff/get-staff-details', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ staff_id: staffId })
+            });
+            const data = await res.json();
+            if (data?.staff?.staff_name) {
+              staffNameEl.value = data.staff.staff_name;
+            } else {
+              alert('Staff not found.');
+            }
+          } catch (err) {
+            console.error('Error fetching staff details:', err);
+            alert('Server error occurred.');
+          }
         });
-        const data = await res.json();
-        if (data && data.staff && data.staff.staff_name) {
-          document.getElementById('staff_name').value = data.staff.staff_name;
-        } else {
-          document.getElementById('staff_name').value = '';
-          alert('Staff not found.');
-        }
-      } catch (error) {
-        console.error('Error fetching staff details:', error);
-        alert('Server error occurred.');
+  
+        // Generate a random suffix once per page load
+        const randomSuffix = Math.floor(Math.random() * 9000 + 1000);
+        // When name input changes, auto‑generate an ID
+        staffNameEl.addEventListener('input', () => {
+          const parts = staffNameEl.value.trim().split(' ');
+          if (parts.length >= 2) {
+            const [first, last] = parts;
+            staffIdEl.value = 
+              first.slice(0,2).toUpperCase() +
+              last.slice(0,2).toUpperCase() +
+              randomSuffix;
+          } else {
+            staffIdEl.value = '';
+          }
+        });
       }
-    });
-    const randomNumber = Math.floor(Math.random() * 9000 + 1000);
-    document.getElementById('staff_name').addEventListener('input', function () {
-      // Get the staff_name value
-      const staffName = this.value.trim();
-
-      // Check if the name has at least two words (first and last name)
-      const nameParts = staffName.split(' ');
-
-      if (nameParts.length >= 2) {
-        // Extract the first name and last name
-        const firstName = nameParts[0];
-        const lastName = nameParts[1];
-
-        // Generate the staff_id
-        const staffId = firstName.slice(0, 2).toUpperCase() + lastName.slice(0, 2).toUpperCase() + randomNumber; // Random 4-digit number
-
-        // Set the staff_id value to the generated ID
-        document.getElementById('staff_id').value = staffId;
-      } else {
-        document.getElementById('staff_id').value = '';
+  
+      // Optional: ensure form actually submits
+      if (form) {
+        form.addEventListener('submit', e => {
+          // If you want to block submission when staff_name is empty:
+          if (staffNameEl && !staffNameEl.value.trim()) {
+            e.preventDefault();
+            alert('Please select a valid staff before submitting.');
+          }
+          // Otherwise, do nothing and allow submit
+        });
       }
     });
   </script>
+  
   <%- include('../../partials/footer') %>

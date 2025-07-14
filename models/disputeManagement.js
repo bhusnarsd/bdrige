@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
         // ✅ Correct: use models.StaffDetails exactly as registered
         DisputeManagement.belongsTo(models.StaffDetails, {
           foreignKey: 'staff_id',
-          targetKey: 'id',
+          targetKey: 'staff_id',
           as: 'StaffDetail',     // optional alias for eager loading
           onDelete: 'CASCADE',
         });
