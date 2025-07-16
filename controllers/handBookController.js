@@ -111,7 +111,6 @@ exports.handBookCreate = async (req, res) => {
     res.redirect('/hr/hb/create');
   }
   
-
 };
 exports.renderHandCreatePage = async (req, res) => {
   try {

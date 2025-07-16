@@ -47,7 +47,7 @@
                                                     <td><%= staff.StaffDetail.staff_name %></td>
                                                     <td><%= staff.doi %></td>
                                                     <td><%= staff.Department.name %></td>
-                                                    <td><a href="/staff/warning-letter/edit/<%= staff.id %>">Edit</a> | Delete</td>
+                                                    <td><a href="/staff/warning-letter/edit/<%= staff.id %>">Edit</a></td>
                                                 </tr>
                                                 <% }) %>
                                         </tbody>
@@ -65,10 +65,10 @@
                                 </ul>
                             </div>
                             <!-- Download Buttons -->
-                            <div class="download">
+                            <!-- <div class="download">
                                 <a href="/export/excel?search=<%= searchTerm %>">Download as Excel</a> |
                                 <a href="/export/pdf?search=<%= searchTerm %>">Download as PDF</a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 

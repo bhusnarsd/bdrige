@@ -1,0 +1,154 @@
+<div class="left-panel">
+  <div class="logo-area">
+    <a href="/"><img src="images/logo_new.jpg" alt="Logo"></a>
+  </div>
+  <!-- Check if user is logged in -->
+  <% if (user) { %>
+  <!-- Changed from session.user to user -->
+  <div style="text-align: center;">
+    Welcome, <%= user.name %>! &nbsp;&nbsp;&nbsp;
+    <form action="/logout" method="POST" style="display: inline-block;">
+      <button type="submit" style="background-color: orangered;">Logout</button>
+    </form>
+  </div>
+    <ul class="menu-bar">
+		<li class='sub-menu'>
+		  <a href="#" onclick="toggleDropdown(event, this)">Admin  <div class='fa fa-caret-down right'></div></a>
+		  <ul class="dropdown">
+			<li><a href="/admin/enquiry" class="active">Enquiry</a></li>
+			<li><a href="" class="active">Consets</a></li>
+			<li><a href="" class="active">Intervention</a></li>
+			<li><a href="" class="active">Payment Delay</a></li>
+			<li><a href="" class="active">Attendance Record</a></li>
+		  </ul>
+		</li>
+		<li>
+		  <a href="#" onclick="toggleDropdown(event, this)">Accounts <div class='fa fa-caret-down right'></div></a>
+		  <ul class="dropdown">
+			<li><a href="" class="active">Long Term Clients</a></li>
+			<li><a href="" class="active">MOU-MOA</a></li>
+			<li><a href="" class="active">Pending Expenses</a></li>
+			<li><a href="" class="active">Invoice Details</a></li>
+		  </ul>
+		</li>
+		<li class='sub-menu'>
+		  <a href="#" onclick="toggleDropdown(event, this)">Clinic Management <div class='fa fa-caret-down right'></div></a>
+		  <ul class="dropdown">
+			<li class='sub-menu'>
+				<a href="#" onclick="toggleDropdown(event, this)">Admin <div class='fa fa-caret-down right'></div></a>
+				<ul class="dropdown"><br/><li><a href="">Despute Management Client</a></li></ul>
+			</li>
+			<li class='sub-menu'>
+				<a href="#" onclick="toggleDropdown(event, this)">HR <div class='fa fa-caret-down right'></div></a>
+				<ul class="dropdown"><br/>
+					<li><a href="/staff">Staff Details</a></li>
+					<li><a href="/staff/confidentiality-contract/list">Staff Confidentiality Contract</a></li>
+					<li><a href="/hr/hb">Staff Handbook and Code of Conduct</a></li>
+					<li><a href="/hr/sip">Staff Induction Program</a></li>
+					<li><a href="/hr/es">Staff End Service</a></li>
+					<li><a href="/hr/dispute">Staff Dispute Management</a></li>
+					<li><a href="/staff/warning-letter/list">Staff Warning Letter</a></li>
+					<li><a href="/hr/kpi">Key Performance Indicator</a></li>
+					<li><a href="">Internal Meeting MOM</a></li>
+					<li><a href="">Salary Calculation</a></li>
+				</ul>
+			</li>
+			<li class='sub-menu'>
+				<a href="#" onclick="toggleDropdown(event, this)">Staff <div class='fa fa-caret-down right'></div></a>
+				<ul class="dropdown"><br/>
+					<li><a href="">Body Checklist</a></li>
+					<li><a href="">Safety Checklist</a></li>
+					<li><a href="">Theropy Preparation</a></li>
+					<li><a href="">Grooming</a></li>
+					<li><a href="">Theropy Room Cleanliness</a></li>
+					<li><a href="">Report Policy & Procedures</a></li>
+				</ul>
+			</li>        
+		</ul>
+    </li>
+    <li class='sub-menu'>
+      <a href="#" onclick="toggleDropdown(event, this)">Clinical <div class='fa fa-caret-down right'></div></a>
+      <ul class="dropdown"><br/>
+        <li><a href="" class="active">Assessment</a></li>
+		<li><a href="" class="active">Demostration Theropy</a></li>
+		<li><a href="" class="active">Holiday</a></li>
+		<li><a href="" class="active">Intervention</a></li>
+		<li><a href="" class="active">MOM</a></li>
+		<li><a href="" class="active">Case Allotment Protocol</a></li>
+      </ul>
+    </li>
+	<li class='sub-menu'>
+      <a href="#" onclick="toggleDropdown(event, this)">Consets <div class='fa fa-caret-down right'></div></a>
+      <ul class="dropdown"><br/>
+        <li><a href="" class="active">Form A Consent For Assessment</a></li>
+		<li><a href="" class="active">Form B Reports To Share</a></li>
+		<li><a href="" class="active">Form C Eletronic Ttransfer</a></li>
+		<li><a href="" class="active">Form D Group Therapy</a></li>
+		<li><a href="" class="active">Form E Social Media</a></li>
+		<li><a href="" class="active">Form F Parent Consent </a></li>
+		<li><a href="" class="active">Form G Therapy Plan Approval</a></li>
+		<li><a href="" class="active">Form H Intervention enrollment</a></li>
+      </ul>
+    </li>
+	<li>
+      <a href="#" onclick="toggleDropdown(event, this)">Supervisor<div class='fa fa-caret-down right'></div></a>
+      <ul class="dropdown"><br/>
+		<li class='sub-menu'>
+			<a href="#" onclick="toggleDropdown(event, this)">ABA <div class='fa fa-caret-down right'></div></a>
+			<ul class="dropdown"><br/><li><a href="">Training Form</a></li>
+				<li><a href="">Client Enrollment</a></li>
+				<li><a href="">Timeline For Training</a></li>
+				<li><a href="">Trainee Observer Form</a></li>
+			</ul>
+		</li>
+		<li class='sub-menu'>
+			<a href="#" onclick="toggleDropdown(event, this)">OT <div class='fa fa-caret-down right'></div></a>
+			<ul class="dropdown"><br/>
+				<li><a href="">Assessment Procedure</a></li>
+				<li><a href="">Assessment Phase I</a></li>
+				<li><a href="">Assessment Phase Il</a></li>
+				<li><a href=">Treatment Protocol</a></li>
+				<li><a href="">Orientation Protocol</a></li>
+				<li><a href="">Sensory Diet Plan</a></li>
+				<li><a href="">Skills To Evaluate</a></li>
+				<li><a href="">Trainee Observer Form</a></li>
+			</ul>
+		</li>
+		<li class='sub-menu'>
+			<a href="#" onclick="toggleDropdown(event, this)">Speech <div class='fa fa-caret-down right'></div></a>
+			<ul class="dropdown"><br/>
+				<li><a href="">Body Checklist</a></li>
+				<li><a href="">Safety Checklist</a></li>
+				<li><a href="">Theropy Preparation</a></li>
+				<li><a href="">Grooming</a></li>
+				<li><a href="">Theropy Room Cleanliness</a></li>
+				<li><a href="">Report Policy & Procedures</a></li>
+			</ul>
+		</li> 
+		<li class='sub-menu'>
+			<a href="#" onclick="toggleDropdown(event, this)">PT <div class='fa fa-caret-down right'></div></a>
+			<ul class="dropdown"><br/>
+				<li><a href="">Body Checklist</a></li>
+				<li><a href="">Safety Checklist</a></li>
+				<li><a href="">Theropy Preparation</a></li>
+				<li><a href="">Grooming</a></li>
+				<li><a href="">Theropy Room Cleanliness</a></li>
+				<li><a href="">Report Policy & Procedures</a></li>
+			</ul>
+		</li>
+      </ul>
+    </li>
+  </ul>
+  <% } else { %>
+  <!-- <a href="/login">Login</a>
+        <a href="/register">Register</a> -->
+  <% } %>
+
+</div>
+<script>
+	$('.sub-menu ul').hide();
+		$(".sub-menu a").click(function () {
+			$(this).parent(".sub-menu").children("ul").slideToggle("100");
+			$(this).find(".right").toggleClass("fa-caret-up fa-caret-down");
+		});
+</script>

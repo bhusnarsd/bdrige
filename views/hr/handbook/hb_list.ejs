@@ -144,7 +144,7 @@
                                                     <td><%= hb.StaffDetail.staff_id %></td>
                                                     <td><%= hb.StaffDetail.staff_name %></td>
                                                     <td><%= hb.dob %></td>
-                                                    <td><a href="/hr/handbook/edit/<%= hb.id %>">Edit</a> | Delete</td>
+                                                    <td><a href="/hr/handbook/edit/<%= hb.id %>">Edit</a></td>
                                                 </tr>
                                                 <% }) %>
                                         </tbody>
@@ -162,10 +162,10 @@
                                 </ul>
                             </div>
                             <!-- Download Buttons -->
-                            <div class="download">
+                            <!-- <div class="download">
                                 <a href="/export/excel?search=<%= searchTerm %>">Download as Excel</a> |
                                 <a href="/export/pdf?search=<%= searchTerm %>">Download as PDF</a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 

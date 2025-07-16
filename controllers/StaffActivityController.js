@@ -291,24 +291,113 @@ exports.editWarningLetterForm = async (req, res) => {
 
 
 
-// Handle update
+// // Handle update
+// exports.updateWarningLetter = async (req, res) => {
+//   const { id } = req.params;
+
+//   try {
+//     const updateData = req.body;
+
+//     // File handling
+//     if (req.file) {
+//       updateData.any_document = req.file.filename; // Save filename to DB
+//     }
+
+//     const [updated] = await StaffWarning.update(updateData, { where: { id } });
+
+//     if (!updated) {
+//       req.flash('error', 'No record updated.');
+//       return res.redirect(`/staff/warning-letter/edit/${id}`);
+//     }
+
+//     req.flash('success', 'Warning letter updated successfully.');
+//     res.redirect(`/staff/warning-letter/edit/${id}`);
+//   } catch (err) {
+//     console.error('Error updating warning letter:', err);
+//     req.flash('error', 'Error updating data.');
+//     res.redirect(`/staff/warning-letter/edit/${id}`);
+//   }
+// };
+
+
 exports.updateWarningLetter = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const updateData = req.body;
+  upload.fields([{ name: 'any_document', maxCount: 1 }])(req, res, async (err) => {
+    const { id } = req.params;
+    const staffList = await StaffDetails.findAll({ where: { is_deleted: false } });
+    const departments = await Department.findAll();
 
-    const [updated] = await StaffWarning.update(updateData, { where: { id } });
-
-    if (!updated) {
-      req.flash('error', 'No record updated.');
+    if (err) {
+      console.error('File upload error:', err);
+      req.flash('errorMessages', 'Error uploading files');
       return res.redirect(`/staff/warning-letter/edit/${id}`);
     }
 
-    req.flash('success', 'Warning letter updated successfully.');
-    res.redirect(`/staff/warning-letter/edit/${id}`);
-  } catch (err) {
-    console.error('Error updating warning letter:', err);
-    req.flash('error', 'Error updating data.');
-    res.redirect(`/staff/warning-letter/edit/${id}`);
-  }
+    const {
+      staff_id,
+      staff_name,
+      doi,
+      department,
+      issues_concerns,
+      background_info,
+      ecotp,
+      action1,
+      action2,
+      action3,
+      deadline_date,
+      email_to_respond,
+      appropriate_date,
+      response,
+      responded_by,
+      conclusion
+    } = req.body;
+
+    const any_document = req.files['any_document']?.[0]?.filename;
+
+    try {
+      const departmentObj = await Department.findOne({ where: { name: department } });
+
+      if (!departmentObj) {
+        req.flash('errorMessages', 'Invalid department.');
+        return res.redirect(`/staff/warning-letter/edit/${id}`);
+      }
+
+      const updateData = {
+        staff_id,
+        staff_name,
+        doi,
+        department_id: departmentObj.id,
+        issues_concerns,
+        background_info,
+        ecotp,
+        action1,
+        action2,
+        action3,
+        deadline_date,
+        email_to_respond,
+        appropriate_date,
+        response,
+        responded_by,
+        conclusion,
+      };
+
+      // Only update the document if a new file is uploaded
+      if (any_document) {
+        updateData.any_document = any_document;
+      }
+
+      const [updated] = await StaffWarning.update(updateData, { where: { id } });
+
+      if (!updated) {
+        req.flash('errorMessages', 'No record updated.');
+        return res.redirect(`/staff/warning-letter/edit/${id}`);
+      }
+
+      req.flash('successMessages', 'Warning letter updated successfully.');
+      res.redirect(`/staff/warning-letter/edit/${id}`);
+    } catch (error) {
+      console.error('Error updating warning letter:', error);
+      req.flash('errorMessages', 'Error updating data.');
+      res.redirect(`/staff/warning-letter/edit/${id}`);
+    }
+  });
 };

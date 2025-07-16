@@ -1,0 +1,16 @@
+.menu-bar li .dropdown li a.active {
+    padding: 10px;
+    display: block;
+    text-align: left;
+    color: #fff;
+    font-size: 14px;
+    background-color: #aec036;
+}
+
+.dropdown {
+    display: none;
+}
+
+.sub-menu.open > .dropdown {
+    display: block;
+}

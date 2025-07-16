@@ -5,7 +5,38 @@
                         const parent = element.parentElement;
                         parent.classList.toggle('open');
                     }
-                    
+
+window.addEventListener('DOMContentLoaded', () => {
+        const currentPath = window.location.pathname;
+
+        // Loop through all menu links
+        document.querySelectorAll('.menu-bar a').forEach(link => {
+            const linkPath = link.getAttribute('href');
+
+            // Match exact path (ignore empty and #)
+            if (linkPath && linkPath !== '#' && linkPath === currentPath) {
+                // Add active class
+                link.classList.add('active');
+
+                // Find parent li
+                let parent = link.closest('li');
+
+                // Traverse upward and add 'open' to all sub-menus
+                while (parent) {
+                    if (parent.classList.contains('sub-menu')) {
+                        parent.classList.add('open');
+
+                        // Remove inline style from its dropdown
+                        const dropdown = parent.querySelector('.dropdown');
+                        if (dropdown && dropdown.hasAttribute('style')) {
+                            dropdown.removeAttribute('style');
+                        }
+                    }
+                    parent = parent.parentElement.closest('li');
+                }
+            }
+        });
+    });                    
                 </script>                 
             </div>
         </div>

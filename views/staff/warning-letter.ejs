@@ -237,7 +237,7 @@
         const dropdown = document.getElementById('department');
         data.departments.forEach(dept => {
           const option = document.createElement('option');
-          option.value = dept.id;
+          option.value = dept.name;
           option.textContent = dept.name;
           dropdown.appendChild(option);
         });

@@ -50,7 +50,7 @@
           <div class="form-row">
             <div class="form-group">
               <label>DOB</label>
-              <input type="date" name="dob" value="<%= hb.dob ? hb.dob : '' %>">
+              <input type="date" name="dob" value="<%= hb.dob ? hb.dob : '' %>" readonly>
             </div>
             <div class="form-group">
               <label>Emergency Contact</label>
@@ -244,7 +244,7 @@
               documentation should be included in the employee’s personnel file. </p>
             <h4>Hours of Work</h4>
             <p>The regular office hours for ABC is 8 am to 10pm for 6 days a week, Where your Schedule
-              schedule will be<input type="text" id="how2" name="how2" class="width30"> will be an off day
+              schedule will be<input type="text" id="how2" name="how2" class="width30" value="<%= hb.how2 %>"> will be an off day
               .Employees are required to fill up a leave form and email, in advance, of planned days away
               from the office. Unplanned absences from the office should be reported to the Clinical
               Director and the Center manager as soon as could reasonably be expected and email the leave

@@ -35,7 +35,7 @@
                       <tr>
                         <td>Unique id:</td>
                         <td>
-                          <select id="staff_id" name="staff_id" required>
+                          <select id="staff_id" name="staff_id" required disabled>
                             <option value="">-- Select Unique ID --</option>
                             <% staffList.forEach(staff => { %>
                               <option value="<%= staff.staff_id %>" <%= warning.staff_id === staff.staff_id ? 'selected' : '' %>><%= staff.staff_id %></option>
@@ -54,10 +54,10 @@
                         <td>Date of issue</td>
                         <td><input type="date" id="doi" name="doi" value="<%= warning.doi %>"></td>
                       </tr>
-                      <tr>
+                      <!-- <tr>
                         <td>Department</td>
                         <td>
-                          <!-- <select id="dept" name="dept" required>
+                          <select id="department" name="department" required>
                             <option value="">-- Select Department --</option>
                             <% 
                               const departments = [
@@ -67,20 +67,22 @@
                               ];
                               departments.forEach(function(dept) { 
                             %>
-                              <option value="<%= dept %>" <%= warning.dept === dept ? 'selected' : '' %>><%= dept %></option>
+                              <option value="<%= dept %>" <%= warning.department === dept ? 'selected' : '' %>><%= dept %></option>
                             <% }) %>
-                          </select> -->
-                          <tr>
-                            <td>Department</td>
-                            <td>
-                              <select id="department" name="department_id" required>
-                                <option value="">-- Loading Departments --</option>
-                              </select>
-                            </td>
-                          </tr>
-                          
+                          </select>
+                        </td>
+                      </tr> -->
+                      <tr>
+                        <td>Department</td>
+                        <td>
+                          <select id="department" name="department" required>
+                            <option value="">-- Loading Departments --</option>
+                          </select>
+                          <input type="hidden" id="hidden_department_id" value="<%= warning.department_id %>">
                         </td>
                       </tr>
+                      
+                      
                       <tr>
                         <td>Brief description of the issue/concern</td>
                         <td><input type="text" id="issues_concerns" name="issues_concerns" value="<%= warning.issues_concerns %>" required></td>
@@ -150,9 +152,80 @@
     </div>
   </div>
 </div>
+<!-- <script>
+  document.addEventListener('DOMContentLoaded', async function () {
+    const dropdown = document.getElementById('department');
 
+    // ✅ Extract the numeric department ID passed from EJS
+    const selectedDeptId = <%= warning.department_id || 0 %>; // fallback to 0 if undefined
+
+    console.log('Selected Dept ID from EJS:', selectedDeptId);
+
+    try {
+      const res = await fetch('/staff/departments');
+      const data = await res.json();
+
+      dropdown.innerHTML = '<option value="">-- Select Department --</option>';
+
+      if (data.success && Array.isArray(data.departments)) {
+        data.departments.forEach(dept => {
+          const option = document.createElement('option');
+          option.value = dept.id;
+          option.textContent = dept.name;
+
+          // ✅ Match department_id for patching the selected value
+          if (dept.id === selectedDeptId) {
+            option.selected = true;
+          }
+
+          dropdown.appendChild(option);
+        });
+      } else {
+        console.warn('No departments found.');
+      }
+    } catch (error) {
+      console.error('Failed to load departments:', error);
+    }
+  });
+</script> -->
 <script>
-  // Fetch staff details on staff ID change
+  document.addEventListener('DOMContentLoaded', async function () {
+    const dropdown = document.getElementById('department');
+    const hiddenDeptId = document.getElementById('hidden_department_id').value;
+
+    try {
+      const res = await fetch('/staff/departments');
+      const data = await res.json();
+
+      dropdown.innerHTML = '<option value="">-- Select Department --</option>';
+
+      if (data.success && Array.isArray(data.departments)) {
+        data.departments.forEach(dept => {
+          const option = document.createElement('option');
+          option.value = dept.name; // 👈 submit name, not ID
+          option.textContent = dept.name;
+
+          // Pre-select the option if department_id matches
+          if (dept.id == hiddenDeptId) {
+            option.selected = true;
+          }
+
+          dropdown.appendChild(option);
+        });
+      } else {
+        console.warn('No departments found.');
+      }
+    } catch (error) {
+      console.error('Failed to load departments:', error);
+    }
+  });
+</script>
+
+
+
+
+
+<!-- <script>
   document.getElementById('staff_id').addEventListener('change', async function () {
     const staffId = this.value;
     if (!staffId) {
@@ -168,6 +241,7 @@
       });
 
       const data = await res.json();
+
       if (data.staff) {
         document.getElementById('staff_name').value = data.staff.staff_name || '';
       } else {
@@ -176,24 +250,17 @@
     } catch (err) {
       console.error('Error fetching staff data:', err);
     }
-  });
 
-  // Load department list on DOM load
-  document.addEventListener('DOMContentLoaded', async function () {
     try {
       const res = await fetch('/staff/departments');
       const data = await res.json();
-      const dropdown = document.getElementById('department');
-      dropdown.innerHTML = '<option value="">-- Select Department --</option>'; // Clear initial
 
       if (data.success && Array.isArray(data.departments)) {
+        const dropdown = document.getElementById('department');
         data.departments.forEach(dept => {
           const option = document.createElement('option');
           option.value = dept.id;
           option.textContent = dept.name;
-          if (dept.id === <%= warning.department_id %>) {
-            option.selected = true;
-          }
           dropdown.appendChild(option);
         });
       } else {
@@ -203,7 +270,6 @@
       console.error('Failed to load departments:', error);
     }
   });
-</script>
-
+</script> -->
 
 <%- include('../partials/footer') %>
