@@ -101,8 +101,6 @@
                         <img id="staff_signature_preview" src="<%= kpi.staff_sign %>" alt="Staff Signature" style="max-width: 100%; height: auto;">
                         <!-- <canvas id="staff_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br> -->
                         <input type="hidden" id="staff_sign_input" name="staff_sign_input">
-
-                        
                       </td>
                       <td>HOD/Supervisor Signature:
                         <img id="hod_sign_preview" src="<%= kpi.hod_sign %>" alt="HOD Signature" style="max-width: 100%; height: auto;">
@@ -333,30 +331,30 @@
             </div><br /><br />
             <div class="form-row">
               <div class="form-group">
-                <label for="hr_sign">HR Signature</label>
+                <label for="hr_sign">HR signature</label>
                 <img id="hr_sign_preview" src="<%= kpi.hr_sign %>" alt="HR Signature" style="max-width: 100%; height: auto;">
-                <canvas id="hr_sign-pad" width="300" height="150" style="border:1px solid #ccc; display: none;"></canvas>
-                <input type="hidden" id="hr_sign" name="hr_sign">
+                <!-- <canvas id="hr_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br> -->
+                <input type="hidden" id="hr_sign_input" name="hr_sign_input">
               </div>
               <div class="form-group">
-                <label for="director_sign">Director Signature</label>
+                <label for="director_sign">Director</label>
                 <img id="director_sign_preview" src="<%= kpi.director_sign %>" alt="Director Signature" style="max-width: 100%; height: auto;">
-                <canvas id="director_sign-pad" width="300" height="150" style="border:1px solid #ccc; display: none;"></canvas>
-                <input type="hidden" id="director_sign" name="director_sign">
+                <!-- <canvas id="director_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br> -->
+                <input type="hidden" id="director_sign_input" name="director_sign_input">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label for="staff_sign1">Employee’s Signature</label>
                 <img id="staff_sign1_preview" src="<%= kpi.staff_sign1 %>" alt="Employee’s Signature" style="max-width: 100%; height: auto;">
-                <canvas id="staff_sign1-pad" width="300" height="150" style="border:1px solid #ccc; display: none;"></canvas>
-                <input type="hidden" id="staff_sign1" name="staff_sign1">
+                <!-- <canvas id="staff_sign1" width="400" height="200" style="border: 1px solid black;"></canvas><br> -->
+                <input type="hidden" id="staff_sign1_input" name="staff_sign1_input">
               </div>
               <div class="form-group">
                 <label for="hod_sign1">HOD/Supervisor Signature</label>
                 <img id="hod_sign1_preview" src="<%= kpi.hod_sign1 %>" alt="HOD/Supervisor Signature" style="max-width: 100%; height: auto;">
-                <canvas id="hod_sign1-pad" width="300" height="150" style="border:1px solid #ccc; display: none;"></canvas>
-                <input type="hidden" id="hod_sign1" name="hod_sign1">
+                <!-- <canvas id="hod_sign1" width="400" height="200" style="border: 1px solid black;"></canvas><br> -->
+                <input type="hidden" id="hod_sign1_input" name="hod_sign1_input">
               </div>
             </div>
             <div class="form-group">
@@ -521,6 +519,86 @@
       // form.submit(); // Or manually trigger the form submission after handling signatures
     });
   };
+
+
+
+
+  // // Select the staff_id input field
+  // const staffIdInput = document.getElementById('staff_id');
+  // const staffIdSearchInput = document.getElementById('staff_id_search');
+  // const staffNameInput = document.getElementById('staff_name');
+  // const currentPhoneInput = document.getElementById('current_phone');
+  // const submitButton = document.querySelector('button[type="submit"]');
+  // const errorMessage = document.getElementById('errorMessage');
+
+  // // Initially disable the submit button
+  // submitButton.disabled = true;
+  // submitButton.style.backgroundColor = 'gray';
+
+  // // Add an event listener to detect when the user types in the staff_id input
+  // staffIdSearchInput.addEventListener('input', async () => {
+  //   const staffId = staffIdSearchInput.value;
+
+  //   // Only trigger the API call if the staff_id has exactly 8 characters
+  //   if (staffId.length === 8) {
+  //     try {
+  //       const response = await fetch('/staff/get-staff-details', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           staff_id: staffId
+  //         }),
+  //       });
+
+  //       const data = await response.json();
+
+  //       if (response.ok) {
+  //         // Show the staff details (you can adjust based on your UI structure)
+  //         console.log(data.staff);
+  //         // Populate the form fields with the fetched staff data
+  //         staffIdInput.value = data.staff.id || '';
+  //         staffNameInput.value = data.staff.staff_name || '';
+  //         currentPhoneInput.value = data.staff.ccdetails || '';
+
+  //         // Enable the submit button when valid staff_id is found
+  //         submitButton.disabled = false;
+  //         submitButton.style.backgroundColor = ''; // Indicate readiness to submit
+  //         errorMessage.style.display = 'none'; // Hide error message
+  //       } else {
+  //         // Show error if staff_id doesn't exist
+  //         alert(data.error);
+
+  //         // Disable the submit button if no valid staff found
+  //         submitButton.disabled = true;
+  //         // Show error message and disable button
+  //         submitButton.style.backgroundColor = 'gray'; // Reset button style
+  //         errorMessage.style.display = 'block'; // Display error message
+  //         errorMessage.textContent = 'Staff ID not found. Please check again.';
+  //       }
+  //     } catch (error) {
+  //       console.error('Error:', error);
+  //       alert('Something went wrong!');
+  //       // Disable the submit button in case of error
+  //       submitButton.disabled = true;
+  //     }
+  //   } else {
+  //     // If staff_id is not exactly 8 characters, disable the submit button
+  //     submitButton.disabled = true;
+  //     // Reset the form and error message if staff_id is invalid
+  //     submitButton.style.backgroundColor = 'gray'; // Reset button style
+  //     errorMessage.style.display = 'block'; // Show error message
+  //     errorMessage.textContent = 'Staff ID must be exactly 8 characters.';
+
+  //     staffIdInput.value = '';
+  //     staffNameInput.value = '';
+  //     currentPhoneInput.value = '';
+  //   }
+  // });
+
+
+
 
   document.addEventListener('DOMContentLoaded', function() {
   // Function to calculate and update the sum for a specific block

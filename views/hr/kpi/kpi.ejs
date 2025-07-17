@@ -111,22 +111,29 @@
                       <td><input type="text" id="kpi_text5" name="kpi_text5" value="sssss" required></td>
                     </tr>
                     <tr>
-                      <td>Employee Signature:
+                      <td>
+                        <label for="staff_sign">Employee’s Signature</label>
+                        <canvas id="staff_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                        <button type="button" id="clear-staff_sign">Clear</button>
+                        <input type="hidden" id="staff_sign" name="staff_sign">
+                      </td>
+                      <!-- <td>Employee Signature:
                         <label for="staff_sign">Employee’s Signature</label><br>
                         <canvas id="staff_sign" width="400" height="150" style="border:1px solid #333;"></canvas>
                         <input type="hidden" id="staff_sign_input" name="staff_sign_input">
-                        <!-- <canvas id="staff_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br>
-                        <input type="hidden" id="staff_sign_input" name="staff_sign_input"> -->
-                        <!-- <input type="hidden" id="staff_sign_input" name="staff_sign_input"> -->
+                      </td> -->
+
+                      <td>
+                        <label for="hod_sign">HOD/Supervisor Signature</label>
+                        <canvas id="hod_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                        <button type="button" id="clear-hod_sign">Clear</button>
+                        <input type="hidden" id="hod_sign" name="hod_sign">
                       </td>
-                      <td>HOD/Supervisor Signature:
+                      <!-- <td>HOD/Supervisor Signature:
                         <label for="hod_sign">HOD/Supervisor Signature</label><br>
                         <canvas id="hod_sign" width="400" height="150" style="border:1px solid #333;"></canvas>
                         <input type="hidden" id="hod_sign_input" name="hod_sign_input">
-                        <!-- <label for="hod_sign">HOD/Supervisor Signature</label>
-                        <canvas id="hod_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br>
-                        <input type="hidden" id="hod_sign_input" name="hod_sign_input"> -->
-                      </td>
+                      </td> -->
                     </tr>
                   </tbody>
                 </table>
@@ -351,39 +358,35 @@
             </div><br /><br />
             <div class="form-row">
               <div class="form-group">
-                <label for="hr_sign">HR’s Signature</label><br>
-                <canvas id="hr_sign" width="400" height="150" style="border:1px solid #333;"></canvas>
-                <input type="hidden" id="hr_sign_input" name="hr_sign_input">
-                <!-- <label for="hr_sign">HR signature</label>
-                <canvas id="hr_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br>
-                <input type="hidden" id="hr_sign_input" name="hr_sign_input"> -->
+                <label for="hr_sign">HR’s Signature</label>
+                <canvas id="hr_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                <button type="button" id="clear-hr_sign">Clear</button>
+                <input type="hidden" id="hr_sign" name="hr_sign">
               </div>
+
               <div class="form-group">
-                <label for="director_sign">Director’s Signature</label><br>
-                <canvas id="director_sign" width="400" height="150" style="border:1px solid #333;"></canvas>
-                <input type="hidden" id="director_sign_input" name="director_sign_input">
-                <!-- <label for="director_sign">Director</label>
-                <canvas id="director_sign" width="400" height="200" style="border: 1px solid black;"></canvas><br>
-                <input type="hidden" id="director_sign_input" name="director_sign_input"> -->
+                <label for="director_sign">Director’s Signature</label>
+                <canvas id="director_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                <button type="button" id="clear-director_sign">Clear</button>
+                <input type="hidden" id="director_sign" name="director_sign">
               </div>
+
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label for="staff_sign1">Employee’s Signature</label><br>
-                <canvas id="staff_sign1" width="400" height="150" style="border:1px solid #333;"></canvas>
-                <input type="hidden" id="staff_sign1_input" name="staff_sign1_input">
-                <!-- <label for="staff_sign1">Employee’s Signature</label>
-                <canvas id="staff_sign1" width="400" height="200" style="border: 1px solid black;"></canvas><br>
-                <input type="hidden" id="staff_sign1_input" name="staff_sign1_input"> -->
+                <label for="staff_sign1">Employee’s Signatur</label>
+                <canvas id="staff_sign1-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                <button type="button" id="clear-staff_sign1">Clear</button>
+                <input type="hidden" id="staff_sign1" name="staff_sign1">
               </div>
+
               <div class="form-group">
-                <label for="hod_sign1">HOD/Supervisor 2nd Signature</label><br>
-                <canvas id="hod_sign1" width="400" height="150" style="border:1px solid #333;"></canvas>
-                <input type="hidden" id="hod_sign1_input" name="hod_sign1_input">
-                <!-- <label for="hod_sign1">HOD/Supervisor Signature</label>
-                <canvas id="hod_sign1" width="400" height="200" style="border: 1px solid black;"></canvas><br>
-                <input type="hidden" id="hod_sign1_input" name="hod_sign1_input"> -->
+                <label for="hod_sign1">HOD/Supervisor 2nd Signature</label>
+                <canvas id="hod_sign1-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                <button type="button" id="clear-hod_sign1">Clear</button>
+                <input type="hidden" id="hod_sign1" name="hod_sign1">
               </div>
+
             </div>
             <div class="form-group">
               <button type="submit">Submit</button>
@@ -399,689 +402,257 @@
   </div>
 </div>
 </div>
-<script>
-  // Auto-fill name and department based on staff ID
-  document.getElementById('staff_id').addEventListener('change', async function () {
-    const staffId = this.value;
-    if (!staffId) {
-      document.getElementById('staff_name').value = '';
-      document.getElementById('department').value = '';
-      return;
-    }
-    try {
-      const res = await fetch('/staff/get-staff-details', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ staff_id: staffId })
-      });
-      const data = await res.json();
-      if (data.staff) {
-        document.getElementById('staff_name').value = data.staff.staff_name || '';
-        document.getElementById('current_phone').value = data.staff.staff_phone || '';
-        document.getElementById('department').value = data.staff.department || '';
-      } else {
-        alert('Staff not found');
-      }
-    } catch (err) {
-      console.error('Error fetching staff data:', err);
-    }
-  });
-
-  // Initialize a signature canvas
-  function initializeSignatureCanvas(canvasId) {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    let drawing = false, lastX = 0, lastY = 0;
-
-    function getPos(e) {
-      const rect = canvas.getBoundingClientRect();
-      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-      const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-      return { x, y };
-    }
-
-    ['mousedown','touchstart'].forEach(evt =>
-      canvas.addEventListener(evt, e => {
-        e.preventDefault();
-        drawing = true;
-        ({ x: lastX, y: lastY } = getPos(e));
-      })
-    );
-    ['mouseup','mouseout','touchend','touchcancel'].forEach(evt =>
-      canvas.addEventListener(evt, () => drawing = false)
-    );
-    ['mousemove','touchmove'].forEach(evt =>
-      canvas.addEventListener(evt, e => {
-        if (!drawing) return;
-        const { x, y } = getPos(e);
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        lastX = x; lastY = y;
-      })
-    );
-  }
-
-  // Sum block calculation logic (unchanged)
-  function updateSum(blockClass, sumClass) {
-    const inputs = document.querySelectorAll(`.${blockClass}`);
-    let sum = Array.from(inputs).reduce((acc, i) => acc + (parseFloat(i.value) || 0), 0);
-    document.querySelector(`.${sumClass}`).textContent = sum;
-    document.getElementById(sumClass).value = sum;
-    const totalAll = ['block1-sum','block2-sum','block3-sum']
-      .reduce((a, id) => a + (parseFloat(document.getElementById(id).value) || 0), 0);
-    document.getElementById('block-total').value = totalAll;
-    document.getElementById('block-total-display').textContent = totalAll;
-  }
-
+<!-- <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Wire up sum recalculation
+    // === Signature Setup Function ===
+    function setupSignature(canvasId, inputId, clearBtnId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const input = document.getElementById(inputId);
+      const clearBtn = document.getElementById(clearBtnId);
+
+      if (!canvas || !ctx || !input || !clearBtn) {
+        console.warn(`Missing element for ${canvasId}`);
+        return () => {};
+      }
+      let drawing = false;
+      let lastX = 0, lastY = 0;
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+        return { x, y };
+      }
+
+      ['mousedown', 'touchstart'].forEach(evt =>
+        canvas.addEventListener(evt, e => {
+          e.preventDefault();
+          drawing = true;
+          const { x, y } = getPos(e);
+          lastX = x;
+          lastY = y;
+        })
+      );
+
+      ['mouseup', 'mouseout', 'touchend', 'touchcancel'].forEach(evt =>
+        canvas.addEventListener(evt, () => drawing = false)
+      );
+
+      ['mousemove', 'touchmove'].forEach(evt =>
+        canvas.addEventListener(evt, e => {
+          if (!drawing) return;
+          const { x, y } = getPos(e);
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+          ctx.lineTo(x, y);
+          ctx.stroke();
+          lastX = x;
+          lastY = y;
+        })
+      );
+
+      clearBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        input.value = '';
+      });
+
+      return () => {
+        input.value = canvas.toDataURL();
+      };
+    }
+
+    // === Initialize All Signature Pads ===
+    window.saveStaffSign = setupSignature('staff_sign-pad', 'staff_sign', 'clear-staff_sign');
+    window.saveHodSign = setupSignature('hod_sign-pad', 'hod_sign', 'clear-hod_sign');
+    // window.saveHrSign = setupSignature('hr_sign-pad', 'hr_sign', 'clear-hr_sign');
+    // window.saveDirectorSign = setupSignature('director_sign-pad', 'director_sign', 'clear-director_sign');
+    // window.saveStaffSign1 = setupSignature('staff_sign1-pad', 'staff_sign1', 'clear-staff_sign1');
+    // window.saveHodSign1 = setupSignature('hod_sign1-pad', 'hod_sign1', 'clear-hod_sign1');
+
+    // === Sum Block Logic ===
+    function updateSum(blockClass, sumClass) {
+      const inputs = document.querySelectorAll(`.${blockClass}`);
+      let sum = Array.from(inputs).reduce((acc, i) => acc + (parseFloat(i.value) || 0), 0);
+      document.querySelector(`.${sumClass}`).textContent = sum;
+      document.getElementById(sumClass).value = sum;
+      const totalAll = ['block1-sum', 'block2-sum', 'block3-sum']
+        .reduce((a, id) => a + (parseFloat(document.getElementById(id)?.value) || 0), 0);
+      document.getElementById('block-total').value = totalAll;
+      document.getElementById('block-total-display').textContent = totalAll;
+    }
+
+    ['block1-input', 'block2-input', 'block3-input'].forEach((cls, i) => {
+      document.querySelectorAll(`.${cls}`).forEach(inp =>
+        inp.addEventListener('input', () => updateSum(cls, `block${i + 1}-sum`))
+      );
+    });
+    updateSum('block1-input', 'block1-sum');
+    updateSum('block2-input', 'block2-sum');
+    updateSum('block3-input', 'block3-sum');
+
+    // === Auto-fill staff name and department ===
+    document.getElementById('staff_id').addEventListener('change', async function () {
+      const staffId = this.value;
+      if (!staffId) {
+        document.getElementById('staff_name').value = '';
+        document.getElementById('department').value = '';
+        return;
+      }
+      try {
+        const res = await fetch('/staff/get-staff-details', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ staff_id: staffId })
+        });
+        const data = await res.json();
+        if (data.staff) {
+          document.getElementById('staff_name').value = data.staff.staff_name || '';
+          document.getElementById('current_phone').value = data.staff.staff_phone || '';
+          document.getElementById('department').value = data.staff.department || '';
+        } else {
+          alert('Staff not found');
+        }
+      } catch (err) {
+        console.error('Error fetching staff data:', err);
+      }
+    });
+
+    // === Submit Handler ===
+    const form = document.querySelector('form');
+    form.addEventListener('submit', e => {
+      if (window.saveHrSign) window.saveHrSign();
+      if (window.saveDirectorSign) window.saveDirectorSign();
+      // if (window.saveStaffSign1) window.saveStaffSign1();
+      // if (window.saveHodSign1) window.saveHodSign1();
+      // if(window.saveStaffSign) window.saveStaffSign();
+      // if( window.saveHodSign)  window.saveHodSign();
+    });
+  });
+</script> -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // === Signature Setup Function ===
+    function setupSignature(canvasId, inputId, clearBtnId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const input = document.getElementById(inputId);
+      const clearBtn = document.getElementById(clearBtnId);
+      if (!canvas || !ctx || !input || !clearBtn) return () => {};
+
+      let drawing = false, lastX = 0, lastY = 0;
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches && e.touches[0];
+        const x = ((touch ? touch.clientX : e.clientX) - rect.left);
+        const y = ((touch ? touch.clientY : e.clientY) - rect.top);
+        return { x, y };
+      }
+
+      ['mousedown','touchstart'].forEach(evt => {
+        canvas.addEventListener(evt, e => {
+          e.preventDefault();
+          drawing = true;
+          const pos = getPos(e);
+          lastX = pos.x;
+          lastY = pos.y;
+        });
+      });
+
+      ['mouseup','mouseout','touchend','touchcancel'].forEach(evt => {
+        canvas.addEventListener(evt, () => {
+          drawing = false;
+        });
+      });
+
+      ['mousemove','touchmove'].forEach(evt => {
+        canvas.addEventListener(evt, e => {
+          if (!drawing) return;
+          const pos = getPos(e);
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+          ctx.lineTo(pos.x, pos.y);
+          ctx.stroke();
+          lastX = pos.x;
+          lastY = pos.y;
+        });
+      });
+
+      clearBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        input.value = '';
+      });
+
+      return () => {
+        input.value = canvas.toDataURL();
+      };
+    }
+
+    // === Initialize Signature Pads ===
+    ['staff_sign','hod_sign','hr_sign','director_sign','staff_sign1','hod_sign1'].forEach(id => {
+      window['save_' + id] = setupSignature(
+        id + '-pad',   // canvas element ID
+        id,            // hidden input ID
+        'clear-' + id  // clear button ID
+      );
+    });
+
+    // === KPI Sum Logic (unchanged) ===
+    function updateSum(blockClass, sumClass) {
+      const inputs = document.querySelectorAll(`.${blockClass}`);
+      const sum = Array.from(inputs).reduce((acc, i) => acc + (parseFloat(i.value) || 0), 0);
+      document.querySelector(`.${sumClass}`).textContent = sum;
+      document.getElementById(sumClass).value = sum;
+      const total = ['block1-sum','block2-sum','block3-sum']
+        .reduce((t, id) => t + (parseFloat(document.getElementById(id).value) || 0), 0);
+      document.getElementById('block-total').value = total;
+      document.getElementById('block-total-display').textContent = total;
+    }
     ['block1-input','block2-input','block3-input'].forEach((cls,i) => {
       document.querySelectorAll(`.${cls}`).forEach(inp =>
         inp.addEventListener('input', () => updateSum(cls, `block${i+1}-sum`))
       );
     });
-    // Initial sums
+    // Initial calculation
     updateSum('block1-input','block1-sum');
     updateSum('block2-input','block2-sum');
     updateSum('block3-input','block3-sum');
 
-    // Initialize all signature canvases
-    ['staff_sign','hod_sign','hr_sign','director_sign','staff_sign1','hod_sign1']
-      .forEach(initializeSignatureCanvas);
+    // === Auto-fill Staff Details ===
+    document.getElementById('staff_id').addEventListener('change', async function() {
+      const id = this.value;
+      ['staff_name','current_phone','department'].forEach(f => {
+        const el = document.getElementById(f);
+        if (el) el.value = '';
+      });
+      if (!id) return;
+      try {
+        const res = await fetch('/staff/get-staff-details', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ staff_id: id })
+        });
+        const data = await res.json();
+        if (data.staff) {
+          document.getElementById('staff_name').value = data.staff.staff_name || '';
+          document.getElementById('current_phone').value = data.staff.staff_phone || '';
+          document.getElementById('department').value = data.staff.department || '';
+        }
+      } catch(err) {
+        console.error('Error fetching staff details:', err);
+      }
+    });
 
-    // Single submit handler
+    // === Form Submit: capture signatures ===
     const form = document.querySelector('form');
     form.addEventListener('submit', e => {
-      e.preventDefault();
-
-      // Copy each canvas → hidden input
-      ['staff_sign','hod_sign','hr_sign','director_sign','staff_sign1','hod_sign1']
-        .forEach(id => {
-          const canvas = document.getElementById(id);
-          const input  = document.getElementById(`${id}_input`);
-          if (canvas && input) {
-            input.value = canvas.toDataURL();
-          } else {
-            console.warn(`Missing #${id} or #${id}_input`);
-          }
-        });
-
-      // (Optional) inspect in console:
-      console.log('staff_sign_input:', document.getElementById('staff_sign_input').value.substring(0,30));
-
-      form.submit();
+      ['staff_sign','hod_sign','hr_sign','director_sign','staff_sign1','hod_sign1'].forEach(id => {
+        window['save_' + id]?.();
+      });
+      // allow normal submission (hidden inputs now hold dataURL strings)
     });
   });
 </script>
 
-<!-- <script>
-  // Auto-fill name and department based on staff ID
-  document.getElementById('staff_id').addEventListener('change', async function () {
-    const staffId = this.value;
-    if (!staffId) {
-      document.getElementById('staff_name').value = '';
-      document.getElementById('department').value = '';
-      return;
-    }
-
-    try {
-      const res = await fetch('/staff/get-staff-details', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ staff_id: staffId })
-      });
-
-      const data = await res.json();
-
-      if (data.staff) {
-        document.getElementById('staff_name').value = data.staff.staff_name || '';
-        document.getElementById('department').value = data.staff.department || '';
-      } else {
-        alert('Staff not found');
-      }
-    } catch (err) {
-      console.error('Error fetching staff data:', err);
-    }
-  });
-
-  // Initialize signature canvas
-  function initializeSignatureCanvas(canvasId, inputId) {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
-    let lastX = 0, lastY = 0;
-
-    function getPosition(e) {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.touches ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-      const y = e.touches ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
-      return { x, y };
-    }
-
-    canvas.addEventListener('mousedown', (e) => {
-      drawing = true;
-      ({ x: lastX, y: lastY } = getPosition(e));
-    });
-    canvas.addEventListener('mouseup', () => drawing = false);
-    canvas.addEventListener('mousemove', (e) => {
-      if (drawing) {
-        const { x, y } = getPosition(e);
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        lastX = x;
-        lastY = y;
-      }
-    });
-
-    canvas.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      drawing = true;
-      ({ x: lastX, y: lastY } = getPosition(e));
-    });
-    canvas.addEventListener('touchmove', (e) => {
-      if (drawing) {
-        const { x, y } = getPosition(e);
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        lastX = x;
-        lastY = y;
-      }
-    });
-    canvas.addEventListener('touchend', () => drawing = false);
-  }
-
-  // Set base64 signature values and submit form
-  function handleFormSubmit(event) {
-    const form = document.querySelector('form');
-
-    // Collect signature base64 and assign to hidden inputs
-    ['staff_sign', 'hod_sign', 'hr_sign', 'director_sign', 'staff_sign1', 'hod_sign1'].forEach(id => {
-      const canvas = document.getElementById(id);
-      const input = document.getElementById(`${id}_input`);
-      if (canvas && input) {
-        input.value = canvas.toDataURL();
-      }
-    });
-
-    // Debug: Show trimmed base64 output
-    console.log('Signature base64 sample:', {
-      staff_sign: document.getElementById('staff_sign_input').value?.substring(0, 30),
-      hod_sign: document.getElementById('hod_sign_input').value?.substring(0, 30),
-    });
-
-    form.submit(); // ✅ Safe to submit
-  }
-
-  // Sum block calculation logic
-  function updateSum(blockClass, sumClass, callback) {
-    const inputs = document.querySelectorAll(`.${blockClass}`);
-    const totalDisplay = document.querySelector(`.${sumClass}`);
-    const totalInput = document.querySelector(`#${sumClass}`);
-    const totalAllInput = document.querySelector('#block-total');
-    const totalAllDisplay = document.querySelector('#block-total-display');
-
-    let sum = 0;
-    inputs.forEach(input => sum += parseFloat(input.value) || 0);
-
-    totalDisplay.textContent = sum;
-    totalInput.value = sum;
-
-    const totalAll = ['block1-sum', 'block2-sum', 'block3-sum']
-      .map(id => parseFloat(document.querySelector(`#${id}`)?.value) || 0)
-      .reduce((a, b) => a + b, 0);
-
-    totalAllInput.value = totalAll;
-    totalAllDisplay.textContent = totalAll;
-
-    if (typeof callback === 'function') callback();
-  }
-
-  // DOM Ready logic
-  document.addEventListener('DOMContentLoaded', function () {
-    const staffIdInput = document.getElementById('staff_id');
-    const staffIdSearchInput = document.getElementById('staff_id_search');
-    const staffNameInput = document.getElementById('staff_name');
-    const currentPhoneInput = document.getElementById('current_phone');
-    const submitButton = document.querySelector('button[type="submit"]');
-    const errorMessage = document.getElementById('errorMessage');
-
-    // Disable submit initially
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.style.backgroundColor = 'gray';
-    }
-
-    if (staffIdSearchInput) {
-      staffIdSearchInput.addEventListener('input', async () => {
-        const staffId = staffIdSearchInput.value;
-
-        if (staffId.length === 8) {
-          try {
-            const response = await fetch('/staff/get-staff-details', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ staff_id: staffId })
-            });
-
-            const data = await response.json();
-
-            if (response.ok && data.staff) {
-              staffIdInput.value = data.staff.id || '';
-              staffNameInput.value = data.staff.staff_name || '';
-              currentPhoneInput.value = data.staff.ccdetails || '';
-              submitButton.disabled = false;
-              submitButton.style.backgroundColor = '';
-              errorMessage.style.display = 'none';
-            } else {
-              alert(data.error || 'Staff not found');
-              submitButton.disabled = true;
-              errorMessage.style.display = 'block';
-              errorMessage.textContent = 'Staff ID not found. Please check again.';
-            }
-          } catch (error) {
-            console.error('Fetch error:', error);
-            alert('Server error');
-            submitButton.disabled = true;
-          }
-        } else {
-          submitButton.disabled = true;
-          errorMessage.style.display = 'block';
-          errorMessage.textContent = 'Staff ID must be exactly 8 characters.';
-          staffIdInput.value = '';
-          staffNameInput.value = '';
-          currentPhoneInput.value = '';
-        }
-      });
-    }
-
-    // Recalculate KPI blocks on input
-    ['block1-input', 'block2-input', 'block3-input'].forEach((cls, i) => {
-      document.querySelectorAll(`.${cls}`).forEach(input => {
-        input.addEventListener('input', () => updateSum(cls, `block${i + 1}-sum`));
-      });
-    });
-
-    // Initial sum calculation
-    updateSum('block1-input', 'block1-sum');
-    updateSum('block2-input', 'block2-sum');
-    updateSum('block3-input', 'block3-sum');
-
-    // Setup signature canvases
-    initializeSignatureCanvas('staff_sign', 'staff_sign_input');
-    initializeSignatureCanvas('hod_sign', 'hod_sign_input');
-    initializeSignatureCanvas('hr_sign', 'hr_sign_input');
-    initializeSignatureCanvas('director_sign', 'director_sign_input');
-    initializeSignatureCanvas('staff_sign1', 'staff_sign1_input');
-    initializeSignatureCanvas('hod_sign1', 'hod_sign1_input');
-
-    // Final form submit trigger
-    const form = document.querySelector('form');
-    form.addEventListener('submit', (event) => {
-      event.preventDefault(); // stop default
-      updateSum('block1-input', 'block1-sum', () => {
-        updateSum('block2-input', 'block2-sum', () => {
-          updateSum('block3-input', 'block3-sum', () => {
-            console.log('staff_sign canvas:', document.getElementById('staff_sign'));
-console.log('staff_sign_input before set:', document.getElementById('staff_sign_input').value);
-console.log('staff_sign base64:', document.getElementById('staff_sign').toDataURL().substring(0, 100));
-
-            handleFormSubmit(event);
-          });
-        });
-      });
-    });
-  });
-</script> -->
-
-
-<!-- <script>
- document.getElementById('staff_id').addEventListener('change', async function () {
-    const staffId = this.value;
-    if (!staffId) {
-      document.getElementById('staff_name').value = '';
-      document.getElementById('department').value = '';
-      document.getElementById('job_title').value = '';
-      return;
-    }
-  
-    try {
-      const res = await fetch('/staff/get-staff-details', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ staff_id: staffId })
-      });
-  
-      const data = await res.json();
-  
-      if (data.staff) {
-        document.getElementById('staff_name').value = data.staff.staff_name || '';
-        document.getElementById('department').value = data.staff.department || '';
-        document.getElementById('job_title').value = data.staff.job_title || '';
-      } else {
-        alert('Staff not found');
-      }
-    } catch (err) {
-      console.error('Error fetching staff data:', err);
-      // alert('Server error occurred.');
-    }
-  });
-
-
-  // Function to initialize the canvas drawing behavior
-  function initializeSignatureCanvas(canvasId, inputId) {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
-    let lastX = 0;
-    let lastY = 0;
-
-    // Function to get the position of the pointer (mouse or touch)
-    function getPosition(event) {
-      const rect = canvas.getBoundingClientRect();
-      const x = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
-      const y = event.touches ? event.touches[0].clientY - rect.top : event.clientY - rect.top;
-      return {
-        x,
-        y
-      };
-    }
-
-    // Start drawing when mouse is pressed or touch starts
-    canvas.addEventListener('mousedown', (event) => {
-      drawing = true;
-
-      // Get the mouse position relative to the canvas
-      // const rect = canvas.getBoundingClientRect();
-      // lastX = event.clientX - rect.left;
-      // lastY = event.clientY - rect.top;
-      const {
-        x,
-        y
-      } = getPosition(event);
-      lastX = x;
-      lastY = y;
-    });
-    // Start drawing on touch start (mobile/tablets)
-    canvas.addEventListener('touchstart', (event) => {
-      event.preventDefault(); // Prevents the default touch action (scrolling)
-      drawing = true;
-      const {
-        x,
-        y
-      } = getPosition(event);
-      lastX = x;
-      lastY = y;
-    });
-
-    // Stop drawing when mouse is released or touch ends
-    canvas.addEventListener('mouseup', () => {
-      drawing = false;
-    });
-    // Stop drawing on touch end
-    canvas.addEventListener('touchend', () => {
-      drawing = false;
-    });
-
-    // Draw on canvas when mouse is moved or touch moves and drawing is true
-    canvas.addEventListener('mousemove', (event) => {
-      if (drawing) {
-        // const rect = canvas.getBoundingClientRect();
-        // const x = event.clientX - rect.left;
-        // const y = event.clientY - rect.top;
-        const {
-          x,
-          y
-        } = getPosition(event);
-
-        // Draw a line from the last position to the current position
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-
-        lastX = x; // Update lastX to the current position
-        lastY = y; // Update lastY to the current position
-      }
-    });
-    // Draw on canvas when touch moves
-    canvas.addEventListener('touchmove', (event) => {
-      if (drawing) {
-        const {
-          x,
-          y
-        } = getPosition(event);
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-
-        lastX = x;
-        lastY = y;
-      }
-    });
-  }
-
-  // Function to handle form submission
-  function handleFormSubmit(event) {
-    // Get the canvas data for each signature field
-    const staffSignData = document.getElementById('staff_sign').toDataURL();
-    const hodSignData = document.getElementById('hod_sign').toDataURL();
-    const hrSignData = document.getElementById('hr_sign').toDataURL();
-    const directorSignData = document.getElementById('director_sign').toDataURL();
-    const staffSign1Data = document.getElementById('staff_sign1').toDataURL();
-    const hodSign1Data = document.getElementById('hod_sign1').toDataURL();
-
-    // Set the hidden input fields with the canvas data
-    document.getElementById('staff_sign_input').value = staffSignData;
-    document.getElementById('hod_sign_input').value = hodSignData;
-    document.getElementById('hr_sign_input').value = hrSignData;
-    document.getElementById('director_sign_input').value = directorSignData;
-    document.getElementById('staff_sign1_input').value = staffSign1Data;
-    document.getElementById('hod_sign1_input').value = hodSign1Data;
-
-    // console.log('Form data:', {
-    //   staffSignData,
-    //   hodSignData,
-    //   hrSignData,
-    //   directorSignData,
-    //   staffSign1Data,
-    //   hodSign1Data
-    // });
-
-    // Proceed with the form submission after populating the signature data
-    // If you're submitting with AJAX, prevent the default behavior
-    // event.preventDefault(); // Only needed for AJAX submission
-    document.querySelector('form').submit(); // Submit the form after setting the hidden inputs
-  }
-
-  // Initialize all signature canvases
-  window.onload = function() {
-    // Initialize signature canvases
-    initializeSignatureCanvas('staff_sign', 'staff_sign_input');
-    initializeSignatureCanvas('hod_sign', 'hod_sign_input');
-    initializeSignatureCanvas('hr_sign', 'hr_sign_input');
-    initializeSignatureCanvas('director_sign', 'director_sign_input');
-    initializeSignatureCanvas('staff_sign1', 'staff_sign1_input');
-    initializeSignatureCanvas('hod_sign1', 'hod_sign1_input');
-
-    // Add submit event listener to the form
-    document.querySelector('form').addEventListener('submit', (event) => {
-      event.preventDefault(); // Prevent form submission for manual handling
-
-      handleFormSubmit(event); // Handle form submission after populating signature fields
-
-      // Optionally, submit the form via AJAX if you're not doing a regular form post
-      // form.submit(); // Or manually trigger the form submission after handling signatures
-    });
-  };
-
-
-
-
-  // Select the staff_id input field
-  const staffIdInput = document.getElementById('staff_id');
-  const staffIdSearchInput = document.getElementById('staff_id_search');
-  const staffNameInput = document.getElementById('staff_name');
-  const currentPhoneInput = document.getElementById('current_phone');
-  const submitButton = document.querySelector('button[type="submit"]');
-  const errorMessage = document.getElementById('errorMessage');
-
-  // Initially disable the submit button
-  submitButton.disabled = true;
-  submitButton.style.backgroundColor = 'gray';
-
-  // Add an event listener to detect when the user types in the staff_id input
-  staffIdSearchInput.addEventListener('input', async () => {
-    const staffId = staffIdSearchInput.value;
-
-    // Only trigger the API call if the staff_id has exactly 8 characters
-    if (staffId.length === 8) {
-      try {
-        const response = await fetch('/staff/get-staff-details', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            staff_id: staffId
-          }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          // Show the staff details (you can adjust based on your UI structure)
-          console.log(data.staff);
-          // Populate the form fields with the fetched staff data
-          staffIdInput.value = data.staff.id || '';
-          staffNameInput.value = data.staff.staff_name || '';
-          currentPhoneInput.value = data.staff.ccdetails || '';
-
-          // Enable the submit button when valid staff_id is found
-          submitButton.disabled = false;
-          submitButton.style.backgroundColor = ''; // Indicate readiness to submit
-          errorMessage.style.display = 'none'; // Hide error message
-        } else {
-          // Show error if staff_id doesn't exist
-          alert(data.error);
-
-          // Disable the submit button if no valid staff found
-          submitButton.disabled = true;
-          // Show error message and disable button
-          submitButton.style.backgroundColor = 'gray'; // Reset button style
-          errorMessage.style.display = 'block'; // Display error message
-          errorMessage.textContent = 'Staff ID not found. Please check again.';
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('Something went wrong!');
-        // Disable the submit button in case of error
-        submitButton.disabled = true;
-      }
-    } else {
-      // If staff_id is not exactly 8 characters, disable the submit button
-      submitButton.disabled = true;
-      // Reset the form and error message if staff_id is invalid
-      submitButton.style.backgroundColor = 'gray'; // Reset button style
-      errorMessage.style.display = 'block'; // Show error message
-      errorMessage.textContent = 'Staff ID must be exactly 8 characters.';
-
-      staffIdInput.value = '';
-      staffNameInput.value = '';
-      currentPhoneInput.value = '';
-    }
-  });
-
-
-
-
-  document.addEventListener('DOMContentLoaded', function() {
-  // Function to calculate and update the sum for a specific block
-  function updateSum(blockClass, sumClass) {
-    const inputs = document.querySelectorAll(`.${blockClass}`);
-    const totalDisplay = document.querySelector(`.${sumClass}`);
-    const totalDisplayInTxt = document.querySelector(`#${sumClass}`);
-    const allTotalDisplayInTxt = document.querySelector('#block-total');
-    const totalDisplayElement = document.querySelector('#block-total-display');
-
-    if (!totalDisplay || !totalDisplayInTxt || !allTotalDisplayInTxt || !totalDisplayElement) {
-        console.error('One or more elements are missing!');
-        return;  // Prevent errors if elements don't exist
-    }
-
-    let total = 0;
-
-    // Loop through the inputs in the block and calculate the total sum
-    inputs.forEach(input => {
-      total += parseFloat(input.value) || 0;  // Handle invalid inputs by using 0 as fallback
-    });
-
-    // Update the sum in the designated span
-    totalDisplay.textContent = total;
-    totalDisplayInTxt.value = total;
-    
-    // Log the individual block total
-    console.log(`Total for block: ${total}`);
-
-    // Update the total of all `totalDisplayInTxt` values (block1-sum, block2-sum, block3-sum)
-    const allTotal = [
-        document.querySelector('#block1-sum'),
-        document.querySelector('#block2-sum'),
-        document.querySelector('#block3-sum')
-    ].reduce((acc, sumElement) => acc + (parseFloat(sumElement.value) || 0), 0);
-
-    // Log the sum of all blocks
-    console.log(`All total: ${allTotal}`);
-
-    // Update the overall total in #block-total
-    // Force a reflow by resetting and updating the value
-    allTotalDisplayInTxt.value = '';  // Reset first
-    allTotalDisplayInTxt.value = allTotal;  // Update with the total
-
-    // Update the displayed total
-    totalDisplayElement.textContent = allTotal;  // Update span with total
-    console.log(`Updated block-total: ${allTotalDisplayInTxt.value}`);
-  }
-
-  // Add event listeners to input fields in each block to update the sum dynamically
-  document.querySelectorAll('.block1-input').forEach(input => {
-    input.addEventListener('input', () => updateSum('block1-input', 'block1-sum'));
-  });
-  
-  document.querySelectorAll('.block2-input').forEach(input => {
-    input.addEventListener('input', () => updateSum('block2-input', 'block2-sum'));
-  });
-
-  document.querySelectorAll('.block3-input').forEach(input => {
-    input.addEventListener('input', () => updateSum('block3-input', 'block3-sum'));
-  });
-
-  // Call the updateSum function once on page load for each block
-  updateSum('block1-input', 'block1-sum');
-  updateSum('block2-input', 'block2-sum');
-  updateSum('block3-input', 'block3-sum');
-});
-document.querySelector('form').addEventListener('submit', (event) => {
-  event.preventDefault(); // Prevent immediate submission
-
-  // ✅ Recalculate and update all sum fields
-  updateSum('block1-input', 'block1-sum');
-  updateSum('block2-input', 'block2-sum');
-  updateSum('block3-input', 'block3-sum');
-
-  // ✅ You may also want to revalidate or clean signatures here
-  handleFormSubmit(event); // (if it populates signature fields)
-
-  // ✅ Submit the form manually after all values are set
-  event.target.submit(); // ✅ This line is required
-});
-
-</script> -->
 
 <%- include('../../partials/footer') %>

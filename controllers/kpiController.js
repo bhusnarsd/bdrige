@@ -51,51 +51,55 @@ exports.kpiList = async (req, res) => {
 };
 
 function parseDate(val) {
-  if (!val) return null;                 // empty string or undefined → null
+  if (!val) return null;
   const d = new Date(val);
-  return isNaN(d.getTime()) ? null : d;  // invalid → null, valid → Date
+  return isNaN(d.getTime()) ? null : d;
 }
+
+
 exports.kpiCreate = async (req, res) => {
-  console.log('req.body >>>', JSON.stringify(req.body));
-
-  // Destructure form fields
-  const { staff_id, kpi_date, department, e_period, kpi_text1, kpi_text2, kpi_text3, kpi_text4, kpi_text5,
-          rating_scale, trg1_art, trg1_rwad, trg1_rws, trg1_mbc, trg1_ppc, trg1_sum,
-          trg2_pos, trg2_sft, trg2_ccapc, trg2_caos, trg2_ps, trg2_counslng, trg2_sum,
-          trg3_cs, trg3_dm, trg3_init, trg3_cp, trg3_gps, trg3_tw, trg3_sum,
-          sasndtq1, sasndtq2, sasndtq3, sasndtq4, sasndtq5, sasndtq6,
-          trg_total, ps_scale } = req.body;
-
-          const safeKpiDate       = parseDate(req.body.kpi_date);
-          const safeDeadlineDate  = parseDate(req.body.deadline_date);
-          const safeAppropriate   = parseDate(req.body.appropriate_date);
-  // Canvas signature fields
-  const images = [
-    { field: 'hr_sign', input: 'hr_sign_input', filename: 'hrSignature' },
-    { field: 'staff_sign', input: 'staff_sign_input', filename: 'staffSignature' },
-    { field: 'hod_sign', input: 'hod_sign_input', filename: 'hodSignature' },
-    { field: 'director_sign', input: 'director_sign_input', filename: 'directorSignature' },
-    { field: 'staff_sign1', input: 'staff_sign1_input', filename: 'staffSignature1' },
-    { field: 'hod_sign1', input: 'hod_sign1_input', filename: 'hodSignature1' }
-  ];
-
   try {
-    // Process base64 images
+    console.log('req.body >>>', JSON.stringify(req.body));
+
+    const {
+      staff_id, kpi_date, department, e_period,
+      kpi_text1, kpi_text2, kpi_text3, kpi_text4, kpi_text5,
+      rating_scale, trg1_art, trg1_rwad, trg1_rws, trg1_mbc, trg1_ppc, trg1_sum,
+      trg2_pos, trg2_sft, trg2_ccapc, trg2_caos, trg2_ps, trg2_counslng, trg2_sum,
+      trg3_cs, trg3_dm, trg3_init, trg3_cp, trg3_gps, trg3_tw, trg3_sum,
+      sasndtq1, sasndtq2, sasndtq3, sasndtq4, sasndtq5, sasndtq6,
+      trg_total, ps_scale,
+      staff_name, current_phone
+    } = req.body;
+
+    const safeKpiDate = parseDate(kpi_date);
+    const safeDeadlineDate = parseDate(req.body.deadline_date);
+    const safeAppropriateDate = parseDate(req.body.appropriate_date);
+
+    const signatureFields = [
+      { name: 'staff_sign', filename: 'Staff' },
+      { name: 'hod_sign', filename: 'HOD' },
+      { name: 'hr_sign', filename: 'HR' },
+      { name: 'director_sign', filename: 'Director' },
+      { name: 'staff_sign1', filename: 'Staff1' },
+      { name: 'hod_sign1', filename: 'HOD1' },
+    ];
+
     const imagePaths = {};
-    for (const img of images) {
-      const dataUrl = req.body[img.input];
-      if (dataUrl) {
+
+    for (const sig of signatureFields) {
+      const dataUrl = req.body[sig.name];
+      if (dataUrl && dataUrl.startsWith('data:image')) {
         const buffer = Buffer.from(dataUrl.split(',')[1], 'base64');
         const signatureDir = path.join(__dirname, '..', 'public', 'uploads', 'signatures', 'kpi');
         fs.mkdirSync(signatureDir, { recursive: true });
-        const imageName = `${Date.now()}-${img.filename}.png`;
-        const filePath = path.join(signatureDir, imageName);
+        const fileName = `${Date.now()}-${sig.filename}.png`;
+        const filePath = path.join(signatureDir, fileName);
         fs.writeFileSync(filePath, buffer);
-        imagePaths[img.field] = filePath;
+        imagePaths[sig.name] = `/uploads/signatures/kpi/${fileName}`;
       }
     }
 
-    // Create DB record
     const newKpi = await Kpi.create({
       staff_id, kpi_date: safeKpiDate, department, e_period,
       kpi_text1, kpi_text2, kpi_text3, kpi_text4, kpi_text5,
@@ -105,57 +109,53 @@ exports.kpiCreate = async (req, res) => {
       sasndtq1, sasndtq2, sasndtq3, sasndtq4, sasndtq5, sasndtq6,
       trg_total, ps_scale,
       deadline_date: safeDeadlineDate,
-      appropriate_date: safeAppropriate,
-      hr_sign: imagePaths.hr_sign || null,
+      appropriate_date: safeAppropriateDate,
       staff_sign: imagePaths.staff_sign || null,
       hod_sign: imagePaths.hod_sign || null,
+      hr_sign: imagePaths.hr_sign || null,
       director_sign: imagePaths.director_sign || null,
       staff_sign1: imagePaths.staff_sign1 || null,
       hod_sign1: imagePaths.hod_sign1 || null
     });
 
-    // Fetch details for template
     const kpiDetails = await getKpiDetails(newKpi.id);
+
     const StaffDetail = kpiDetails.StaffDetail || {
       staff_id,
-      staff_name: req.body.staff_name || '',
-      staff_ccdetails: req.body.current_phone || ''
+      staff_name: staff_name || '',
+      staff_ccdetails: current_phone || ''
     };
 
-    // Render EJS to HTML
     const templateData = {
       ...kpiDetails,
       StaffDetail,
       department,
       e_period,
-      ...Object.fromEntries(Object.entries(imagePaths).map(([field, p]) => [field, `/uploads/signatures/kpi/${path.basename(p)}`]))
+      ...imagePaths
     };
+
     const html = await ejs.renderFile(
       path.join(__dirname, '..', 'views', 'hr', 'kpi', 'kpi_template.ejs'),
       templateData
     );
 
-    // Launch Puppeteer with bundled Chromium
     const browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       executablePath: puppeteer.executablePath()
     });
+
     const page = await browser.newPage();
     await page.setContent(html);
-
-    // Generate PDF buffer
     const pdfBuffer = await page.pdf({ format: 'A4' });
     await browser.close();
 
-    // Write PDF to disk
     const pdfDir = path.join(__dirname, '..', 'public', 'uploads', 'kpi');
     fs.mkdirSync(pdfDir, { recursive: true });
     const pdfName = `kpi_${Date.now()}.pdf`;
     const pdfPath = path.join(pdfDir, pdfName);
     fs.writeFileSync(pdfPath, pdfBuffer);
 
-    // Save PDF path in DB
     await newKpi.update({ pdf_path: `/uploads/kpi/${pdfName}` });
 
     req.flash('success', 'KPI added successfully.');
@@ -173,12 +173,12 @@ const getKpiDetails = async (kpiId) => {
     where: { id: kpiId },
     include: [{
       model: StaffDetails,
-      as: 'StaffDetail',  // ✅ Must match the alias in association
+      as: 'StaffDetail',
       attributes: ['id', 'staff_id', 'staff_name', 'ccdetails']
     }]
   });
 
-  
+
   if (kpiData) {
     const data = kpiData.get({ plain: true });
 
@@ -199,50 +199,6 @@ const getKpiDetails = async (kpiId) => {
   }
   return null;
 };
-
-// const getKpiDetails = async (kpiId) => {
-//   const kpiData = await kpi.findOne({
-//     where: { id: kpiId },
-//     include: [{
-//       model: staffDetails,   // Assuming the name of the staff model is `staffDetails`
-//       attributes: ['staff_name', 'staff_id', 'ccdetails'], // Specify the columns you want
-//     }],
-//   });
-
-//   if (kpiData) {
-//     // Get the raw object data
-//     const data = kpiData.get({ plain: true });
-
-//     // Format kpi_date to 'YYYY-MM-DD' if it's a Date object or ISO string
-//     if (data.kpi_date) {
-//       data.kpi_date = new Date(data.kpi_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-//     }
-
-//     // Convert the staff_sign path to use forward slashes and make sure it's accessible via URL
-//     if (data.staff_sign) {
-//       data.staff_sign = data.staff_sign.replace(/\\/g, '/').replace('public', '');
-//     }
-//     if (data.hod_sign) {
-//       data.hod_sign = data.hod_sign.replace(/\\/g, '/').replace('public', '');
-//     }
-//     if (data.hr_sign) {
-//       data.hr_sign = data.hr_sign.replace(/\\/g, '/').replace('public', '');
-//     }
-//     if (data.director_sign) {
-//       data.director_sign = data.director_sign.replace(/\\/g, '/').replace('public', '');
-//     }
-//     if (data.staff_sign1) {
-//       data.staff_sign1 = data.staff_sign1.replace(/\\/g, '/').replace('public', '');
-//     }
-//     if (data.hod_sign1) {
-//       data.hod_sign1 = data.hod_sign1.replace(/\\/g, '/').replace('public', '');
-//     }
-
-//     return data;
-//   }
-//   return null;
-// };
-
 exports.editKpi = async (req, res) => {
   const { id } = req.params;
   try {
@@ -300,6 +256,9 @@ exports.kpiUpdate = async (req, res) => {
   // Combine cleaned fields and files
   const dataToUpdate = { ...cleanedFields };
 
+  // Prevent overwriting staff_id if not intended
+  delete dataToUpdate.staff_id;
+
   if (Object.keys(dataToUpdate).length === 0) {
     req.flash('error', 'No data provided for update.');
     return res.render('hr/kpi/editKpi', {
@@ -327,13 +286,18 @@ exports.kpiUpdate = async (req, res) => {
     }
 
     const kpiDetails = await getKpiDetails(id);
-
+    const StaffDetail = kpiDetails.StaffDetail || {
+      staff_id: fieldsToUpdate.staff_id || '',
+      staff_name: fieldsToUpdate.staff_name || '',
+      staff_ccdetails: fieldsToUpdate.current_phone || ''
+    };
     // Path to your EJS template file
     const ejsTemplatePath = path.join(__dirname, '..', 'views', 'hr', 'kpi', 'kpi_template.ejs');
 
     // Prepare data to pass to the template
     const templateData = {
       ...kpiDetails,
+      StaffDetail,
       hr_sign: `http://localhost:3000/uploads/signatures/kpi/${path.basename(kpiDetails.hr_sign)}`,
       staff_sign: `http://localhost:3000/uploads/signatures/kpi/${path.basename(kpiDetails.staff_sign)}`,
       hod_sign: `http://localhost:3000/uploads/signatures/kpi/${path.basename(kpiDetails.hod_sign)}`,
@@ -370,7 +334,10 @@ exports.kpiUpdate = async (req, res) => {
     // Example: storing the path in the database
     try {
       console.log('pdfFileName >> ', pdfFileName)
-      await Kpi.update({ pdf_path: `public/uploads/kpi/${pdfFileName}` });
+      await Kpi.update(
+        { pdf_path: `/uploads/kpi/${pdfFileName}` },
+        { where: { id } }
+      );
     } catch (error) {
       console.error("Error updating PDF path:", error);
     }
@@ -403,7 +370,7 @@ exports.kpiUpdate = async (req, res) => {
 
 exports.renderKPICreatePage = async (req, res) => {
   try {
-    const staffList = await StaffDetails.findAll({ where: { is_deleted: false }});
+    const staffList = await StaffDetails.findAll({ where: { is_deleted: false } });
 
     const messages = req.flash(); // ✅ only if using connect-flash
 
