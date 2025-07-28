@@ -1,0 +1,701 @@
+<%- include('../../partials/header') %>
+<div class="container">
+  <%- include('../../partials/left-panel') %>
+  <div class="right-panel">
+    <div class="content-area">
+      <% if (typeof errorMessage !=='undefined' && errorMessage) { %>
+        <div style="color: red; margin-bottom: 20px;"><%= errorMessage %></div>
+      <% } %>
+      <% if (typeof successMessage !=='undefined' && successMessage) { %>
+        <div style="color: green; margin-bottom: 20px;"><%= successMessage %></div>
+      <% } %>
+      <div class="breadcrumbs">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/staff">Staff</a></li>
+          <li>Edit Induction Program</li>
+        </ul>
+      </div>
+      <div class="form-area">
+        <h2>Edit Staff Induction Program</h2>
+        <div class="form-box">
+          <form action="/hr/sip/edit/<%= induction.id %>" method="POST">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="staff_id">Unique id:</label>
+                    <input type="text" id="staff_id" name="staff_id" value="<%= induction.StaffDetail ? induction.StaffDetail.staff_id : '' %>" readonly>
+                    <!-- <input type="hidden" id="staff_id" name="staff_id" value="<%= induction.StaffDetail ? induction.StaffDetail.id : '' %>"> -->
+                  </div>
+ 
+              <div class="form-group">
+                <label for="staff_name">Employee Name</label>
+                <input type="text" id="staff_name" name="staff_name" value="<%=  induction.StaffDetail ? induction.StaffDetail.staff_name : ''%>" readonly>
+              </div>
+            </div>
+            <div class="form-row"> 
+              <div class="form-group">
+                <label for="dept">Department</label>
+                <select id="dept" name="dept" required>
+                  <option value="">-- Select Department --</option>
+                  <% let departments = [
+                    "Clinic Manager", "Speech Therapist", "OT", "Physiotherapist", "ABA",
+                    "ABA Supervisor", "Psychologist", "Intern-Speech Therapist", "Light Vehicle Driver",
+                    "Cleaner", "Admin", "Driver", "Marketing Executive", "Marketing Manager"
+                  ]; %>
+                  <% departments.forEach(dep => { %>
+                    <option value="<%= dep %>" <%= dep === induction.dept ? 'selected' : '' %>><%= dep %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="job_title">Job Title</label>
+                <input type="text" id="job_title" name="job_title" value="<%= induction.job_title %>" required>
+              </div>
+            </div>
+
+            <p>This is a checklist of information for Induction...</p>
+            <h2>ITEMS TO COVER WITH EACH NEW EMPLOYEE</h2>
+            <div class="content">
+              <div class="tablewrapper">
+                <div class="table-responsive">
+                  <table class="table table-condensed table-striped">
+                    <thead class="tablehead">
+                      <tr>
+                        <th>The Department</th>
+                        <th>Complete/ Incomplete</th>
+                      </tr>
+                    </thead>
+                    <tbody class="tablebody">
+                      <!-- Checklist Example - repeat for all checklist items -->
+                      <tr>
+                        <td>1.Department function</td>
+                        <td>
+                          <div class="radio-group">
+                            <label>
+                              <input type="radio" name="df_status" value="Complete" <%= induction.df_status === "Complete" ? "checked" : "" %> required> Complete
+                            </label>
+                            <label>
+                              <input type="radio" name="df_status" value="InComplete" <%= induction.df_status === "InComplete" ? "checked" : "" %> required> InComplete
+                            </label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>2.Introduction to colleagues</td>
+                        <td>
+                          <div class="radio-group">
+                            <label>
+                              <input type="radio" name="itc_status" value="Complete" <%= induction.itc_status === "Complete" ? "checked" : "" %> required> Complete
+                            </label>
+                            <label>
+                              <input type="radio" name="itc_status" value="InComplete" <%= induction.itc_status === "InComplete" ? "checked" : "" %> required> InComplete
+                            </label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>3.New entrant’s own job</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="neoj_status" value="Complete" <%= induction.neoj_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="neoj_status" value="InComplete" <%= induction.neoj_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>4.Supervision</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="sup_status" value="Complete" <%= induction.sup_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="sup_status" value="InComplete" <%= induction.sup_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>5.General layout - entrances and exits</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="gleae_status" value="Complete" <%= induction.gleae_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="gleae_status" value="InComplete" <%= induction.gleae_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Conditions of Employment</td>
+                        <td>
+                          <div class="radio-group">
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1.Information on hours of work. </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="iohow_status" value="Complete" <%= induction.iohow_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="iohow_status" value="InComplete" <%= induction.iohow_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>2.Time recording, finger punching, Email ID , Attendance marking </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="trfpeiam_status" value="Complete" <%= induction.trfpeiam_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="trfpeiam_status" value="Complete" <%= induction.trfpeiam_status === "Complete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>3.Job description </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="jd_status" value="Complete" <%= induction.jd_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="jd_status" value="InComplete" <%= induction.jd_status === "InComplete" ? "checked" : "" %>required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>4.Probationary periods of employment </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="ppoe_status" value="Complete" <%= induction.ppoe_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="ppoe_status" value="InComplete" <%= induction.ppoe_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>5.Breaking the contract–notice and other formalities </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="btcnaof_status" value="Complete" <%= induction.btcnaof_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label> 
+                            <label><input type="radio" name="btcnaof_status" value="InComplete" <%= induction.btcnaof_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>6.Reporting in when sick including when on leave</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="riwsiwol_status" value="InComplete" <%= induction.riwsiwol_status === "InComplete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="riwsiwol_status" value="Complete" <%= induction.riwsiwol_status === "Complete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>7.Arrangements for requesting leave:annual leave/sick leave /emergency leave
+                        </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="afrlalslel_status" value="InComplete" <%= induction.afrlalslel_status === "InComplete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="afrlalslel_status" value="Complete" <%= induction.afrlalslel_status === "Complete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>8.Uniforms, and uniform policy, protective clothing, replacement dress in the
+                          center. </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="uauppcrditc_status" value="InComplete" <%= induction.uauppcrditc_status === "InComplete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="uauppcrditc_status" value="Complete" <%= induction.uauppcrditc_status === "Complete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>9.DHA,CDA , guild lines of standard and policy , Child protection </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="dcglosapcp_status" value="Complete" <%= induction.dcglosapcp_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="dcglosapcp_status" value="InComplete" <%= induction.dcglosapcp_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>10. Dealing with the parents/ Clients </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="dwtpc_status" value="Complete" <%= induction.dwtpc_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="dwtpc_status" value="Complete" <%= induction.dwtpc_status === "Complete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>11. Medical Records, Preparation of Medical Records and data </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="mrpomrad_status" value="Complete" <%= induction.mrpomrad_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="mrpomrad_status" value="InComplete" <%= induction.mrpomrad_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2">Health and Safety, Security, Fire</td>
+                      </tr>
+                      <tr>
+                        <td>1.Health and safety information relevant to the department</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="hasirttd_status" value="Complete" <%= induction.hasirttd_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="hasirttd_status" value="InComplete" <%= induction.hasirttd_status === "InComplete" ? "checked" : "" %>required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>2.Issuing of fire instructions and procedure</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="iofiap_status" value="Complete" <%= induction.iofiap_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="iofiap_status" value="InComplete" <%= induction.iofiap_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>3.Location of fire-fighting equipment</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="loffe_status" value="Complete" <%= induction.loffe_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="loffe_status" value="InComplete" <%= induction.loffe_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>4.Assembly point in case of fire</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="apicof_status" value="Complete" <%= induction.apicof_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="apicof_status" value="InComplete" <%= induction.apicof_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>5.Accident/ Incident reporting</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="air_status" value="Complete" <%= induction.air_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="air_status" value="InComplete" <%= induction.air_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>6.First aid facilities</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="faf_status" value="Complete" <%= induction.faf_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="faf_status" value="InComplete" <%= induction.faf_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>7.Loss of personal items </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="lopi_status" value="Complete" <%= induction.lopi_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="lopi_status" value="InComplete" <%= induction.lopi_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>8.Cleanliness of working area , toy management </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="cowatm_status" value="Complete" <%= induction.cowatm_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="cowatm_status" value="InComplete" <%= induction.cowatm_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>9.Arrangement for keys, ID Badges , flash cards , materials etc.</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="afkibfcme_status" value="Complete" <%= induction.afkibfcme_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="afkibfcme_status" value="InComplete" <%= induction.afkibfcme_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>10.Waste Management</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="wm_status" value="Complete" <%= induction.wm_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="wm_status" value="InComplete" <%= induction.wm_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>11.Violence and aggressive behaviour</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="vaab_status" value="Complete" <%= induction.vaab_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="vaab_status" value="InComplete" <%= induction.vaab_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>12.Infection control.</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="ic_status" value="Complete" <%= induction.ic_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="ic_status" value="InComplete" <%= induction.ic_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>13.Major Incident procedures and actions to take</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="mipaatt_status" value="Complete" <%= induction.mipaatt_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="mipaatt_status" value="InComplete" <%= induction.mipaatt_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2">Conduct</td>
+                      </tr>
+                      <tr>
+                        <td>1.Personal presentation</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="pp_status" value="Complete" <%= induction.pp_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="pp_status" value="InComplete" <%= induction.pp_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>2.Disciplinary procedures</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="dp_status" value="Complete" <%= induction.dp_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="dp_status" value="InComplete" <%= induction.dp_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>3.Courtesy to the customer and the public</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="cttcatp_status" value="Complete" <%= induction.cttcatp_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="cttcatp_status" value="InComplete" <%= induction.cttcatp_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>4.Confidentiality</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="con_status" value="Complete" <%= induction.con_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="con_status" value="InComplete" <%= induction.con_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>5.Noise Control</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="nc_status" value="Complete" <%= induction.nc_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="nc_status" value="InComplete" <%= induction.nc_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>6.Acceptance of gifts</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="aog_status" value="Complete" <%= induction.aog_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="aog_status" value="InComplete" <%= induction.aog_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>7.Local rules regarding smoking</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="lrrs_status" value="Complete" <%= induction.lrrs_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="lrrs_status" value="InComplete" <%= induction.lrrs_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>8.Private use of telephones</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="puot_status" value="Complete" <%= induction.puot_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="puot_status" value="InComplete" <%= induction.puot_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>9.Standards of Business Conduct</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="sobc_status" value="Complete" <%= induction.sobc_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="sobc_status" value="InComplete" <%= induction.sobc_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2">Facilities</td>
+                      </tr>
+                      <tr>
+                        <td>1.Pantry</td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="pan_status" value="Complete" <%= induction.pan_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="pan_status" value="InComplete" <%= induction.pan_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>2.Washroom </td>
+                        <td>
+                          <div class="radio-group">
+                            <label><input type="radio" name="wash_status" value="Complete" <%= induction.wash_status === "Complete" ? "checked" : "" %> required>
+                              Complete</label>
+                            <label><input type="radio" name="wash_status" value="InComplete" <%= induction.wash_status === "InComplete" ? "checked" : "" %> required checked>
+                              InComplete</label>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <h2>Employee’s Declaration:</h2>
+              <p>I have been informed about and understand the above items.</p>
+              <div class="form-group">
+                <label for="emp_name">Employee Name:</label>
+                <input type="text" id="emp_name" name="emp_name" value="<%= induction.emp_name %>" required>
+              </div>
+              <div class="form-group">
+                <label for="emp_sign">Employee’s Signature</label>
+               <!--  <canvas id="emp_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                <button type="button" id="clear-emp_sign">Clear</button> -->
+                <img id="emp_sign_preview" src="<%= induction.emp_sign %>" alt="Employee’s Signature" style="max-width: 100%; height: auto;">
+                <!-- <input type="hidden" id="emp_sign" name="emp_sign" value="<%= induction.emp_sign %>"> -->
+                <input type="hidden" id="emp_sign" name="emp_sign">
+            </div>
+              <div class="form-group">
+                <label for="emp_sign_date">Date</label>
+                <input type="date" id="emp_sign_date" name="emp_sign_date" value="<%= induction.emp_sign_date %>">
+              </div>
+              <p>I confirm that the above Induction Programme has been completed for the above member of staff.</p>
+              <div class="form-group">
+                <label for="hr_clinic_name">HR/CLINIC MANAGER Name:</label>
+                <input type="text" id="hr_clinic_name" name="hr_clinic_name" value="<%= induction.hr_clinic_name %>" required>
+              </div>
+              <div class="form-group">
+                <label for="hr_clinic_sign">HR/CLINIC MANAGER Signature</label>
+              <!--   <canvas id="hr_clinic_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                <button type="button" id="clear-hr_clinic_sign">Clear</button>
+                <input type="hidden" id="hr_clinic_sign" name="hr_clinic_sign" value="<%= induction.hr_clinic_sign %>"> -->
+                <img id="hr_clinic_sign_preview" src="<%= induction.hr_clinic_sign %>" alt="HR/CLINIC MANAGER Signature" style="max-width: 100%; height: auto;">
+            </div>
+              <div class="form-group">
+                <label for="hr_clinic_sign_date">Date</label>
+                <input type="date" id="hr_clinic_sign_date" name="hr_clinic_sign_date" value="<%= induction.hr_clinic_sign_date %>">
+              </div>
+
+              <h4>STAFF INDUCTION DOCUMENT</h4>
+              <p>
+                I, <input type="text" id="sid_txt1" name="sid_txt1" value="<%= induction.sid_txt1 %>" class="width30">, acknowledge that I have
+                received guidance and understood staff induction program provided by
+                <input type="text" id="sid_txt2" name="sid_txt2" value="<%= induction.sid_txt2 %>" class="width30">. I understand the policies, procedures, and terms
+                and conditions outlined during induction and agree to abide by them during my employment
+                with <input type="text" id="sid_txt3" name="sid_txt3" value="<%= induction.sid_txt3 %>" class="width30">
+              </p>
+              <h4>FIRST PARTY</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="sid_fparty_name">Name:</label>
+                  <input type="text" id="sid_fparty_name" name="sid_fparty_name" value="<%= induction.sid_fparty_name %>" required>
+                </div>
+                <div class="form-group">
+                  <label for="sid_fparty_position">Position:</label>
+                  <input type="text" id="sid_fparty_position" name="sid_fparty_position" value="<%= induction.sid_fparty_position %>" required>
+                </div>
+                <div class="form-group">
+                  <label for="sid_fparty_sign">Signature</label>
+                  <img id="sid_fparty_sign_preview" src="<%= induction.sid_fparty_sign %>" alt="Signature" style="max-width: 100%; height: auto;">
+                  <!-- <canvas id="sid_fparty_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                  <button type="button" id="clear-sid_fparty_sign">Clear</button>
+                  <input type="hidden" id="sid_fparty_sign" name="sid_fparty_sign" value="<%= induction.sid_fparty_sign %>"> -->
+                </div>
+                <h4>BRIDGES SPEECH CENTER LLC Speech Center</h4>
+              </div>
+              <h4>SECOND PARTY</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="sid_sparty_name">Name:</label>
+                  <input type="text" id="sid_sparty_name" name="sid_sparty_name" value="<%= induction.sid_sparty_name %>" required>
+                </div>
+                <div class="form-group">
+                  <label for="sid_sparty_passport">Passport Number:</label>
+                  <input type="text" id="sid_sparty_passport" name="sid_sparty_passport" value="<%= induction.sid_sparty_passport %>" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="sid_sparty_address">Current address:</label>
+                  <input type="text" id="sid_sparty_address" name="sid_sparty_address" value="<%= induction.sid_sparty_address %>">
+                </div>
+                <div class="form-group">
+                  <label for="sid_sparty_date">Date</label>
+                  <input type="date" id="sid_sparty_date" name="sid_sparty_date" value="<%= induction.sid_sparty_date %>">
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit">Save Changes</button>
+                <a href="/hr/sip" class="btn btn-secondary">Cancel</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const staffIdInput = document.getElementById('staff_id');
+      const staffNameInput = document.getElementById('staff_name');
+      const departmentInput = document.getElementById('department');
+  // Client-side JavaScript to format and populate date fields
+function formatDateForInput(isoString) {
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
+}
+
+// When loading the form, set the date input values
+document.addEventListener('DOMContentLoaded', () => {
+    // For each date field in your form
+    const dateFields = {
+        emp_sign_date: yourData.emp_sign_date,
+        sid_sparty_date: yourData.sid_sparty_date
+        // Add other date fields as needed
+    };
+
+    for (const [fieldId, dateValue] of Object.entries(dateFields)) {
+        const inputElement = document.getElementById(fieldId);
+        if (inputElement) {
+            inputElement.value = formatDateForInput(dateValue);
+        }
+    }
+});
+      // Load staff name and department if staff_id changes
+      staffIdInput.addEventListener('change', async () => {
+        const staffId = staffIdInput.value;
+        if (!staffId) {
+          staffNameInput.value = '';
+          departmentInput.value = '';
+          return;
+        }
+  
+        try {
+          const res = await fetch(`/api/staff/${staffId}`);
+          if (!res.ok) throw new Error('Failed to fetch staff data');
+          const data = await res.json();
+          staffNameInput.value = data.staff_name || '';
+          departmentInput.value = data.department || '';
+        } catch (err) {
+          console.error('Error fetching staff info:', err);
+          staffNameInput.value = '';
+          departmentInput.value = '';
+        }
+      });
+  
+      // OPTIONAL: Prevent empty signature inputs from being submitted
+      // This ensures req.body does not contain empty fields
+      const form = document.querySelector('form');
+      form.addEventListener('submit', () => {
+        const staffSignInput = document.getElementById('emp_sign');
+        const hodSignInput = document.getElementById('hr_clinic_sign');
+        const sidFPArtyInput = document.getElementById('sid_fparty_sign');
+        if (staffSignInput && staffSignInput.value.trim() === '') {
+          staffSignInput.remove();
+        }
+        if (hodSignInput && hodSignInput.value.trim() === '') {
+          hodSignInput.remove();
+        }
+        if (sidFPArtyInput && sidFPArtyInput.value.trim() === '') {
+            sidFPArtyInput.remove();
+        }
+      });
+    });
+  </script>
+  
+  
+<%- include('../../partials/footer') %>

@@ -112,9 +112,9 @@
                     </tr>
                     <tr>
                       <td>
-                        <label for="staff_sign">Employee’s Signature</label>
+                        <label for="staff_sign-pad">Employee’s Signature</label>
                         <canvas id="staff_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
-                        <button type="button" id="clear-staff_sign">Clear</button>
+                        <!-- <button type="button" id="clear-staff_sign">Clear</button> -->
                         <input type="hidden" id="staff_sign" name="staff_sign">
                       </td>
                       <!-- <td>Employee Signature:
@@ -124,9 +124,9 @@
                       </td> -->
 
                       <td>
-                        <label for="hod_sign">HOD/Supervisor Signature</label>
+                        <label for="hod_sign-pad">HOD/Supervisor Signature</label>
                         <canvas id="hod_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
-                        <button type="button" id="clear-hod_sign">Clear</button>
+                        <!-- <button type="button" id="clear-hod_sign">Clear</button> -->
                         <input type="hidden" id="hod_sign" name="hod_sign">
                       </td>
                       <!-- <td>HOD/Supervisor Signature:
@@ -358,32 +358,32 @@
             </div><br /><br />
             <div class="form-row">
               <div class="form-group">
-                <label for="hr_sign">HR’s Signature</label>
+                <label for="hr_sign-pad">HR’s Signature</label>
                 <canvas id="hr_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
                 <button type="button" id="clear-hr_sign">Clear</button>
                 <input type="hidden" id="hr_sign" name="hr_sign">
               </div>
 
               <div class="form-group">
-                <label for="director_sign">Director’s Signature</label>
+                <label for="director_sign-pad">Director’s Signature</label>
                 <canvas id="director_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
-                <button type="button" id="clear-director_sign">Clear</button>
+                <!-- <button type="button" id="clear-director_sign">Clear</button> -->
                 <input type="hidden" id="director_sign" name="director_sign">
               </div>
 
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label for="staff_sign1">Employee’s Signatur</label>
+                <label for="staff_sign1-pad">Employee’s Signatur</label>
                 <canvas id="staff_sign1-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
-                <button type="button" id="clear-staff_sign1">Clear</button>
+                <!-- <button type="button" id="clear-staff_sign1">Clear</button> -->
                 <input type="hidden" id="staff_sign1" name="staff_sign1">
               </div>
 
               <div class="form-group">
-                <label for="hod_sign1">HOD/Supervisor 2nd Signature</label>
+                <label for="hod_sign1-pad">HOD/Supervisor 2nd Signature</label>
                 <canvas id="hod_sign1-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
-                <button type="button" id="clear-hod_sign1">Clear</button>
+                <!-- <button type="button" id="clear-hod_sign1">Clear</button> -->
                 <input type="hidden" id="hod_sign1" name="hod_sign1">
               </div>
 
@@ -402,236 +402,268 @@
   </div>
 </div>
 </div>
-<!-- <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // === Signature Setup Function ===
-    function setupSignature(canvasId, inputId, clearBtnId) {
-      const canvas = document.getElementById(canvasId);
-      const ctx = canvas.getContext('2d');
-      const input = document.getElementById(inputId);
-      const clearBtn = document.getElementById(clearBtnId);
 
-      if (!canvas || !ctx || !input || !clearBtn) {
-        console.warn(`Missing element for ${canvasId}`);
-        return () => {};
-      }
-      let drawing = false;
-      let lastX = 0, lastY = 0;
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // === Signature Configuration ===
+  const signatureConfig = [
+    { canvasId: 'staff_sign-pad', inputId: 'staff_sign' },
+    { canvasId: 'hod_sign-pad', inputId: 'hod_sign' },
+    { canvasId: 'hr_sign-pad', inputId: 'hr_sign' },
+    { canvasId: 'director_sign-pad', inputId: 'director_sign' },
+    { canvasId: 'staff_sign1-pad', inputId: 'staff_sign1' },
+    { canvasId: 'hod_sign1-pad', inputId: 'hod_sign1' }
+  ];
 
-      function getPos(e) {
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-        const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-        return { x, y };
-      }
+  // === Signature Pad Setup ===
+  function setupSignaturePad(canvasId, inputId) {
+    const canvas = document.getElementById(canvasId);
+    const input = document.getElementById(inputId);
+    
+    if (!canvas || !input) {
+      console.error(`Missing elements for ${canvasId} or ${inputId}`);
+      return null;
+    }
 
-      ['mousedown', 'touchstart'].forEach(evt =>
-        canvas.addEventListener(evt, e => {
-          e.preventDefault();
-          drawing = true;
-          const { x, y } = getPos(e);
-          lastX = x;
-          lastY = y;
-        })
-      );
+    // Set canvas size explicitly to prevent scaling issues
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    
+    const ctx = canvas.getContext('2d');
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#000000';
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    
+    let drawing = false;
+    let lastX = 0;
+    let lastY = 0;
+    let hasDrawn = false; // Track if anything has been drawn
 
-      ['mouseup', 'mouseout', 'touchend', 'touchcancel'].forEach(evt =>
-        canvas.addEventListener(evt, () => drawing = false)
-      );
-
-      ['mousemove', 'touchmove'].forEach(evt =>
-        canvas.addEventListener(evt, e => {
-          if (!drawing) return;
-          const { x, y } = getPos(e);
-          ctx.beginPath();
-          ctx.moveTo(lastX, lastY);
-          ctx.lineTo(x, y);
-          ctx.stroke();
-          lastX = x;
-          lastY = y;
-        })
-      );
-
-      clearBtn.addEventListener('click', () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        input.value = '';
-      });
-
-      return () => {
-        input.value = canvas.toDataURL();
+    function getPosition(event) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const touch = event.touches?.[0] || event;
+      return {
+        x: (touch.clientX - rect.left) * scaleX,
+        y: (touch.clientY - rect.top) * scaleY
       };
     }
 
-    // === Initialize All Signature Pads ===
-    window.saveStaffSign = setupSignature('staff_sign-pad', 'staff_sign', 'clear-staff_sign');
-    window.saveHodSign = setupSignature('hod_sign-pad', 'hod_sign', 'clear-hod_sign');
-    // window.saveHrSign = setupSignature('hr_sign-pad', 'hr_sign', 'clear-hr_sign');
-    // window.saveDirectorSign = setupSignature('director_sign-pad', 'director_sign', 'clear-director_sign');
-    // window.saveStaffSign1 = setupSignature('staff_sign1-pad', 'staff_sign1', 'clear-staff_sign1');
-    // window.saveHodSign1 = setupSignature('hod_sign1-pad', 'hod_sign1', 'clear-hod_sign1');
-
-    // === Sum Block Logic ===
-    function updateSum(blockClass, sumClass) {
-      const inputs = document.querySelectorAll(`.${blockClass}`);
-      let sum = Array.from(inputs).reduce((acc, i) => acc + (parseFloat(i.value) || 0), 0);
-      document.querySelector(`.${sumClass}`).textContent = sum;
-      document.getElementById(sumClass).value = sum;
-      const totalAll = ['block1-sum', 'block2-sum', 'block3-sum']
-        .reduce((a, id) => a + (parseFloat(document.getElementById(id)?.value) || 0), 0);
-      document.getElementById('block-total').value = totalAll;
-      document.getElementById('block-total-display').textContent = totalAll;
+    function startDrawing(event) {
+      event.preventDefault();
+      drawing = true;
+      const pos = getPosition(event);
+      lastX = pos.x;
+      lastY = pos.y;
+      
+      // Start a new path
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
     }
 
-    ['block1-input', 'block2-input', 'block3-input'].forEach((cls, i) => {
-      document.querySelectorAll(`.${cls}`).forEach(inp =>
-        inp.addEventListener('input', () => updateSum(cls, `block${i + 1}-sum`))
-      );
-    });
-    updateSum('block1-input', 'block1-sum');
-    updateSum('block2-input', 'block2-sum');
-    updateSum('block3-input', 'block3-sum');
+    function stopDrawing(event) {
+      if (!drawing) return;
+      event.preventDefault();
+      drawing = false;
+      hasDrawn = true;
+      
+      // Immediately save signature when drawing stops
+      setTimeout(() => saveSignature(), 10);
+    }
 
-    // === Auto-fill staff name and department ===
-    document.getElementById('staff_id').addEventListener('change', async function () {
-      const staffId = this.value;
-      if (!staffId) {
-        document.getElementById('staff_name').value = '';
-        document.getElementById('department').value = '';
+    function draw(event) {
+      if (!drawing) return;
+      event.preventDefault();
+      
+      const pos = getPosition(event);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      lastX = pos.x;
+      lastY = pos.y;
+    }
+
+    function saveSignature() {
+      try {
+        if (!hasDrawn) {
+          input.value = '';
+          return false;
+        }
+        
+        const signatureData = canvas.toDataURL('image/png');
+        
+        // Check if canvas is truly empty by comparing with blank canvas
+        const blankCanvas = document.createElement('canvas');
+        blankCanvas.width = canvas.width;
+        blankCanvas.height = canvas.height;
+        const blankData = blankCanvas.toDataURL('image/png');
+        
+        if (signatureData !== blankData && signatureData.length > 1000) {
+          input.value = signatureData;
+          console.log(`Signature saved for ${inputId}:`, signatureData.substring(0, 50) + '...');
+          return true;
+        } else {
+          input.value = '';
+          return false;
+        }
+      } catch (error) {
+        console.error(`Error saving signature for ${inputId}:`, error);
+        input.value = '';
+        return false;
+      }
+    }
+
+    function clearSignature() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      input.value = '';
+      hasDrawn = false;
+      console.log(`Signature cleared for ${inputId}`);
+    }
+
+    // Mouse Events
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    // Touch Events
+    canvas.addEventListener('touchstart', startDrawing, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', stopDrawing, { passive: false });
+    canvas.addEventListener('touchcancel', stopDrawing, { passive: false });
+
+    // Clear button setup
+    const clearBtn = document.getElementById(`clear-${inputId}`);
+    if (clearBtn) {
+      clearBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        clearSignature();
+      });
+    }
+
+    return {
+      save: saveSignature,
+      clear: clearSignature,
+      isEmpty: () => !input.value || input.value.trim() === '',
+      hasContent: () => hasDrawn && input.value && input.value.length > 1000
+    };
+  }
+
+  // Initialize all signature pads
+  const signaturePads = signatureConfig.map(config => ({
+    ...config,
+    pad: setupSignaturePad(config.canvasId, config.inputId)
+  })).filter(item => item.pad !== null);
+
+  // === Form Submission Handler ===
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // Always prevent default first
+
+      console.log('Form submission started...');
+
+      // Force save all signatures before validation
+      const signatureResults = [];
+      signaturePads.forEach(({ inputId, pad }) => {
+        if (pad) {
+          const saved = pad.save();
+          const hasContent = pad.hasContent();
+          signatureResults.push({
+            inputId,
+            saved,
+            hasContent,
+            value: document.getElementById(inputId)?.value || ''
+          });
+          console.log(`${inputId}: saved=${saved}, hasContent=${hasContent}, valueLength=${document.getElementById(inputId)?.value?.length || 0}`);
+        }
+      });
+
+      // Check for missing required signatures
+      const missingSignatures = signatureResults.filter(result => !result.hasContent);
+      
+      if (missingSignatures.length > 0) {
+        const missingNames = missingSignatures.map(s => s.inputId).join(', ');
+        alert(`Please provide all required signatures. Missing: ${missingNames}`);
+        return false;
+      }
+
+      // Final validation - check all hidden inputs have data
+      let allSignaturesValid = true;
+      signaturePads.forEach(({ inputId }) => {
+        const input = document.getElementById(inputId);
+        if (!input || !input.value || input.value.length < 1000) {
+          console.error(`Invalid signature data for ${inputId}`);
+          allSignaturesValid = false;
+        }
+      });
+
+      if (!allSignaturesValid) {
+        alert('Error processing signatures. Please redraw any missing signatures and try again.');
+        return false;
+      }
+
+      console.log('All signatures validated successfully. Submitting form...');
+      
+      // Add a small delay to ensure all data is processed
+      setTimeout(() => {
+        form.submit();
+      }, 100);
+    });
+  }
+
+  // === KPI Sum Logic ===
+  function updateSum(blockClass, sumClass) {
+    const inputs = document.querySelectorAll(`.${blockClass}`);
+    const sum = Array.from(inputs).reduce((acc, i) => acc + (parseFloat(i.value) || 0), 0);
+    
+    const sumDisplay = document.querySelector(`.${sumClass}`);
+    if (sumDisplay) sumDisplay.textContent = sum;
+    
+    const sumInput = document.getElementById(sumClass);
+    if (sumInput) sumInput.value = sum;
+
+    // Update total
+    const total = ['block1-sum','block2-sum','block3-sum']
+      .reduce((t, id) => t + (parseFloat(document.getElementById(id)?.value) || 0), 0);
+    
+    const totalInput = document.getElementById('block-total');
+    const totalDisplay = document.getElementById('block-total-display');
+    
+    if (totalInput) totalInput.value = total;
+    if (totalDisplay) totalDisplay.textContent = total;
+  }
+
+  // Initialize KPI sum calculations
+  ['block1-input','block2-input','block3-input'].forEach((cls, i) => {
+    document.querySelectorAll(`.${cls}`).forEach(inp =>
+      inp.addEventListener('input', () => updateSum(cls, `block${i+1}-sum`))
+    );
+    updateSum(cls, `block${i+1}-sum`); // Initial calculation
+  });
+
+  // === Staff Details Autofill ===
+  const staffIdSelect = document.getElementById('staff_id');
+  if (staffIdSelect) {
+    staffIdSelect.addEventListener('change', async function() {
+      const id = this.value;
+      if (!id) {
+        ['staff_name','current_phone','department'].forEach(f => {
+          const el = document.getElementById(f);
+          if (el) el.value = '';
+        });
         return;
       }
+
       try {
         const res = await fetch('/staff/get-staff-details', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ staff_id: staffId })
-        });
-        const data = await res.json();
-        if (data.staff) {
-          document.getElementById('staff_name').value = data.staff.staff_name || '';
-          document.getElementById('current_phone').value = data.staff.staff_phone || '';
-          document.getElementById('department').value = data.staff.department || '';
-        } else {
-          alert('Staff not found');
-        }
-      } catch (err) {
-        console.error('Error fetching staff data:', err);
-      }
-    });
-
-    // === Submit Handler ===
-    const form = document.querySelector('form');
-    form.addEventListener('submit', e => {
-      if (window.saveHrSign) window.saveHrSign();
-      if (window.saveDirectorSign) window.saveDirectorSign();
-      // if (window.saveStaffSign1) window.saveStaffSign1();
-      // if (window.saveHodSign1) window.saveHodSign1();
-      // if(window.saveStaffSign) window.saveStaffSign();
-      // if( window.saveHodSign)  window.saveHodSign();
-    });
-  });
-</script> -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // === Signature Setup Function ===
-    function setupSignature(canvasId, inputId, clearBtnId) {
-      const canvas = document.getElementById(canvasId);
-      const ctx = canvas.getContext('2d');
-      const input = document.getElementById(inputId);
-      const clearBtn = document.getElementById(clearBtnId);
-      if (!canvas || !ctx || !input || !clearBtn) return () => {};
-
-      let drawing = false, lastX = 0, lastY = 0;
-      function getPos(e) {
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches && e.touches[0];
-        const x = ((touch ? touch.clientX : e.clientX) - rect.left);
-        const y = ((touch ? touch.clientY : e.clientY) - rect.top);
-        return { x, y };
-      }
-
-      ['mousedown','touchstart'].forEach(evt => {
-        canvas.addEventListener(evt, e => {
-          e.preventDefault();
-          drawing = true;
-          const pos = getPos(e);
-          lastX = pos.x;
-          lastY = pos.y;
-        });
-      });
-
-      ['mouseup','mouseout','touchend','touchcancel'].forEach(evt => {
-        canvas.addEventListener(evt, () => {
-          drawing = false;
-        });
-      });
-
-      ['mousemove','touchmove'].forEach(evt => {
-        canvas.addEventListener(evt, e => {
-          if (!drawing) return;
-          const pos = getPos(e);
-          ctx.beginPath();
-          ctx.moveTo(lastX, lastY);
-          ctx.lineTo(pos.x, pos.y);
-          ctx.stroke();
-          lastX = pos.x;
-          lastY = pos.y;
-        });
-      });
-
-      clearBtn.addEventListener('click', () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        input.value = '';
-      });
-
-      return () => {
-        input.value = canvas.toDataURL();
-      };
-    }
-
-    // === Initialize Signature Pads ===
-    ['staff_sign','hod_sign','hr_sign','director_sign','staff_sign1','hod_sign1'].forEach(id => {
-      window['save_' + id] = setupSignature(
-        id + '-pad',   // canvas element ID
-        id,            // hidden input ID
-        'clear-' + id  // clear button ID
-      );
-    });
-
-    // === KPI Sum Logic (unchanged) ===
-    function updateSum(blockClass, sumClass) {
-      const inputs = document.querySelectorAll(`.${blockClass}`);
-      const sum = Array.from(inputs).reduce((acc, i) => acc + (parseFloat(i.value) || 0), 0);
-      document.querySelector(`.${sumClass}`).textContent = sum;
-      document.getElementById(sumClass).value = sum;
-      const total = ['block1-sum','block2-sum','block3-sum']
-        .reduce((t, id) => t + (parseFloat(document.getElementById(id).value) || 0), 0);
-      document.getElementById('block-total').value = total;
-      document.getElementById('block-total-display').textContent = total;
-    }
-    ['block1-input','block2-input','block3-input'].forEach((cls,i) => {
-      document.querySelectorAll(`.${cls}`).forEach(inp =>
-        inp.addEventListener('input', () => updateSum(cls, `block${i+1}-sum`))
-      );
-    });
-    // Initial calculation
-    updateSum('block1-input','block1-sum');
-    updateSum('block2-input','block2-sum');
-    updateSum('block3-input','block3-sum');
-
-    // === Auto-fill Staff Details ===
-    document.getElementById('staff_id').addEventListener('change', async function() {
-      const id = this.value;
-      ['staff_name','current_phone','department'].forEach(f => {
-        const el = document.getElementById(f);
-        if (el) el.value = '';
-      });
-      if (!id) return;
-      try {
-        const res = await fetch('/staff/get-staff-details', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({ staff_id: id })
         });
+        
         const data = await res.json();
         if (data.staff) {
           document.getElementById('staff_name').value = data.staff.staff_name || '';
@@ -642,17 +674,7 @@
         console.error('Error fetching staff details:', err);
       }
     });
-
-    // === Form Submit: capture signatures ===
-    const form = document.querySelector('form');
-    form.addEventListener('submit', e => {
-      ['staff_sign','hod_sign','hr_sign','director_sign','staff_sign1','hod_sign1'].forEach(id => {
-        window['save_' + id]?.();
-      });
-      // allow normal submission (hidden inputs now hold dataURL strings)
-    });
-  });
+  }
+});
 </script>
-
-
 <%- include('../../partials/footer') %>

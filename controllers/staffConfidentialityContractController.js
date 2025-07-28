@@ -103,12 +103,14 @@ exports.getStaffDetails =  async (req, res) => {
 exports.renderConfidentialityForm = async (req, res) => {
   try {
     const staffList = await StaffDetails.findAll({ where: { is_deleted: false }}); // or any filtered query
-    res.render('staff/confidentiality-contract', { staffList });
+    res.render('staff/confidentiality-contract', { staffList, isEdit: false, contract: null });
   } catch (err) {
     console.error(err);
     res.render('staff/confidentiality-contract', {
       staffList: [],
       errorMessage: 'Failed to load staff list',
+      isEdit: false,
+      contract: null
     });
   }
 };
@@ -125,6 +127,42 @@ exports.createContract = async (req, res) => {
     console.error('Error creating contract:', error);
     req.flash('error', 'Error creating contract');
     res.redirect('/contract/confidentiality-contract'); // ✅ Correct absolute path
+  }
+};
+
+exports.editContract = async (req, res) => {
+  const contractId = req.params.id;
+  try {
+    const contract = await StaffConfidentialityContract.findByPk(contractId);
+    if (!contract) {
+      req.flash('error', 'Contract not found');
+      return res.redirect('/contract/confidentiality-contract/list');
+    }
+    const staffList = await StaffDetails.findAll({ where: { is_deleted: false } });
+    res.render('staff/confidentiality-contract/edit', { staffList, contract, isEdit: true });
+  } catch (error) {
+    console.error('Error fetching contract:', error);
+    req.flash('error', 'Error fetching contract');
+    res.redirect('/contract/confidentiality-contract/list');
+  }
+};
+
+exports.updateContract = async (req, res) => {
+  const contractId = req.params.id;
+  try {
+    const contractData = req.body;
+    const contract = await StaffConfidentialityContract.findByPk(contractId);
+    if (!contract) {
+      req.flash('error', 'Contract not found');
+      return res.redirect('/contract/confidentiality-contract/list');
+    }
+    await contract.update(contractData);
+    req.flash('success', 'Contract updated successfully');
+    res.redirect('/contract/confidentiality-contract/list');
+  } catch (error) {
+    console.error('Error updating contract:', error);
+    req.flash('error', 'Error updating contract');
+    res.redirect(`/contract/confidentiality-contract/edit/${contractId}`);
   }
 };
 

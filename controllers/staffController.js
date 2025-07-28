@@ -143,12 +143,14 @@ exports.getStaffDetails =  async (req, res) => {
 exports.renderConfidentialityForm = async (req, res) => {
   try {
     const staffList = await StaffDetails.findAll(); // or any filtered query
-    res.render('staff/confidentiality-contract', { staffList });
+    res.render('staff/confidentiality-contract', { staffList, isEdit: false, contract: null });
   } catch (err) {
     console.error(err);
     res.render('staff/confidentiality-contract', {
       staffList: [],
       errorMessage: 'Failed to load staff list',
+      isEdit: false,
+      contract: null
     });
   }
 };

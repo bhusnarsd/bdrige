@@ -373,156 +373,48 @@
   </div>
 </div>
 </div>
-<script>
-  // Function to initialize the canvas drawing behavior
-  function initializeSignatureCanvas(canvasId, inputId) {
+<!-- <script>
+ 
+  document.addEventListener('DOMContentLoaded', function () {
+  const signatureFields = [
+    { imageId: 'hr_sign_preview', canvasId: 'hr_sign-pad', inputId: 'hr_sign' },
+    { imageId: 'director_sign_preview', canvasId: 'director_sign-pad', inputId: 'director_sign' },
+    { imageId: 'staff_sign1_preview', canvasId: 'staff_sign1-pad', inputId: 'staff_sign1' },
+    { imageId: 'hod_sign1_preview', canvasId: 'hod_sign1-pad', inputId: 'hod_sign1' },
+    { imageId: 'staff_sign_preview', canvasId: 'staff_sign-pad', inputId: 'staff_sign' },
+    { imageId: 'hod_sign_preview', canvasId: 'hod_sign-pad', inputId: 'hod_sign' }
+  ];
+
+  signatureFields.forEach(({ imageId, canvasId, inputId }) => {
+    const img = document.getElementById(imageId);
     const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
-    let lastX = 0;
-    let lastY = 0;
+    const input = document.getElementById(inputId);
 
-    // Function to get the position of the pointer (mouse or touch)
-    function getPosition(event) {
-      const rect = canvas.getBoundingClientRect();
-      const x = event.touches ? event.touches[0].clientX - rect.left : event.clientX - rect.left;
-      const y = event.touches ? event.touches[0].clientY - rect.top : event.clientY - rect.top;
-      return {
-        x,
-        y
-      };
+    if (img && img.src) {
+      img.addEventListener('load', () => {
+        // Only hide canvas if image loaded successfully
+        if (img.complete && img.naturalWidth > 0) {
+          if (canvas) canvas.style.display = 'none';
+          if (input) input.disabled = true;
+        } else {
+          // If image is broken or missing, allow drawing
+          if (canvas && input) {
+            initializeSignatureCanvas(canvasId, inputId);
+          }
+        }
+      });
+
+      // In case image already loaded before this script runs
+      if (img.complete && img.naturalWidth > 0) {
+        if (canvas) canvas.style.display = 'none';
+        if (input) input.disabled = true;
+      } else {
+        if (canvas && input) {
+          initializeSignatureCanvas(canvasId, inputId);
+        }
+      }
     }
-
-    // Start drawing when mouse is pressed or touch starts
-    canvas.addEventListener('mousedown', (event) => {
-      drawing = true;
-
-      // Get the mouse position relative to the canvas
-      // const rect = canvas.getBoundingClientRect();
-      // lastX = event.clientX - rect.left;
-      // lastY = event.clientY - rect.top;
-      const {
-        x,
-        y
-      } = getPosition(event);
-      lastX = x;
-      lastY = y;
-    });
-    // Start drawing on touch start (mobile/tablets)
-    canvas.addEventListener('touchstart', (event) => {
-      event.preventDefault(); // Prevents the default touch action (scrolling)
-      drawing = true;
-      const {
-        x,
-        y
-      } = getPosition(event);
-      lastX = x;
-      lastY = y;
-    });
-
-    // Stop drawing when mouse is released or touch ends
-    canvas.addEventListener('mouseup', () => {
-      drawing = false;
-    });
-    // Stop drawing on touch end
-    canvas.addEventListener('touchend', () => {
-      drawing = false;
-    });
-
-    // Draw on canvas when mouse is moved or touch moves and drawing is true
-    canvas.addEventListener('mousemove', (event) => {
-      if (drawing) {
-        // const rect = canvas.getBoundingClientRect();
-        // const x = event.clientX - rect.left;
-        // const y = event.clientY - rect.top;
-        const {
-          x,
-          y
-        } = getPosition(event);
-
-        // Draw a line from the last position to the current position
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-
-        lastX = x; // Update lastX to the current position
-        lastY = y; // Update lastY to the current position
-      }
-    });
-    // Draw on canvas when touch moves
-    canvas.addEventListener('touchmove', (event) => {
-      if (drawing) {
-        const {
-          x,
-          y
-        } = getPosition(event);
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-
-        lastX = x;
-        lastY = y;
-      }
-    });
-  }
-
-  // Function to handle form submission
-  function handleFormSubmit(event) {
-    // Get the canvas data for each signature field
-    const staffSignData = document.getElementById('staff_sign').toDataURL();
-    const hodSignData = document.getElementById('hod_sign').toDataURL();
-    const hrSignData = document.getElementById('hr_sign').toDataURL();
-    const directorSignData = document.getElementById('director_sign').toDataURL();
-    const staffSign1Data = document.getElementById('staff_sign1').toDataURL();
-    const hodSign1Data = document.getElementById('hod_sign1').toDataURL();
-
-    // Set the hidden input fields with the canvas data
-    document.getElementById('staff_sign_input').value = staffSignData;
-    document.getElementById('hod_sign_input').value = hodSignData;
-    document.getElementById('hr_sign_input').value = hrSignData;
-    document.getElementById('director_sign_input').value = directorSignData;
-    document.getElementById('staff_sign1_input').value = staffSign1Data;
-    document.getElementById('hod_sign1_input').value = hodSign1Data;
-
-    // console.log('Form data:', {
-    //   staffSignData,
-    //   hodSignData,
-    //   hrSignData,
-    //   directorSignData,
-    //   staffSign1Data,
-    //   hodSign1Data
-    // });
-
-    // Proceed with the form submission after populating the signature data
-    // If you're submitting with AJAX, prevent the default behavior
-    // event.preventDefault(); // Only needed for AJAX submission
-    document.querySelector('form').submit(); // Submit the form after setting the hidden inputs
-  }
-
-  // Initialize all signature canvases
-  window.onload = function() {
-    // Initialize signature canvases
-    initializeSignatureCanvas('staff_sign', 'staff_sign_input');
-    initializeSignatureCanvas('hod_sign', 'hod_sign_input');
-    initializeSignatureCanvas('hr_sign', 'hr_sign_input');
-    initializeSignatureCanvas('director_sign', 'director_sign_input');
-    initializeSignatureCanvas('staff_sign1', 'staff_sign1_input');
-    initializeSignatureCanvas('hod_sign1', 'hod_sign1_input');
-
-    // Add submit event listener to the form
-    document.querySelector('form').addEventListener('submit', (event) => {
-      event.preventDefault(); // Prevent form submission for manual handling
-
-      handleFormSubmit(event); // Handle form submission after populating signature fields
-
-      // Optionally, submit the form via AJAX if you're not doing a regular form post
-      // form.submit(); // Or manually trigger the form submission after handling signatures
-    });
-  };
-
-  document.addEventListener('DOMContentLoaded', function() {
+  });
   // Function to calculate and update the sum for a specific block
   function updateSum(blockClass, sumClass) {
     const inputs = document.querySelectorAll(`.${blockClass}`);
@@ -589,6 +481,86 @@
   updateSum('block3-input', 'block3-sum');
 });
 
+</script> -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const signatureFields = [
+      { imageId: 'hr_sign_preview', inputId: 'hr_sign' },
+      { imageId: 'director_sign_preview', inputId: 'director_sign' },
+      { imageId: 'staff_sign1_preview', inputId: 'staff_sign1' },
+      { imageId: 'hod_sign1_preview', inputId: 'hod_sign1' },
+      { imageId: 'staff_signature_preview', inputId: 'staff_sign_input' },
+      { imageId: 'hod_sign_preview', inputId: 'hod_sign_input' }
+    ];
+
+    signatureFields.forEach(({ imageId, inputId }) => {
+      const img = document.getElementById(imageId);
+      const input = document.getElementById(inputId);
+
+      if (img && img.src) {
+        // If the image is valid, disable the corresponding input (hidden or otherwise)
+        img.onload = function () {
+          if (img.naturalWidth && img.naturalHeight && input) {
+            input.disabled = true;
+          }
+        };
+
+        if (img.complete) {
+          if (img.naturalWidth && img.naturalHeight && input) {
+            input.disabled = true;
+          }
+        }
+      }
+
+      // Always hide canvas if exists (edit form shouldn't allow drawing)
+      const canvasId = imageId.replace('_preview', '-pad');
+      const canvas = document.getElementById(canvasId);
+      if (canvas) {
+        canvas.style.display = 'none';
+      }
+    });
+
+    // === SUM CALCULATIONS ===
+    function updateSum(blockClass, sumClass) {
+      const inputs = document.querySelectorAll(`.${blockClass}`);
+      const totalDisplay = document.querySelector(`.${sumClass}`);
+      const totalDisplayInTxt = document.querySelector(`#${sumClass}`);
+      const allTotalDisplayInTxt = document.querySelector('#block-total');
+      const totalDisplayElement = document.querySelector('#block-total-display');
+
+      if (!totalDisplay || !totalDisplayInTxt || !allTotalDisplayInTxt || !totalDisplayElement) {
+        console.error('One or more elements are missing!');
+        return;
+      }
+
+      let total = 0;
+      inputs.forEach(input => {
+        total += parseFloat(input.value) || 0;
+      });
+
+      totalDisplay.textContent = total;
+      totalDisplayInTxt.value = total;
+
+      const allTotal = [
+        document.querySelector('#block1-sum'),
+        document.querySelector('#block2-sum'),
+        document.querySelector('#block3-sum')
+      ].reduce((acc, el) => acc + (parseFloat(el?.value) || 0), 0);
+
+      allTotalDisplayInTxt.value = '';
+      allTotalDisplayInTxt.value = allTotal;
+      totalDisplayElement.textContent = allTotal;
+    }
+
+    ['block1-input', 'block2-input', 'block3-input'].forEach((block, i) => {
+      document.querySelectorAll(`.${block}`).forEach(input => {
+        input.addEventListener('input', () => updateSum(block, `block${i + 1}-sum`));
+      });
+      updateSum(block, `block${i + 1}-sum`);
+    });
+  });
 </script>
 
+  
 <%- include('../../partials/footer') %>

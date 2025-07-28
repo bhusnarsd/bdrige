@@ -4,4 +4,8 @@ const staffConfidentialityContractController = require('../controllers/staffConf
 
 router.post('/confidentiality-contract',  staffConfidentialityContractController.createContract);
 router.get('/confidentiality-contract', staffConfidentialityContractController.renderConfidentialityForm);
+
+router.get('/confidentiality-contract/edit/:id', staffConfidentialityContractController.editContract);
+router.post('/confidentiality-contract/edit/:id', staffConfidentialityContractController.updateContract);
+
 module.exports = router;

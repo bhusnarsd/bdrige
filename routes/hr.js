@@ -31,7 +31,7 @@ router.get('/es/edit/:id', endServiceEdit);
 router.post('/es/edit/:id', upload.none(), endServiceUpdate);
 
 router.get('/sip', inductionProgramList);
-router.get('/sip/create',  renderSipCreatePage)// (req, res) => { res.render('hr/induction_program/create', { messages: req.flash() }); });
+router.get('/sip/create',  renderSipCreatePage)
 router.post('/sip/create', upload.none(), inductionProgramCreate);
 router.get('/sip/edit/:id', inductionProgramEdit);
 router.post('/sip/edit/:id', upload.none(), inductionProgramUpdate);

@@ -27,28 +27,86 @@ exports.inductionProgramList = async (req, res) => {
   });
 };
 
+// exports.inductionProgramCreate = async (req, res) => {
+//   try {
+
+//         const signatureFields = [
+//           { name: 'emp_sign', filename: 'EMP' },
+//           { name: 'hr_clinic_sign', filename: 'HR' },
+//           { name: 'sid_fparty_sign', filename: 'SSIGN' },
+//         ];
+    
+//         const imagePaths = {};
+    
+//         for (const sig of signatureFields) {
+//           const dataUrl = req.body[sig.name];
+//           if (dataUrl && dataUrl.startsWith('data:image')) {
+//             const buffer = Buffer.from(dataUrl.split(',')[1], 'base64');
+//             const signatureDir = path.join(__dirname, '..', 'public', 'uploads', 'signatures', 'kpi');
+//             fs.mkdirSync(signatureDir, { recursive: true });
+//             const fileName = `${Date.now()}-${sig.filename}.png`;
+//             const filePath = path.join(signatureDir, fileName);
+//             fs.writeFileSync(filePath, buffer);
+//             imagePaths[sig.name] = `/uploads/signatures/kpi/${fileName}`;
+//           }
+//         }
+//     const requestBody = {
+//       // ...req.body
+//     };
+//     console.log('requestBody >> ', requestBody)
+//     const esResponse = await InductionProgram.create(requestBody);
+//     req.flash('success', 'End Service added successfully....');
+//     res.redirect('/hr/sip/create');
+//   } catch (error) {
+//     console.error('Error creating KPI:', error);
+//     req.flash('error', 'An error occurred while saving the End Service.');
+//     res.redirect('/hr/sip/create');
+//   }
+
+
+// };
+
 exports.inductionProgramCreate = async (req, res) => {
-
-  // console.log('req.body >>> ', JSON.stringify(req.body))
-
-  // const { ...fieldsToAdd } = req.body;
-
   try {
+    const signatureFields = [
+      { name: 'emp_sign', filename: 'EMP' },
+      { name: 'hr_clinic_sign', filename: 'HR' },
+      { name: 'sid_fparty_sign', filename: 'SSIGN' },
+    ];
+    const imagePaths = {};
+    for (const sig of signatureFields) {
+      const dataUrl = req.body[sig.name];
+      if (dataUrl && dataUrl.startsWith('data:image')) {
+        const buffer = Buffer.from(dataUrl.split(',')[1], 'base64');
+        const signatureDir = path.join(__dirname, '..', 'public', 'uploads', 'signatures', 'kpi');
+        fs.mkdirSync(signatureDir, { recursive: true });
+
+        const fileName = `${Date.now()}-${sig.filename}.png`;
+        const filePath = path.join(signatureDir, fileName);
+        fs.writeFileSync(filePath, buffer);
+
+        // Save the relative URL path
+        imagePaths[sig.name] = `/uploads/signatures/kpi/${fileName}`;
+      }
+    }
+
     const requestBody = {
-      ...req.body
+      ...req.body,
+      emp_sign: imagePaths.emp_sign || null,
+      hr_clinic_sign: imagePaths.hr_clinic_sign || null,
+      sid_fparty_sign: imagePaths.sid_fparty_sign || null
     };
-    console.log('requestBody >> ', requestBody)
+    console.log('requestBody >> ', requestBody);
     const esResponse = await InductionProgram.create(requestBody);
-    req.flash('success', 'End Service added successfully....');
+    req.flash('success', 'Induction Program added successfully.');
     res.redirect('/hr/sip/create');
   } catch (error) {
-    console.error('Error creating KPI:', error);
-    req.flash('error', 'An error occurred while saving the End Service.');
+    console.error('Error creating Induction Program:', error);
+    req.flash('error', 'An error occurred while saving the Induction Program.');
     res.redirect('/hr/sip/create');
   }
-
-
 };
+
 
 exports.renderSipCreatePage = async (req, res) => {
   try {
@@ -66,7 +124,7 @@ exports.renderSipCreatePage = async (req, res) => {
 
 
 const getInductionProgramDetails = async (esId) => {
-  const esData = await endService.findOne({
+  const esData = await InductionProgram.findOne({
     where: { id: esId },
     include: [{
       model: StaffDetails,   // Assuming the name of the staff model is `staffDetails`
@@ -77,106 +135,129 @@ const getInductionProgramDetails = async (esId) => {
   if (esData) {
     // Get the raw object data
     const data = esData.get({ plain: true });
-
-    // Format kpi_date to 'YYYY-MM-DD' if it's a Date object or ISO string
-    if (data.procd_norsafrl_date) {
-      data.procd_norsafrl_date = new Date(data.procd_norsafrl_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_aorharot_date) {
-      data.procd_aorharot_date = new Date(data.procd_aorharot_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_eisacaeiwh_date) {
-      data.procd_eisacaeiwh_date = new Date(data.procd_eisacaeiwh_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_hodcadh_date) {
-      data.procd_hodcadh_date = new Date(data.procd_hodcadh_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_rocp_date) {
-      data.procd_rocp_date = new Date(data.procd_rocp_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_ids_date) {
-      data.procd_ids_date = new Date(data.procd_ids_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_fc_date) {
-      data.procd_fc_date = new Date(data.procd_fc_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_keys_date) {
-      data.procd_keys_date = new Date(data.procd_keys_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_tr_date) {
-      data.procd_tr_date = new Date(data.procd_tr_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_soata_date) {
-      data.procd_soata_date = new Date(data.procd_soata_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_op_date) {
-      data.procd_op_date = new Date(data.procd_op_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_sal_date) {
-      data.procd_sal_date = new Date(data.procd_sal_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_gt_date) {
-      data.procd_gt_date = new Date(data.procd_gt_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_ul_date) {
-      data.procd_ul_date = new Date(data.procd_ul_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_cfoacacf_date) {
-      data.procd_cfoacacf_date = new Date(data.procd_cfoacacf_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_fafupfot_date) {
-      data.procd_fafupfot_date = new Date(data.procd_fafupfot_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_rchiael_date) {
-      data.procd_rchiael_date = new Date(data.procd_rchiael_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_fsprfsp_date) {
-      data.procd_fsprfsp_date = new Date(data.procd_fsprfsp_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_colcctlc_date) {
-      data.procd_colcctlc_date = new Date(data.procd_colcctlc_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-    if (data.procd_eosbchce_date) {
-      data.procd_eosbchce_date = new Date(data.procd_eosbchce_date).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD'
-    }
-
     return data;
   }
   return null;
 };
-
 exports.inductionProgramEdit = async (req, res) => {
   const { id } = req.params;
+
   try {
-    const es = await getInductionProgramDetails(id);
-    console.log('es >> ', es)
-    if (!es) {
+    const induction = await getInductionProgramDetails(id);
+
+    console.log('es >> ', induction);
+
+    if (!induction) {
       req.flash('error', 'End Service not found');
-      return res.render('hr/induction_program/edit_sip', {
-        es,
+      return res.render('hr/induction_program/edit', {
+        induction: null,
         errorMessages: req.flash('error'),
         successMessages: []
       });
     }
 
-    return res.render('hr/induction_program/edit_sip', {
-      es,
+    // Format dates if they exist
+    if (induction.emp_sign_date) {
+      induction.emp_sign_date = new Date(induction.emp_sign_date).toISOString().split('T')[0];
+    }
+    if (induction.sid_sparty_date) {
+      induction.sid_sparty_date = new Date(induction.sid_sparty_date).toISOString().split('T')[0];
+    }
+    if (induction.hr_clinic_sign_date) {
+      induction.hr_clinic_sign_date = new Date(induction.hr_clinic_sign_date).toISOString().split('T')[0];
+    }
+    return res.render('hr/induction_program/edit', {
+      induction,
       errorMessages: [],
       successMessages: []
     });
+
   } catch (error) {
     console.error(error);
     req.flash('error', 'Internal Server Error');
-    return res.render('hr/induction_program/edit_sip', {
-      es,
+    return res.render('hr/induction_program/edit', {
+      induction: null,
       errorMessages: req.flash('error'),
       successMessages: []
     });
   }
 };
 
-exports.inductionProgramUpdate = async (req, res) => {
+// exports.inductionProgramUpdate = async (req, res) => {
 
+//   const { id } = req.params;
+//   const { ...fieldsToUpdate } = req.body;
+
+//   const beforeUpdateEndService = await getInductionProgramDetails(id);
+
+//   if (!id) {
+//     req.flash('error', 'ID is required for updating details.');
+//     return res.render('hr/induction_program/edit', {
+//       induction: beforeUpdateEndService,
+//       errorMessages: req.flash('error'),
+//       successMessages: []
+//     });
+//   }
+
+//   // Remove undefined fields to avoid overwriting existing data
+//   const cleanedFields = Object.fromEntries(Object.entries(fieldsToUpdate).filter(([_, value]) => value !== undefined && value !== ''));
+
+//   // Combine cleaned fields and files
+//   const dataToUpdate = { ...cleanedFields };
+
+//   if (Object.keys(dataToUpdate).length === 0) {
+//     req.flash('error', 'No data provided for update.');
+//     return res.render('hr/induction_program/edit', {
+//       induction: beforeUpdateEndService,
+//       errorMessages: req.flash('error'),
+//       successMessages: []
+//     });
+//     // return res.render('hr/kpi/editKpi', { errorMessages: 'No data provided for update.', staff: beforeUpdateKpi });
+//   }
+
+//   try {
+//     // console.log('dataToUpdate >>>', dataToUpdate)
+//     const [updatedEndService] = await InductionProgram.update(dataToUpdate, {
+//       where: { id }
+//     });
+
+//     if (updatedEndService[0] === 0) {
+//       req.flash('error', 'No End Service record found with the given ID.');
+//       return res.render('hr/induction_program/edit', {
+//         induction: beforeUpdateEndService,
+//         errorMessages: req.flash('error'),
+//         successMessages: []
+//       });
+//       // return res.render('hr/kpi/editKpi', { errorMessages: 'No kpi record found with the given ID.', staff: beforeUpdateKpi });
+//     }
+
+//     const endServiceDetails = await getInductionProgramDetails(id);
+
+//     req.flash('success', 'End Service details updated successfully!');
+//     return res.render('hr/induction_program/edit', {
+//       induction: endServiceDetails,
+//       successMessages: req.flash('success'),
+//       errorMessages: []
+//     });
+
+//   } catch (err) {
+//     console.error('Error during end service update:', err);
+//     req.flash('error', 'Error updating end service details.');
+//     return res.render('hr/induction_program/edit', {
+//       induction: beforeUpdateEndService,
+//       errorMessages: req.flash('error'),
+//       successMessages: []
+//     });
+//     // req.flash('error', 'Error updating kpi details.');
+//     // return res.render('hr/kpi/editKpi', { kpi: beforeUpdateKpi, errorMessages: req.flash('error') });
+
+//     // return res.render('hr/kpi/editKpi', { errorMessage: 'Error updating kpi details.', staff: beforeUpdateKpi });
+//   }
+
+// };
+
+
+exports.inductionProgramUpdate = async (req, res) => {
   const { id } = req.params;
   const { ...fieldsToUpdate } = req.body;
 
@@ -184,50 +265,52 @@ exports.inductionProgramUpdate = async (req, res) => {
 
   if (!id) {
     req.flash('error', 'ID is required for updating details.');
-    return res.render('hr/induction_program/edit_sip', {
-      es: beforeUpdateEndService,
+    return res.render('hr/induction_program/edit', {
+      induction: beforeUpdateEndService,
       errorMessages: req.flash('error'),
       successMessages: []
     });
   }
 
-  // Remove undefined fields to avoid overwriting existing data
-  const cleanedFields = Object.fromEntries(Object.entries(fieldsToUpdate).filter(([_, value]) => value !== undefined && value !== ''));
+  // Remove undefined, empty string fields and skip signature fields
+  const cleanedFields = Object.fromEntries(
+    Object.entries(fieldsToUpdate).filter(([key, value]) =>
+      value !== undefined &&
+      value !== '' &&
+      !['emp_sign', 'hr_clinic_sign', 'sid_fparty_sign'].includes(key)
+    )
+  );
 
-  // Combine cleaned fields and files
   const dataToUpdate = { ...cleanedFields };
 
   if (Object.keys(dataToUpdate).length === 0) {
     req.flash('error', 'No data provided for update.');
-    return res.render('hr/induction_program/edit_sip', {
-      es: beforeUpdateEndService,
+    return res.render('hr/induction_program/edit', {
+      induction: beforeUpdateEndService,
       errorMessages: req.flash('error'),
       successMessages: []
     });
-    // return res.render('hr/kpi/editKpi', { errorMessages: 'No data provided for update.', staff: beforeUpdateKpi });
   }
 
   try {
-    // console.log('dataToUpdate >>>', dataToUpdate)
-    const [updatedEndService] = await endService.update(dataToUpdate, {
+    const [updatedEndService] = await InductionProgram.update(dataToUpdate, {
       where: { id }
     });
 
-    if (updatedEndService[0] === 0) {
+    if (updatedEndService === 0) {
       req.flash('error', 'No End Service record found with the given ID.');
-      return res.render('hr/induction_program/edit_sip', {
-        es: beforeUpdateEndService,
+      return res.render('hr/induction_program/edit', {
+        induction: beforeUpdateEndService,
         errorMessages: req.flash('error'),
         successMessages: []
       });
-      // return res.render('hr/kpi/editKpi', { errorMessages: 'No kpi record found with the given ID.', staff: beforeUpdateKpi });
     }
 
     const endServiceDetails = await getInductionProgramDetails(id);
 
     req.flash('success', 'End Service details updated successfully!');
-    return res.render('hr/induction_program/edit_sip', {
-      es: endServiceDetails,
+    return res.render('hr/induction_program/edit', {
+      induction: endServiceDetails,
       successMessages: req.flash('success'),
       errorMessages: []
     });
@@ -235,20 +318,13 @@ exports.inductionProgramUpdate = async (req, res) => {
   } catch (err) {
     console.error('Error during end service update:', err);
     req.flash('error', 'Error updating end service details.');
-    return res.render('hr/induction_program/edit_sip', {
-      es: beforeUpdateEndService,
+    return res.render('hr/induction_program/edit', {
+      induction: beforeUpdateEndService,
       errorMessages: req.flash('error'),
       successMessages: []
     });
-    // req.flash('error', 'Error updating kpi details.');
-    // return res.render('hr/kpi/editKpi', { kpi: beforeUpdateKpi, errorMessages: req.flash('error') });
-
-    // return res.render('hr/kpi/editKpi', { errorMessage: 'Error updating kpi details.', staff: beforeUpdateKpi });
   }
-
 };
-
-
 
 
 

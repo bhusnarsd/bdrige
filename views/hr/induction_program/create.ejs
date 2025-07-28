@@ -24,7 +24,7 @@
                   <div class="form-area">
                     <h2>Staff Induction Program</h2>
                     <div class="form-box">
-                      <form action="/hr/sip/create"  method="POST">
+                      <form  id="inductionForm" action="/hr/sip/create"  method="POST">
                         <div class="form-row">
                           <div class="form-group">
                             <label for="staff_id">Unique ID</label>
@@ -678,12 +678,13 @@
                             <input type="tel" id="emp_name" name="emp_name" placeholder="employee name" required>
                           </div>
                           <div class="form-group">
-                            <label for="emp_sign">Employee Signature:</label>
-                            <input type="text" id="emp_sign" name="emp_sign" placeholder="Employee Signature" required>
+                            <label for="emp_sign-pad">Employee’s Signature</label>
+                            <canvas id="emp_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                            <input type="hidden" id="emp_sign" name="emp_sign">
                           </div>
                           <div class="form-group">
                             <label for="emp_sign_date">Date</label>
-                            <input type="date" id="emp_sign_date">
+                            <input type="date" id="emp_sign_date" name="emp_sign_date">
                           </div>
                           <p>I confirm that the above Induction Programme has been completed for the above member of
                             staff.</p>
@@ -691,13 +692,15 @@
                             <label for="hr_clinic_name">HR/CLINIC MANAGER Name:</label>
                             <input type="tel" id="hr_clinic_name" name="hr_clinic_name" placeholder="Hr manager name" required>
                           </div>
+      
                           <div class="form-group">
-                            <label for="hr_clinic_sign">HR/CLINIC MANAGER Signature:</label>
-                            <input type="tel" id="hr_clinic_sign" name="hr_clinic_sign" placeholder="signature" required>
+                            <label for="hr_clinic_sign-pad">HR/CLINIC MANAGER Signature</label>
+                            <canvas id="hr_clinic_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                            <input type="hidden" id="hr_clinic_sign" name="hr_clinic_sign">
                           </div>
                           <div class="form-group">
                             <label for="hr_clinic_sign_date">Date</label>
-                            <input type="date" id="hr_clinic_sign_date">
+                            <input type="date" id="hr_clinic_sign_date" name="hr_clinic_sign_date"> 
                           </div>
                           <h4>STAFF INDUCTION DOCUMENT</h4>
                           <p>I, <input type="text" id="sid_txt1" name="sid_txt1" class="width30">, acknowledge that I have
@@ -718,8 +721,9 @@
                               <input type="text" id="sid_fparty_position" name="sid_fparty_position" placeholder="Position" required>
                             </div>
                             <div class="form-group">
-                              <label for="sid_fparty_sign">Signature:</label>
-                              <input type="text" id="sid_fparty_sign" name="sid_fparty_sign" placeholder="signature" required>
+                              <label for="sid_fparty_sign-pad">Signature</label>
+                              <canvas id="sid_fparty_sign-pad" width="300" height="150" style="border:1px solid #ccc;"></canvas>
+                              <input type="hidden" id="sid_fparty_sign" name="sid_fparty_sign">
                             </div>
                             <h4>BRIDGES SPEECH CENTER LLC Speech Center</h4>
                           </div>
@@ -737,11 +741,11 @@
                           <div class="form-row">
                             <div class="form-group">
                               <label for="sid_sparty_address">Current address:</label>
-                              <input type="text" id="sid_sparty_address" placeholder="Enter address">
+                              <input type="text" id="sid_sparty_address" name="sid_sparty_address" placeholder="Enter address">
                             </div>
                             <div class="form-group">
                               <label for="sid_sparty_date">Date</label>
-                              <input type="date" id="sid_sparty_date">
+                              <input type="date" id="sid_sparty_date" name="sid_sparty_date">
                             </div>
     
                           </div>
@@ -756,67 +760,57 @@
         </div>
       </div>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Grab elements once
-      const staffIdEl   = document.getElementById('staff_id');
-      const staffNameEl = document.getElementById('staff_name');
-      const form        = document.querySelector('form');
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('inductionForm');
+    const staffIdEl = document.getElementById('staff_id');
+    const staffNameEl = document.getElementById('staff_name');
   
-      if (staffIdEl && staffNameEl) {
-        // When staff_id changes, fetch the name
-        staffIdEl.addEventListener('change', async () => {
-          const staffId = staffIdEl.value.trim();
-          staffNameEl.value = '';
-          if (!staffId) return;
+    // — Staff‑name autofill (unchanged) —
+    if (staffIdEl && staffNameEl) {
+      staffIdEl.addEventListener('change', async () => {
+        const val = staffIdEl.value.trim();
+        staffNameEl.value = '';
+        if (!val) return;
+        try {
+          const res = await fetch('/staff/get-staff-details', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({staff_id: val})
+          });
+          const data = await res.json();
+          if (data.staff?.staff_name) staffNameEl.value = data.staff.staff_name;
+          else alert('Staff not found.');
+        } catch (e) {
+          console.error(e);
+          alert('Error fetching staff details.');
+        }
+      });
+    }
   
-          try {
-            const res  = await fetch('/staff/get-staff-details', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ staff_id: staffId })
-            });
-            const data = await res.json();
-            if (data?.staff?.staff_name) {
-              staffNameEl.value = data.staff.staff_name;
-            } else {
-              alert('Staff not found.');
-            }
-          } catch (err) {
-            console.error('Error fetching staff details:', err);
-            alert('Server error occurred.');
-          }
-        });
+    // — Initialize SignaturePads —
+    const empPad = new SignaturePad(document.getElementById('emp_sign-pad'));
+    const hrPad  = new SignaturePad(document.getElementById('hr_clinic_sign-pad'));
+    const sidPad = new SignaturePad(document.getElementById('sid_fparty_sign-pad'));
   
-        // Generate a random suffix once per page load
-        const randomSuffix = Math.floor(Math.random() * 9000 + 1000);
-        // When name input changes, auto‑generate an ID
-        staffNameEl.addEventListener('input', () => {
-          const parts = staffNameEl.value.trim().split(' ');
-          if (parts.length >= 2) {
-            const [first, last] = parts;
-            staffIdEl.value = 
-              first.slice(0,2).toUpperCase() +
-              last.slice(0,2).toUpperCase() +
-              randomSuffix;
-          } else {
-            staffIdEl.value = '';
-          }
-        });
+    form.addEventListener('submit', e => {
+      e.preventDefault(); // stop native submit
+  
+      // Validate presence
+      if (empPad.isEmpty() || hrPad.isEmpty() || sidPad.isEmpty()) {
+        alert('Please sign all required fields.');
+        return;
       }
   
-      // Optional: ensure form actually submits
-      if (form) {
-        form.addEventListener('submit', e => {
-          // If you want to block submission when staff_name is empty:
-          if (staffNameEl && !staffNameEl.value.trim()) {
-            e.preventDefault();
-            alert('Please select a valid staff before submitting.');
-          }
-          // Otherwise, do nothing and allow submit
-        });
-      }
+      // Write into hidden inputs
+      document.getElementById('emp_sign').value = empPad.toDataURL('image/png');
+      document.getElementById('hr_clinic_sign').value = hrPad.toDataURL('image/png');
+      document.getElementById('sid_fparty_sign').value = sidPad.toDataURL('image/png');
+  
+      // Let the browser finish updating those inputs, then submit
+      requestAnimationFrame(() => form.submit());
     });
+  });
   </script>
-  
   <%- include('../../partials/footer') %>

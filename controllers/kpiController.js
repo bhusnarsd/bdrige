@@ -86,18 +86,49 @@ exports.kpiCreate = async (req, res) => {
     ];
 
     const imagePaths = {};
+    const missingSignatures = [];
 
     for (const sig of signatureFields) {
       const dataUrl = req.body[sig.name];
-      if (dataUrl && dataUrl.startsWith('data:image')) {
-        const buffer = Buffer.from(dataUrl.split(',')[1], 'base64');
-        const signatureDir = path.join(__dirname, '..', 'public', 'uploads', 'signatures', 'kpi');
-        fs.mkdirSync(signatureDir, { recursive: true });
-        const fileName = `${Date.now()}-${sig.filename}.png`;
-        const filePath = path.join(signatureDir, fileName);
-        fs.writeFileSync(filePath, buffer);
-        imagePaths[sig.name] = `/uploads/signatures/kpi/${fileName}`;
+      console.log(`Processing signature ${sig.name}:`, dataUrl ? `${dataUrl.substring(0, 50)}...` : 'null/undefined');
+      
+      if (dataUrl && typeof dataUrl === 'string' && dataUrl.startsWith('data:image') && dataUrl.length > 1000) {
+        try {
+          const base64Data = dataUrl.split(',')[1];
+          if (!base64Data) {
+            console.error(`Invalid base64 data for ${sig.name}`);
+            missingSignatures.push(sig.name);
+            continue;
+          }
+          
+          const buffer = Buffer.from(base64Data, 'base64');
+          const signatureDir = path.join(__dirname, '..', 'public', 'uploads', 'signatures', 'kpi');
+          fs.mkdirSync(signatureDir, { recursive: true });
+          const fileName = `${Date.now()}-${sig.filename}.png`;
+          const filePath = path.join(signatureDir, fileName);
+          fs.writeFileSync(filePath, buffer);
+          imagePaths[sig.name] = `/uploads/signatures/kpi/${fileName}`;
+          console.log(`Successfully saved signature ${sig.name} to ${fileName}`);
+        } catch (error) {
+          console.error(`Error processing signature ${sig.name}:`, error);
+          missingSignatures.push(sig.name);
+        }
+      } else {
+        console.error(`Invalid or missing signature data for ${sig.name}:`, {
+          exists: !!dataUrl,
+          type: typeof dataUrl,
+          startsWithDataImage: dataUrl ? dataUrl.startsWith('data:image') : false,
+          length: dataUrl ? dataUrl.length : 0
+        });
+        missingSignatures.push(sig.name);
       }
+    }
+
+    // Check if any required signatures are missing
+    if (missingSignatures.length > 0) {
+      console.error('Missing or invalid signatures:', missingSignatures);
+      req.flash('error', `Missing or invalid signatures: ${missingSignatures.join(', ')}. Please ensure all signatures are properly drawn and try again.`);
+      return res.redirect('/hr/kpi/create');
     }
 
     const newKpi = await Kpi.create({
@@ -386,7 +417,3 @@ exports.renderKPICreatePage = async (req, res) => {
     });
   }
 };
-
-
-
-
